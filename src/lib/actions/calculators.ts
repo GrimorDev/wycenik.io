@@ -158,6 +158,43 @@ export async function addQuestion(
   return { error: null };
 }
 
+export async function updateQuestion(
+  calculatorId: string,
+  questionId: string,
+  _prevState: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  await requireUserId();
+  const label = String(formData.get("label") ?? "").trim();
+  const required = formData.get("required") === "on";
+  const type = String(formData.get("type") ?? "");
+
+  if (!label) return { error: "Treść pytania jest wymagana." };
+
+  const update: { label: string; required: boolean; config?: Record<string, unknown> } = {
+    label,
+    required,
+  };
+
+  if (type === "number_slider") {
+    update.config = {
+      min: Number(formData.get("min") ?? 0),
+      max: Number(formData.get("max") ?? 100),
+      step: Number(formData.get("step") ?? 1),
+      unit: String(formData.get("unit") ?? "").trim() || undefined,
+      pricePerUnit: Number(formData.get("price_per_unit") ?? 0),
+    };
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.from("questions").update(update).eq("id", questionId);
+
+  if (error) return { error: "Nie udało się zapisać pytania." };
+
+  revalidatePath(`/dashboard/calculators/${calculatorId}`);
+  return { error: null };
+}
+
 export async function deleteQuestion(calculatorId: string, questionId: string) {
   await requireUserId();
   const supabase = await createClient();
@@ -195,6 +232,35 @@ export async function addOption(
   });
 
   if (error) return { error: "Nie udało się dodać opcji." };
+
+  revalidatePath(`/dashboard/calculators/${calculatorId}`);
+  return { error: null };
+}
+
+export async function updateOption(
+  calculatorId: string,
+  optionId: string,
+  _prevState: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  await requireUserId();
+  const label = String(formData.get("label") ?? "").trim();
+  const priceDelta = Number(formData.get("price_delta") ?? 0);
+  const priceMultiplier = Number(formData.get("price_multiplier") ?? 1);
+
+  if (!label) return { error: "Treść opcji jest wymagana." };
+
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("options")
+    .update({
+      label,
+      price_delta: Number.isFinite(priceDelta) ? priceDelta : 0,
+      price_multiplier: Number.isFinite(priceMultiplier) && priceMultiplier > 0 ? priceMultiplier : 1,
+    })
+    .eq("id", optionId);
+
+  if (error) return { error: "Nie udało się zapisać opcji." };
 
   revalidatePath(`/dashboard/calculators/${calculatorId}`);
   return { error: null };

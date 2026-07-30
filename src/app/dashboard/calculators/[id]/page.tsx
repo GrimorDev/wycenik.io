@@ -1,15 +1,14 @@
+import Link from "next/link";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { AddOptionForm } from "@/components/calculator/AddOptionForm";
 import { AddQuestionForm } from "@/components/calculator/AddQuestionForm";
 import { DetailsForm } from "@/components/calculator/DetailsForm";
+import { EditOptionForm } from "@/components/calculator/EditOptionForm";
+import { EditQuestionForm } from "@/components/calculator/EditQuestionForm";
 import { EmbedSnippet } from "@/components/calculator/EmbedSnippet";
-import {
-  deleteCalculator,
-  deleteOption,
-  deleteQuestion,
-  togglePublish,
-} from "@/lib/actions/calculators";
+import { ArrowLeftIcon } from "@/components/icons";
+import { deleteCalculator, deleteQuestion, togglePublish } from "@/lib/actions/calculators";
 import type { RawCalculator, RawQuestion } from "@/lib/calculator/mapper";
 import { createClient } from "@/lib/supabase/server";
 
@@ -66,7 +65,11 @@ export default async function EditCalculatorPage({
   return (
     <div className="mx-auto w-full max-w-2xl space-y-12">
       <div>
-        <div className="mb-1 flex items-center justify-between">
+        <Link href="/dashboard" className="link-underline flex items-center gap-1.5 text-sm text-ink-soft">
+          <ArrowLeftIcon className="h-3.5 w-3.5" />
+          Twoje kalkulatory
+        </Link>
+        <div className="mb-1 mt-3 flex items-center justify-between">
           <h1 className="font-display text-3xl">{calculator.name}</h1>
           <span className={`stamp ${calculator.is_published ? "text-sage" : "text-ink-faint"}`}>
             {calculator.is_published ? "Opublikowany" : "Szkic"}
@@ -113,13 +116,10 @@ export default async function EditCalculatorPage({
         <ul className="space-y-4">
           {questions.map((question) => (
             <li key={question.id} className="ticket p-4">
-              <div className="mb-3 flex items-start justify-between">
-                <div>
-                  <p className="font-display text-base">{question.label}</p>
-                  <p className="text-xs text-ink-faint">
-                    {QUESTION_TYPE_LABEL[question.type]} · {question.required ? "wymagane" : "opcjonalne"}
-                  </p>
-                </div>
+              <div className="mb-3 flex items-start justify-between gap-3">
+                <p className="text-xs text-ink-faint">
+                  {QUESTION_TYPE_LABEL[question.type]}
+                </p>
                 <form action={deleteQuestion.bind(null, calculator.id, question.id)}>
                   <button type="submit" className="link-underline text-xs text-rust-dark">
                     Usuń pytanie
@@ -127,29 +127,16 @@ export default async function EditCalculatorPage({
                 </form>
               </div>
 
-              {question.type === "number_slider" ? (
-                <p className="tabular text-sm text-ink-soft">
-                  Od {String(question.config.min)} do {String(question.config.max)}
-                  {question.config.unit ? ` ${question.config.unit}` : ""} · krok{" "}
-                  {String(question.config.step)} · {String(question.config.pricePerUnit)}{" "}
-                  {calculator.currency}/jedn.
-                </p>
-              ) : (
-                <div className="space-y-2">
-                  <ul className="space-y-1">
+              <EditQuestionForm calculatorId={calculator.id} question={question} />
+
+              {question.type !== "number_slider" && (
+                <div className="mt-4 space-y-2 border-t border-dashed border-line-strong pt-4">
+                  <ul className="space-y-2">
                     {[...question.options]
                       .sort((a, b) => a.position - b.position)
                       .map((option) => (
-                        <li key={option.id} className="flex items-center justify-between text-sm">
-                          <span className="tabular text-ink-soft">
-                            {option.label} ({option.price_delta} {calculator.currency}
-                            {option.price_multiplier !== 1 ? ` · ×${option.price_multiplier}` : ""})
-                          </span>
-                          <form action={deleteOption.bind(null, calculator.id, option.id)}>
-                            <button type="submit" className="link-underline text-xs text-rust-dark">
-                              Usuń
-                            </button>
-                          </form>
+                        <li key={option.id}>
+                          <EditOptionForm calculatorId={calculator.id} option={option} />
                         </li>
                       ))}
                   </ul>
