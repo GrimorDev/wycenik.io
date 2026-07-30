@@ -8,7 +8,9 @@ services:
         NEXT_PUBLIC_STRIPE_PRICE_ID: ${NEXT_PUBLIC_STRIPE_PRICE_ID}
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      # Change HOST_PORT in the stack's environment variables if 3000 is
+      # already bound on the host (e.g. HOST_PORT=3001).
+      - "${HOST_PORT:-3000}:3000"
     environment:
       NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL}
       NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY}
