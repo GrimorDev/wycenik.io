@@ -17,33 +17,41 @@ export default async function DashboardPage() {
 
   return (
     <div className="mx-auto w-full max-w-3xl">
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Twoje kalkulatory</h1>
-        <Link
-          href="/dashboard/calculators/new"
-          className="rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background hover:bg-[#383838] dark:hover:bg-[#ccc]"
-        >
+      <div className="mb-8 flex items-center justify-between">
+        <h1 className="font-display text-3xl">Twoje kalkulatory</h1>
+        <Link href="/dashboard/calculators/new" className="btn btn-primary">
           + Nowy kalkulator
         </Link>
       </div>
 
       {!calculators || calculators.length === 0 ? (
-        <p className="text-sm text-zinc-500">Nie masz jeszcze żadnego kalkulatora.</p>
+        <div className="ticket-dashed p-8 text-center text-sm text-ink-soft">
+          Nie masz jeszcze żadnego kalkulatora.
+        </div>
       ) : (
-        <ul className="divide-y divide-black/10 rounded-2xl border border-black/10 dark:divide-white/10 dark:border-white/10">
+        <ul className="flex flex-col gap-3">
           {calculators.map((calc) => (
-            <li key={calc.id} className="flex items-center justify-between px-5 py-4">
+            <li key={calc.id} className="ticket flex items-center justify-between px-5 py-4">
               <div>
-                <p className="font-medium">{calc.name}</p>
-                <p className="text-sm text-zinc-500">
-                  /{calc.slug} · {calc.is_published ? "Opublikowany" : "Szkic"}
+                <p className="font-display text-lg">{calc.name}</p>
+                <p className="tabular mt-0.5 flex items-center gap-2 text-sm text-ink-faint">
+                  /{calc.slug}
+                  <span className={calc.is_published ? "text-sage" : "text-ink-faint"}>
+                    {calc.is_published ? "● Opublikowany" : "○ Szkic"}
+                  </span>
                 </p>
               </div>
-              <div className="flex gap-4 text-sm">
-                <Link href={`/dashboard/calculators/${calc.id}/leads`} className="font-medium text-foreground underline">
+              <div className="flex gap-5 text-sm">
+                <Link
+                  href={`/dashboard/calculators/${calc.id}/leads`}
+                  className="link-underline font-medium text-ink"
+                >
                   Leady
                 </Link>
-                <Link href={`/dashboard/calculators/${calc.id}`} className="font-medium text-foreground underline">
+                <Link
+                  href={`/dashboard/calculators/${calc.id}`}
+                  className="link-underline font-medium text-ink"
+                >
                   Edytuj
                 </Link>
               </div>

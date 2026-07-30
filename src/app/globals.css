@@ -1,26 +1,218 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --paper: #f6efe0;
+  --paper-raised: #fffcf5;
+  --ink: #211c14;
+  --ink-soft: #6b6152;
+  --ink-faint: #a89d87;
+  --rust: #c14a1f;
+  --rust-dark: #93330f;
+  --sage: #45604a;
+  --line: #ddd0b0;
+  --line-strong: #c7b78d;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --paper: #171310;
+    --paper-raised: #211b14;
+    --ink: #f3ead9;
+    --ink-soft: #b6a98d;
+    --ink-faint: #7c7160;
+    --rust: #e37f45;
+    --rust-dark: #f2996a;
+    --sage: #83a988;
+    --line: #382f22;
+    --line-strong: #4a3f2c;
   }
 }
 
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-raised: var(--paper-raised);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-rust: var(--rust);
+  --color-rust-dark: var(--rust-dark);
+  --color-sage: var(--sage);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --font-display: var(--font-display);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--paper);
+  color: var(--ink);
+  position: relative;
+}
+
+/* Subtle paper grain — a fixed, non-interactive noise layer under content. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.03 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@media (prefers-color-scheme: dark) {
+  body::before {
+    opacity: 0.7;
+    mix-blend-mode: screen;
+  }
+}
+
+#__next,
+body > div {
+  position: relative;
+  z-index: 1;
+}
+
+::selection {
+  background-color: var(--rust);
+  color: var(--paper-raised);
+}
+
+* {
+  border-color: var(--line);
+}
+
+/* Ticket / receipt card: the recurring container motif across the app. */
+.ticket {
+  background-color: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 0 var(--line-strong);
+}
+
+.ticket-dashed {
+  background-color: var(--paper-raised);
+  border: 1.5px dashed var(--line-strong);
+  border-radius: 0.75rem;
+}
+
+/* Rotated stamp badge, used for status labels (Opublikowany / Szkic). */
+.stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.6rem;
+  border: 1.5px solid currentColor;
+  border-radius: 999px;
+  transform: rotate(-2deg);
+}
+
+.tabular {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.field {
+  width: 100%;
+  border: 1px solid var(--line-strong);
+  background-color: var(--paper-raised);
+  color: var(--ink);
+  border-radius: 0.5rem;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.875rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.field:focus {
+  outline: none;
+  border-color: var(--rust);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--rust) 18%, transparent);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.6rem 1.25rem;
+  transition: transform 0.15s ease, background-color 0.15s ease, opacity 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background-color: var(--rust);
+  color: var(--paper-raised);
+}
+
+.btn-primary:hover {
+  background-color: var(--rust-dark);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+}
+
+.btn-ghost {
+  border: 1.5px solid var(--line-strong);
+  color: var(--ink);
+}
+
+.btn-ghost:hover {
+  border-color: var(--rust);
+  color: var(--rust);
+}
+
+.link-underline {
+  text-decoration: underline;
+  text-decoration-color: var(--line-strong);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.15s ease;
+}
+
+.link-underline:hover {
+  text-decoration-color: currentColor;
+}
+
+/* Punched-hole perforation strip, used to give a "ticket" its torn edge. */
+.ticket-perforated {
+  position: relative;
+}
+
+.ticket-perforated::before,
+.ticket-perforated::after {
+  content: "";
+  position: absolute;
+  left: 1.25rem;
+  right: 1.25rem;
+  height: 12px;
+  background-image: repeating-radial-gradient(
+    circle at 6px 6px,
+    var(--paper) 0 5px,
+    transparent 5.5px
+  );
+  background-size: 16px 16px;
+  background-repeat: repeat-x;
+  pointer-events: none;
+}
+
+.ticket-perforated::before {
+  top: -6px;
+}
+
+.ticket-perforated::after {
+  bottom: -6px;
 }

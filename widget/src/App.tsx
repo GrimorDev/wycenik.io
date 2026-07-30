@@ -122,7 +122,7 @@ function Calculator({ apiBase, slug, config }: { apiBase: string; slug: string; 
         <div class="wk-progress">
           <div class="wk-progress-bar" style={{ width: "100%" }} />
         </div>
-        <h3>Szacunkowa wycena</h3>
+        <span class="wk-result-label">Szacunkowa wycena</span>
         <p class="wk-price">
           {result.min.toLocaleString("pl-PL")}–{result.max.toLocaleString("pl-PL")} {result.currency}
         </p>

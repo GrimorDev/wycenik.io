@@ -36,21 +36,21 @@ export default async function CalculatorLeadsPage({
   return (
     <div className="mx-auto w-full max-w-3xl space-y-6">
       <div>
-        <Link href={`/dashboard/calculators/${id}`} className="text-sm text-zinc-500 underline">
+        <Link href={`/dashboard/calculators/${id}`} className="link-underline text-sm text-ink-soft">
           ← {calculator.name}
         </Link>
         <div className="mt-2 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">Leady</h1>
+          <h1 className="font-display text-3xl">Leady</h1>
           <ExportCsvButton leads={rows} filename={`leady-${calculator.slug}.csv`} />
         </div>
       </div>
 
       {rows.length === 0 ? (
-        <p className="text-sm text-zinc-500">Brak leadów jeszcze.</p>
+        <div className="ticket-dashed p-8 text-center text-sm text-ink-soft">Brak leadów jeszcze.</div>
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-black/10 dark:border-white/10">
+        <div className="ticket overflow-x-auto">
           <table className="w-full text-left text-sm">
-            <thead className="border-b border-black/10 text-zinc-500 dark:border-white/10">
+            <thead className="border-b border-dashed border-line-strong text-ink-faint">
               <tr>
                 <th className="px-4 py-3 font-medium">Imię</th>
                 <th className="px-4 py-3 font-medium">E-mail</th>
@@ -59,16 +59,16 @@ export default async function CalculatorLeadsPage({
                 <th className="px-4 py-3 font-medium">Data</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-black/10 dark:divide-white/10">
+            <tbody className="divide-y divide-line">
               {rows.map((lead) => (
                 <tr key={lead.id}>
                   <td className="px-4 py-3">{lead.name}</td>
                   <td className="px-4 py-3">{lead.email}</td>
-                  <td className="px-4 py-3">{lead.phone}</td>
-                  <td className="px-4 py-3">
+                  <td className="tabular px-4 py-3">{lead.phone}</td>
+                  <td className="tabular px-4 py-3 text-rust">
                     {lead.estimated_min}–{lead.estimated_max}
                   </td>
-                  <td className="px-4 py-3 text-zinc-500">
+                  <td className="tabular px-4 py-3 text-ink-faint">
                     {new Date(lead.created_at).toLocaleString("pl-PL")}
                   </td>
                 </tr>

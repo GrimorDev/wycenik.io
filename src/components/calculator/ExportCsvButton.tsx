@@ -40,12 +40,7 @@ export function ExportCsvButton({ leads, filename }: { leads: Lead[]; filename: 
   }
 
   return (
-    <button
-      type="button"
-      onClick={handleExport}
-      disabled={leads.length === 0}
-      className="rounded-full border border-black/20 px-4 py-2 text-sm font-medium hover:bg-black/5 disabled:opacity-50 dark:border-white/20 dark:hover:bg-white/10"
-    >
+    <button type="button" onClick={handleExport} disabled={leads.length === 0} className="btn btn-ghost">
       Pobierz CSV
     </button>
   );

@@ -17,42 +17,34 @@ export function AddOptionForm({
 
   return (
     <form action={formAction} className="flex flex-wrap items-end gap-3">
-      <label className="text-sm">
+      <label className="text-sm text-ink-soft">
         Opcja
-        <input
-          name="label"
-          required
-          className="mt-1 rounded-lg border border-black/10 bg-transparent px-2 py-1.5 text-sm dark:border-white/10"
-        />
+        <input name="label" required className="field mt-1 py-1.5" />
       </label>
-      <label className="text-sm">
+      <label className="text-sm text-ink-soft">
         Dopłata
         <input
           name="price_delta"
           type="number"
           step="0.01"
           defaultValue={0}
-          className="mt-1 w-24 rounded-lg border border-black/10 bg-transparent px-2 py-1.5 text-sm dark:border-white/10"
+          className="field tabular mt-1 w-24 py-1.5"
         />
       </label>
-      <label className="text-sm">
+      <label className="text-sm text-ink-soft">
         Mnożnik
         <input
           name="price_multiplier"
           type="number"
           step="0.01"
           defaultValue={1}
-          className="mt-1 w-20 rounded-lg border border-black/10 bg-transparent px-2 py-1.5 text-sm dark:border-white/10"
+          className="field tabular mt-1 w-20 py-1.5"
         />
       </label>
-      <button
-        type="submit"
-        disabled={pending}
-        className="rounded-full border border-black/20 px-3 py-1.5 text-sm hover:bg-black/5 disabled:opacity-50 dark:border-white/20 dark:hover:bg-white/10"
-      >
+      <button type="submit" disabled={pending} className="btn btn-ghost px-3 py-1.5">
         {pending ? "Dodawanie…" : "Dodaj opcję"}
       </button>
-      {state.error && <p className="w-full text-sm text-red-600">{state.error}</p>}
+      {state.error && <p className="w-full text-sm text-rust-dark">{state.error}</p>}
     </form>
   );
 }

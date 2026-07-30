@@ -34,51 +34,46 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex flex-1 items-center justify-center px-4 py-16">
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-sm rounded-2xl border border-black/10 p-8 dark:border-white/10"
-      >
-        <h1 className="mb-1 text-2xl font-semibold">Zaloguj się</h1>
-        <p className="mb-6 text-sm text-zinc-500">
-          Wejdź do panelu swoich kalkulatorów.
-        </p>
+    <div className="flex flex-1 flex-col items-center justify-center px-4 py-16">
+      <Link href="/" className="mb-8 font-display text-xl italic">
+        Wycenik<span className="text-rust not-italic">.io</span>
+      </Link>
 
-        <label className="mb-4 block text-sm">
+      <form onSubmit={handleSubmit} className="ticket w-full max-w-sm p-8">
+        <h1 className="font-display text-2xl">Zaloguj się</h1>
+        <p className="mb-6 mt-1 text-sm text-ink-soft">Wejdź do panelu swoich kalkulatorów.</p>
+
+        <label className="mb-4 block text-sm text-ink-soft">
           E-mail
           <input
             type="email"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-black/10 bg-transparent px-3 py-2 text-sm dark:border-white/10"
+            className="field mt-1"
           />
         </label>
 
-        <label className="mb-4 block text-sm">
+        <label className="mb-5 block text-sm text-ink-soft">
           Hasło
           <input
             type="password"
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-black/10 bg-transparent px-3 py-2 text-sm dark:border-white/10"
+            className="field mt-1"
           />
         </label>
 
-        {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
+        {error && <p className="mb-4 text-sm text-rust-dark">{error}</p>}
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full rounded-full bg-foreground px-5 py-2.5 text-sm font-medium text-background transition-colors hover:bg-[#383838] disabled:opacity-50 dark:hover:bg-[#ccc]"
-        >
+        <button type="submit" disabled={loading} className="btn btn-primary w-full py-2.5">
           {loading ? "Logowanie…" : "Zaloguj się"}
         </button>
 
-        <p className="mt-4 text-center text-sm text-zinc-500">
+        <p className="mt-5 text-center text-sm text-ink-soft">
           Nie masz konta?{" "}
-          <Link href="/signup" className="font-medium text-foreground underline">
+          <Link href="/signup" className="link-underline font-medium text-ink">
             Zarejestruj się
           </Link>
         </p>

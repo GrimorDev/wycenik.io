@@ -19,16 +19,18 @@ export default async function DashboardLayout({
 
   return (
     <div className="flex flex-1 flex-col">
-      <header className="flex items-center justify-between border-b border-black/10 px-6 py-4 dark:border-white/10">
-        <Link href="/dashboard" className="font-semibold">
-          Wycenik.io
-        </Link>
-        <nav className="flex items-center gap-4">
-          <span className="text-sm text-zinc-500">{user.email}</span>
-          <LogoutButton />
-        </nav>
+      <header className="border-b border-line px-6 py-4">
+        <div className="mx-auto flex max-w-3xl items-center justify-between">
+          <Link href="/dashboard" className="font-display text-lg italic">
+            Wycenik<span className="text-rust not-italic">.io</span>
+          </Link>
+          <nav className="flex items-center gap-4">
+            <span className="tabular text-sm text-ink-faint">{user.email}</span>
+            <LogoutButton />
+          </nav>
+        </div>
       </header>
-      <main className="flex flex-1 flex-col px-6 py-8">{children}</main>
+      <main className="flex flex-1 flex-col px-6 py-10">{children}</main>
     </div>
   );
 }

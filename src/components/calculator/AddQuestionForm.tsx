@@ -11,67 +11,59 @@ export function AddQuestionForm({ calculatorId }: { calculatorId: string }) {
   const [type, setType] = useState<"number_slider" | "single_choice" | "checkbox">("single_choice");
 
   return (
-    <form action={formAction} className="space-y-3 rounded-xl border border-dashed border-black/20 p-4 dark:border-white/20">
-      <p className="text-sm font-medium">Dodaj pytanie</p>
-      <label className="block text-sm">
+    <form action={formAction} className="ticket-dashed space-y-3 p-4">
+      <p className="stamp text-rust">Dodaj pytanie</p>
+      <label className="block text-sm text-ink-soft">
         Treść pytania
-        <input
-          name="label"
-          required
-          className="mt-1 w-full rounded-lg border border-black/10 bg-transparent px-3 py-2 text-sm dark:border-white/10"
-        />
+        <input name="label" required className="field mt-1" />
       </label>
       <div className="flex items-end gap-4">
-        <label className="block text-sm">
+        <label className="block text-sm text-ink-soft">
           Typ
           <select
             name="type"
             value={type}
             onChange={(e) => setType(e.target.value as typeof type)}
-            className="mt-1 rounded-lg border border-black/10 bg-transparent px-3 py-2 text-sm dark:border-white/10"
+            className="field mt-1"
           >
             <option value="single_choice">Jednokrotny wybór</option>
             <option value="checkbox">Checkboxy (wielokrotny wybór)</option>
             <option value="number_slider">Suwak liczbowy</option>
           </select>
         </label>
-        <label className="flex items-center gap-2 pb-2.5 text-sm">
-          <input type="checkbox" name="required" defaultChecked />
+        <label className="flex items-center gap-2 pb-2.5 text-sm text-ink-soft">
+          <input type="checkbox" name="required" defaultChecked className="accent-rust" />
           Wymagane
         </label>
       </div>
 
       {type === "number_slider" && (
         <div className="grid grid-cols-4 gap-3">
-          <label className="text-sm">
+          <label className="text-sm text-ink-soft">
             Min
-            <input name="min" type="number" defaultValue={0} className="mt-1 w-full rounded-lg border border-black/10 bg-transparent px-3 py-2 text-sm dark:border-white/10" />
+            <input name="min" type="number" defaultValue={0} className="field tabular mt-1" />
           </label>
-          <label className="text-sm">
+          <label className="text-sm text-ink-soft">
             Max
-            <input name="max" type="number" defaultValue={100} className="mt-1 w-full rounded-lg border border-black/10 bg-transparent px-3 py-2 text-sm dark:border-white/10" />
+            <input name="max" type="number" defaultValue={100} className="field tabular mt-1" />
           </label>
-          <label className="text-sm">
+          <label className="text-sm text-ink-soft">
             Krok
-            <input name="step" type="number" defaultValue={1} className="mt-1 w-full rounded-lg border border-black/10 bg-transparent px-3 py-2 text-sm dark:border-white/10" />
+            <input name="step" type="number" defaultValue={1} className="field tabular mt-1" />
           </label>
-          <label className="text-sm">
+          <label className="text-sm text-ink-soft">
             Cena / jednostkę
-            <input name="price_per_unit" type="number" step="0.01" defaultValue={0} className="mt-1 w-full rounded-lg border border-black/10 bg-transparent px-3 py-2 text-sm dark:border-white/10" />
+            <input name="price_per_unit" type="number" step="0.01" defaultValue={0} className="field tabular mt-1" />
           </label>
-          <label className="col-span-4 text-sm">
+          <label className="col-span-4 text-sm text-ink-soft">
             Jednostka (np. m2)
-            <input name="unit" className="mt-1 w-full rounded-lg border border-black/10 bg-transparent px-3 py-2 text-sm dark:border-white/10" />
+            <input name="unit" className="field mt-1" />
           </label>
         </div>
       )}
 
-      {state.error && <p className="text-sm text-red-600">{state.error}</p>}
-      <button
-        type="submit"
-        disabled={pending}
-        className="rounded-full border border-black/20 px-4 py-2 text-sm font-medium hover:bg-black/5 disabled:opacity-50 dark:border-white/20 dark:hover:bg-white/10"
-      >
+      {state.error && <p className="text-sm text-rust-dark">{state.error}</p>}
+      <button type="submit" disabled={pending} className="btn btn-ghost">
         {pending ? "Dodawanie…" : "Dodaj pytanie"}
       </button>
     </form>

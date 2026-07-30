@@ -27,44 +27,24 @@ export function DetailsForm({
 
   return (
     <form action={formAction} className="space-y-4">
-      <label className="block text-sm">
+      <label className="block text-sm text-ink-soft">
         Nazwa
-        <input
-          name="name"
-          required
-          defaultValue={name}
-          className="mt-1 w-full rounded-lg border border-black/10 bg-transparent px-3 py-2 text-sm dark:border-white/10"
-        />
+        <input name="name" required defaultValue={name} className="field mt-1" />
       </label>
-      <label className="block text-sm">
+      <label className="block text-sm text-ink-soft">
         Opis (opcjonalnie)
-        <textarea
-          name="description"
-          defaultValue={description ?? ""}
-          rows={2}
-          className="mt-1 w-full rounded-lg border border-black/10 bg-transparent px-3 py-2 text-sm dark:border-white/10"
-        />
+        <textarea name="description" defaultValue={description ?? ""} rows={2} className="field mt-1" />
       </label>
       <div className="grid grid-cols-3 gap-4">
-        <label className="block text-sm">
+        <label className="block text-sm text-ink-soft">
           Cena bazowa
-          <input
-            name="base_price"
-            type="number"
-            step="0.01"
-            defaultValue={basePrice}
-            className="mt-1 w-full rounded-lg border border-black/10 bg-transparent px-3 py-2 text-sm dark:border-white/10"
-          />
+          <input name="base_price" type="number" step="0.01" defaultValue={basePrice} className="field tabular mt-1" />
         </label>
-        <label className="block text-sm">
+        <label className="block text-sm text-ink-soft">
           Waluta
-          <input
-            name="currency"
-            defaultValue={currency}
-            className="mt-1 w-full rounded-lg border border-black/10 bg-transparent px-3 py-2 text-sm dark:border-white/10"
-          />
+          <input name="currency" defaultValue={currency} className="field tabular mt-1" />
         </label>
-        <label className="block text-sm">
+        <label className="block text-sm text-ink-soft">
           Widełki wyceny (%)
           <input
             name="estimate_spread_percent"
@@ -73,16 +53,12 @@ export function DetailsForm({
             min="0"
             max="100"
             defaultValue={Math.round(estimateSpreadPercent * 100)}
-            className="mt-1 w-full rounded-lg border border-black/10 bg-transparent px-3 py-2 text-sm dark:border-white/10"
+            className="field tabular mt-1"
           />
         </label>
       </div>
-      {state.error && <p className="text-sm text-red-600">{state.error}</p>}
-      <button
-        type="submit"
-        disabled={pending}
-        className="rounded-full bg-foreground px-5 py-2 text-sm font-medium text-background hover:bg-[#383838] disabled:opacity-50 dark:hover:bg-[#ccc]"
-      >
+      {state.error && <p className="text-sm text-rust-dark">{state.error}</p>}
+      <button type="submit" disabled={pending} className="btn btn-primary">
         {pending ? "Zapisywanie…" : "Zapisz zmiany"}
       </button>
     </form>
