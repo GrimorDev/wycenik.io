@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
-import { Fraunces, IBM_Plex_Mono, Work_Sans } from "next/font/google";
+import { Bricolage_Grotesque, IBM_Plex_Mono, Work_Sans } from "next/font/google";
 import "./globals.css";
 
-const fraunces = Fraunces({
+const bricolage = Bricolage_Grotesque({
   variable: "--font-display",
   subsets: ["latin", "latin-ext"],
-  axes: ["opsz", "SOFT", "WONK"],
-  style: ["normal", "italic"],
 });
 
 const workSans = Work_Sans({
@@ -21,7 +19,7 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Wycenik.io — Generator kalkulatorów wycen",
+  title: "Wycenik.io: generator kalkulatorów wycen",
   description: "Osadzalny kalkulator wyceny dla Twojej strony WWW. Bez kodu, w 5 minut.",
 };
 
@@ -33,7 +31,7 @@ export default function RootLayout({
   return (
     <html
       lang="pl"
-      className={`${fraunces.variable} ${workSans.variable} ${plexMono.variable} h-full antialiased`}
+      className={`${bricolage.variable} ${workSans.variable} ${plexMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-paper text-ink font-sans">{children}</body>
     </html>

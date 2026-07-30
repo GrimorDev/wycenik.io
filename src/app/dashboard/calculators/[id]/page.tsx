@@ -129,7 +129,7 @@ export default async function EditCalculatorPage({
 
               {question.type === "number_slider" ? (
                 <p className="tabular text-sm text-ink-soft">
-                  {String(question.config.min)}–{String(question.config.max)}
+                  Od {String(question.config.min)} do {String(question.config.max)}
                   {question.config.unit ? ` ${question.config.unit}` : ""} · krok{" "}
                   {String(question.config.step)} · {String(question.config.pricePerUnit)}{" "}
                   {calculator.currency}/jedn.
@@ -142,8 +142,8 @@ export default async function EditCalculatorPage({
                       .map((option) => (
                         <li key={option.id} className="flex items-center justify-between text-sm">
                           <span className="tabular text-ink-soft">
-                            {option.label} — {option.price_delta} {calculator.currency}
-                            {option.price_multiplier !== 1 ? ` · ×${option.price_multiplier}` : ""}
+                            {option.label} ({option.price_delta} {calculator.currency}
+                            {option.price_multiplier !== 1 ? ` · ×${option.price_multiplier}` : ""})
                           </span>
                           <form action={deleteOption.bind(null, calculator.id, option.id)}>
                             <button type="submit" className="link-underline text-xs text-rust-dark">

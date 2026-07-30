@@ -35,8 +35,8 @@ export default function LoginPage() {
 
   return (
     <div className="flex flex-1 flex-col items-center justify-center px-4 py-16">
-      <Link href="/" className="mb-8 font-display text-xl italic">
-        Wycenik<span className="text-rust not-italic">.io</span>
+      <Link href="/" className="mb-8 font-display text-xl font-semibold">
+        Wycenik<span className="text-rust">.io</span>
       </Link>
 
       <form onSubmit={handleSubmit} className="ticket w-full max-w-sm p-8">

@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { DemoWidgetEmbed } from "@/components/DemoWidgetEmbed";
+import { ArrowRightIcon, ChevronDownIcon } from "@/components/icons";
 
 const FEATURES = [
   {
     n: "01",
     title: "Kreator bez kodu",
-    description: "3–7 pytań: suwak, wybór jednokrotny, checkboxy. Zero programowania.",
+    description: "Od 3 do 7 pytań: suwak, wybór jednokrotny, checkboxy. Zero programowania.",
   },
   {
     n: "02",
@@ -29,8 +30,8 @@ export default function Home() {
     <div className="flex flex-1 flex-col">
       <header className="border-b border-line px-6 py-5">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
-          <span className="font-display text-xl italic">
-            Wycenik<span className="text-rust not-italic">.io</span>
+          <span className="font-display text-xl font-semibold">
+            Wycenik<span className="text-rust">.io</span>
           </span>
           <nav className="flex items-center gap-5 text-sm">
             <Link href="/login" className="link-underline text-ink-soft hover:text-ink">
@@ -48,30 +49,34 @@ export default function Home() {
           <div>
             <p className="stamp text-rust">Generator kalkulatorów wycen</p>
 
-            <h1 className="mt-6 font-display text-5xl leading-[1.05] tracking-tight sm:text-6xl">
+            <h1 className="mt-6 font-display text-5xl font-semibold leading-[1.05] tracking-tight sm:text-6xl">
               Kalkulator wyceny
               <br />
               na Twojej stronie
               <br />
-              <span className="text-rust italic">w 5 minut</span>
+              <span className="text-rust">w 5 minut</span>
             </h1>
 
             <p className="mt-6 max-w-md text-lg text-ink-soft">
-              Klienci widzą szacunkową wycenę natychmiast, Ty zbierasz gotowe
-              leady zamiast pustych zapytań &bdquo;ile to będzie kosztować?&rdquo;.
+              Klienci widzą szacunkową wycenę natychmiast, Ty zbierasz gotowe leady zamiast
+              pustych zapytań &bdquo;ile to będzie kosztować?&rdquo;.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <Link href="/signup" className="btn btn-primary px-7 py-3 text-base">
                 Zacznij za darmo
+                <ArrowRightIcon className="h-4 w-4" />
               </Link>
               <a href="#demo" className="btn btn-ghost px-7 py-3 text-base">
-                Zobacz demo ↓
+                Zobacz demo
+                <ChevronDownIcon className="h-4 w-4" />
               </a>
             </div>
 
             <div className="mt-10 flex items-baseline gap-3 border-t border-dashed border-line-strong pt-6">
-              <span className="tabular font-display text-4xl text-rust">+30–40%</span>
+              <span className="tabular font-display text-4xl font-semibold text-rust">
+                +30 do 40%
+              </span>
               <span className="max-w-[14rem] text-sm text-ink-soft">
                 więcej zapytań ofertowych po wdrożeniu kalkulatora
               </span>
@@ -92,8 +97,8 @@ export default function Home() {
 
           <div id="demo" className="lg:sticky lg:top-24">
             <p className="mb-4 flex items-center gap-2 text-sm text-ink-soft">
-              <span className="tabular text-rust">→</span>
-              Przykładowy kalkulator — spróbuj:
+              <ArrowRightIcon className="h-4 w-4 text-rust" />
+              Przykładowy kalkulator, spróbuj:
             </p>
             <div className="ticket ticket-perforated p-6">
               <DemoWidgetEmbed slug="sprzatanie-demo" />

@@ -1,27 +1,27 @@
 export const WIDGET_CSS = `
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;1,600&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap');
 
 :host {
   all: initial;
-  --wk-paper: #fffcf5;
-  --wk-ink: #211c14;
-  --wk-ink-soft: #6b6152;
-  --wk-rust: #c14a1f;
-  --wk-rust-dark: #93330f;
-  --wk-line: #ddd0b0;
-  --wk-line-strong: #c7b78d;
+  --wk-paper: #ffffff;
+  --wk-ink: #1e1b16;
+  --wk-ink-soft: #6b6357;
+  --wk-rust: #b54b24;
+  --wk-rust-dark: #8a3a1b;
+  --wk-line: #e4dac5;
+  --wk-line-strong: #d2c4a3;
   --wk-tint: #fbf0e4;
 }
 
 @media (prefers-color-scheme: dark) {
   :host {
-    --wk-paper: #211b14;
-    --wk-ink: #f3ead9;
-    --wk-ink-soft: #b6a98d;
-    --wk-rust: #e37f45;
-    --wk-rust-dark: #f2996a;
-    --wk-line: #382f22;
-    --wk-line-strong: #4a3f2c;
+    --wk-paper: #201f24;
+    --wk-ink: #ede9e2;
+    --wk-ink-soft: #9e9a92;
+    --wk-rust: #e08a52;
+    --wk-rust-dark: #f0a06c;
+    --wk-line: #2c2a30;
+    --wk-line-strong: #3a373e;
     --wk-tint: #2c2317;
   }
 }
@@ -46,8 +46,8 @@ export const WIDGET_CSS = `
 
 .wk-step h3 {
   margin: 0 0 6px;
-  font-family: "Fraunces", Georgia, serif;
-  font-weight: 600;
+  font-family: "Bricolage Grotesque", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 700;
   font-size: 19px;
   letter-spacing: -0.01em;
 }
@@ -157,10 +157,9 @@ export const WIDGET_CSS = `
   transform: rotate(-2deg);
 }
 .wk-price {
-  font-family: "Fraunces", Georgia, serif;
-  font-style: italic;
-  font-weight: 600;
-  font-size: 32px;
+  font-family: "Bricolage Grotesque", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 700;
+  font-size: 30px;
   color: var(--wk-ink);
   margin: 12px 0 6px;
 }

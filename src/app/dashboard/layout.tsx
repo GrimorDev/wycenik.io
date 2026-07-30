@@ -21,8 +21,8 @@ export default async function DashboardLayout({
     <div className="flex flex-1 flex-col">
       <header className="border-b border-line px-6 py-4">
         <div className="mx-auto flex max-w-3xl items-center justify-between">
-          <Link href="/dashboard" className="font-display text-lg italic">
-            Wycenik<span className="text-rust not-italic">.io</span>
+          <Link href="/dashboard" className="font-display text-lg font-semibold">
+            Wycenik<span className="text-rust">.io</span>
           </Link>
           <nav className="flex items-center gap-4">
             <span className="tabular text-sm text-ink-faint">{user.email}</span>

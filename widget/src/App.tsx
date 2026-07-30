@@ -124,7 +124,8 @@ function Calculator({ apiBase, slug, config }: { apiBase: string; slug: string; 
         </div>
         <span class="wk-result-label">Szacunkowa wycena</span>
         <p class="wk-price">
-          {result.min.toLocaleString("pl-PL")}–{result.max.toLocaleString("pl-PL")} {result.currency}
+          Od {result.min.toLocaleString("pl-PL")} do {result.max.toLocaleString("pl-PL")}{" "}
+          {result.currency}
         </p>
         <p class="wk-hint">Dokładną wycenę prześlemy na podany adres e-mail.</p>
       </div>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { StatusDotIcon } from "@/components/icons";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function DashboardPage() {
@@ -36,8 +37,11 @@ export default async function DashboardPage() {
                 <p className="font-display text-lg">{calc.name}</p>
                 <p className="tabular mt-0.5 flex items-center gap-2 text-sm text-ink-faint">
                   /{calc.slug}
-                  <span className={calc.is_published ? "text-sage" : "text-ink-faint"}>
-                    {calc.is_published ? "● Opublikowany" : "○ Szkic"}
+                  <span
+                    className={`flex items-center gap-1 ${calc.is_published ? "text-sage" : "text-ink-faint"}`}
+                  >
+                    <StatusDotIcon className="h-2.5 w-2.5" filled={calc.is_published} />
+                    {calc.is_published ? "Opublikowany" : "Szkic"}
                   </span>
                 </p>
               </div>
