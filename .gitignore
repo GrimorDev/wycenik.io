@@ -40,3 +40,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# generated widget bundle (built via `npm run build:widget`)
+/public/widget.js

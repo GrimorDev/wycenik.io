@@ -1,6 +1,6 @@
 // Hand-written to match supabase/migrations/0001_init.sql.
 // Regenerate with `supabase gen types typescript` once the project is linked,
-// keeping this file's shape (Database.public.Tables.<table>.{Row,Insert,Update}).
+// keeping this file's shape (Database.public.Tables.<table>.{Row,Insert,Update,Relationships}).
 
 export interface Database {
   public: {
@@ -21,6 +21,7 @@ export interface Database {
           company_name?: string | null;
           created_at?: string;
         };
+        Relationships: [];
       };
       calculators: {
         Row: {
@@ -62,6 +63,7 @@ export interface Database {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       questions: {
         Row: {
@@ -94,6 +96,7 @@ export interface Database {
           required?: boolean;
           created_at?: string;
         };
+        Relationships: [];
       };
       options: {
         Row: {
@@ -123,6 +126,7 @@ export interface Database {
           position?: number;
           created_at?: string;
         };
+        Relationships: [];
       };
       leads: {
         Row: {
@@ -158,7 +162,10 @@ export interface Database {
           estimated_max?: number;
           created_at?: string;
         };
+        Relationships: [];
       };
     };
+    Views: Record<string, never>;
+    Functions: Record<string, never>;
   };
 }
