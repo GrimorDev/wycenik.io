@@ -8,6 +8,8 @@ const config: CalculatorConfig = {
   basePrice: 100,
   currency: "PLN",
   estimateSpreadPercent: 0.1,
+  accentColor: "#b54b24",
+  locale: "pl",
   questions: [
     {
       id: "q-area",

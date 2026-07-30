@@ -8,12 +8,12 @@ import { EditOptionForm } from "@/components/calculator/EditOptionForm";
 import { EditQuestionForm } from "@/components/calculator/EditQuestionForm";
 import { EmbedSnippet } from "@/components/calculator/EmbedSnippet";
 import { ArrowLeftIcon } from "@/components/icons";
-import { deleteCalculator, deleteQuestion, togglePublish } from "@/lib/actions/calculators";
-import type { RawCalculator, RawQuestion } from "@/lib/calculator/mapper";
+import { deleteCalculator, togglePublish } from "@/lib/actions/calculators";
+import type { RawCalculator } from "@/lib/calculator/mapper";
 import { createClient } from "@/lib/supabase/server";
 
 const CALCULATOR_SELECT =
-  "id,name,slug,description,base_price,currency,estimate_spread_percent,is_published,user_id,questions(id,label,type,config,position,required,options(id,label,price_delta,price_multiplier,position))";
+  "id,name,slug,description,base_price,currency,estimate_spread_percent,accent_color,locale,is_published,user_id,questions(id,label,type,config,position,required,options(id,label,price_delta,price_multiplier,position))";
 
 async function getOrigin() {
   const h = await headers();
@@ -22,11 +22,14 @@ async function getOrigin() {
   return `${proto}://${host}`;
 }
 
-const QUESTION_TYPE_LABEL: Record<RawQuestion["type"], string> = {
-  number_slider: "Suwak liczbowy",
-  single_choice: "Jednokrotny wybór",
-  checkbox: "Checkboxy",
-};
+function topDomainsFrom(rows: { source_domain: string | null }[]): [string, number][] {
+  const counts = new Map<string, number>();
+  for (const row of rows) {
+    if (!row.source_domain) continue;
+    counts.set(row.source_domain, (counts.get(row.source_domain) ?? 0) + 1);
+  }
+  return [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5);
+}
 
 export default async function EditCalculatorPage({
   params,
@@ -58,6 +61,29 @@ export default async function EditCalculatorPage({
   if (error || !calculator || calculator.user_id !== user?.id) {
     notFound();
   }
+
+  const [{ count: viewCount }, { count: leadCount }, { data: viewRows }] = await Promise.all([
+    supabase
+      .from("calculator_views")
+      .select("id", { count: "exact", head: true })
+      .eq("calculator_id", calculator.id),
+    supabase
+      .from("leads")
+      .select("id", { count: "exact", head: true })
+      .eq("calculator_id", calculator.id),
+    supabase
+      .from("calculator_views")
+      .select("source_domain")
+      .eq("calculator_id", calculator.id)
+      .not("source_domain", "is", null)
+      .limit(2000),
+  ]);
+
+  const views = viewCount ?? 0;
+  const leads = leadCount ?? 0;
+  const conversion = views > 0 ? ((leads / views) * 100).toFixed(1) : "0.0";
+  const topDomains = topDomainsFrom(viewRows ?? []);
+
   const origin = await getOrigin();
   const embedSnippet = `<script src="${origin}/widget.js" data-calculator="${calculator.slug}"></script>`;
   const questions = [...calculator.questions].sort((a, b) => a.position - b.position);
@@ -77,6 +103,39 @@ export default async function EditCalculatorPage({
         </div>
         <p className="tabular text-sm text-ink-faint">/{calculator.slug}</p>
       </div>
+
+      <section className="space-y-3">
+        <h2 className="font-display text-xl">Statystyki</h2>
+        <div className="grid grid-cols-3 gap-3">
+          <div className="ticket p-4 text-center">
+            <p className="tabular font-display text-2xl text-rust">{views}</p>
+            <p className="mt-1 text-xs text-ink-faint">Wyświetlenia</p>
+          </div>
+          <div className="ticket p-4 text-center">
+            <p className="tabular font-display text-2xl text-rust">{leads}</p>
+            <p className="mt-1 text-xs text-ink-faint">Leady</p>
+          </div>
+          <div className="ticket p-4 text-center">
+            <p className="tabular font-display text-2xl text-rust">{conversion}%</p>
+            <p className="mt-1 text-xs text-ink-faint">Konwersja</p>
+          </div>
+        </div>
+        {topDomains.length > 0 && (
+          <div className="ticket-dashed p-4">
+            <p className="mb-2 text-xs font-medium uppercase tracking-wide text-ink-faint">
+              Aktywny na domenach
+            </p>
+            <ul className="space-y-1">
+              {topDomains.map(([domain, count]) => (
+                <li key={domain} className="flex items-center justify-between text-sm">
+                  <span className="tabular text-ink-soft">{domain}</span>
+                  <span className="tabular text-ink-faint">{count}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </section>
 
       <section className="space-y-3">
         <h2 className="font-display text-xl">Kod do wdrożenia</h2>
@@ -103,6 +162,8 @@ export default async function EditCalculatorPage({
           basePrice={calculator.base_price}
           currency={calculator.currency}
           estimateSpreadPercent={calculator.estimate_spread_percent}
+          accentColor={calculator.accent_color}
+          locale={calculator.locale}
         />
       </section>
 
@@ -116,17 +177,6 @@ export default async function EditCalculatorPage({
         <ul className="space-y-4">
           {questions.map((question) => (
             <li key={question.id} className="ticket p-4">
-              <div className="mb-3 flex items-start justify-between gap-3">
-                <p className="text-xs text-ink-faint">
-                  {QUESTION_TYPE_LABEL[question.type]}
-                </p>
-                <form action={deleteQuestion.bind(null, calculator.id, question.id)}>
-                  <button type="submit" className="link-underline text-xs text-rust-dark">
-                    Usuń pytanie
-                  </button>
-                </form>
-              </div>
-
               <EditQuestionForm calculatorId={calculator.id} question={question} />
 
               {question.type !== "number_slider" && (
@@ -136,7 +186,11 @@ export default async function EditCalculatorPage({
                       .sort((a, b) => a.position - b.position)
                       .map((option) => (
                         <li key={option.id}>
-                          <EditOptionForm calculatorId={calculator.id} option={option} />
+                          <EditOptionForm
+                            calculatorId={calculator.id}
+                            option={option}
+                            currency={calculator.currency}
+                          />
                         </li>
                       ))}
                   </ul>

@@ -2,6 +2,7 @@ import { useEffect, useState } from "preact/hooks";
 import type { Answer, AnswersMap, CalculatorConfig, CalculatorQuestion } from "../../src/lib/calculator/types";
 import { fetchCalculatorConfig, submitLead, type LeadEstimate } from "./api";
 import { QuestionInput } from "./QuestionInput";
+import { STRINGS, type Locale } from "./strings";
 
 interface Props {
   apiBase: string;
@@ -10,7 +11,7 @@ interface Props {
 
 type LoadState =
   | { status: "loading" }
-  | { status: "error"; message: string }
+  | { status: "error" }
   | { status: "ready"; config: CalculatorConfig };
 
 export function App({ apiBase, slug }: Props) {
@@ -22,24 +23,21 @@ export function App({ apiBase, slug }: Props) {
       .then((config) => {
         if (!cancelled) setLoad({ status: "ready", config });
       })
-      .catch((err: unknown) => {
-        if (!cancelled) {
-          setLoad({
-            status: "error",
-            message: err instanceof Error ? err.message : "Nie udało się wczytać kalkulatora.",
-          });
-        }
+      .catch(() => {
+        if (!cancelled) setLoad({ status: "error" });
       });
     return () => {
       cancelled = true;
     };
   }, [apiBase, slug]);
 
+  // Locale is only known once config loads, so loading/error states before
+  // that always render in Polish.
   if (load.status === "loading") {
-    return <div class="wk-widget wk-center">Ładowanie kalkulatora…</div>;
+    return <div class="wk-widget wk-center">{STRINGS.pl.loading}</div>;
   }
   if (load.status === "error") {
-    return <div class="wk-widget wk-center wk-error">{load.message}</div>;
+    return <div class="wk-widget wk-center wk-error">{STRINGS.pl.loadError}</div>;
   }
   return <Calculator apiBase={apiBase} slug={slug} config={load.config} />;
 }
@@ -69,6 +67,9 @@ function canAdvance(question: CalculatorQuestion | null, answers: AnswersMap): b
 }
 
 function Calculator({ apiBase, slug, config }: { apiBase: string; slug: string; config: CalculatorConfig }) {
+  const t = STRINGS[config.locale as Locale] ?? STRINGS.pl;
+  const accentStyle = `--wk-rust:${config.accentColor}`;
+
   const [stepIndex, setStepIndex] = useState(0);
   const [answers, setAnswers] = useState<AnswersMap>(() => {
     const initial: AnswersMap = {};
@@ -109,31 +110,33 @@ function Calculator({ apiBase, slug, config }: { apiBase: string; slug: string; 
     try {
       const estimate = await submitLead(apiBase, slug, { ...lead, answers });
       setResult(estimate);
-    } catch (err) {
-      setSubmitError(err instanceof Error ? err.message : "Nie udało się wysłać formularza.");
+    } catch {
+      setSubmitError(t.submitError);
     } finally {
       setSubmitting(false);
     }
   }
 
+  const locale = config.locale === "en" ? "en-US" : "pl-PL";
+
   if (result) {
     return (
-      <div class="wk-widget wk-result">
+      <div class="wk-widget wk-result" style={accentStyle}>
         <div class="wk-progress">
           <div class="wk-progress-bar" style={{ width: "100%" }} />
         </div>
-        <span class="wk-result-label">Szacunkowa wycena</span>
+        <span class="wk-result-label">{t.resultLabel}</span>
         <p class="wk-price">
-          Od {result.min.toLocaleString("pl-PL")} do {result.max.toLocaleString("pl-PL")}{" "}
-          {result.currency}
+          {t.rangeFrom} {result.min.toLocaleString(locale)} {t.rangeTo}{" "}
+          {result.max.toLocaleString(locale)} {result.currency}
         </p>
-        <p class="wk-hint">Dokładną wycenę prześlemy na podany adres e-mail.</p>
+        <p class="wk-hint">{t.resultHint}</p>
       </div>
     );
   }
 
   return (
-    <div class="wk-widget">
+    <div class="wk-widget" style={accentStyle}>
       <div class="wk-progress">
         <div class="wk-progress-bar" style={{ width: `${progressPct}%` }} />
       </div>
@@ -141,9 +144,9 @@ function Calculator({ apiBase, slug, config }: { apiBase: string; slug: string; 
       {isLeadStep ? (
         <form class="wk-step" onSubmit={handleSubmit}>
           <h3>{config.name}</h3>
-          <p class="wk-hint">Podaj dane kontaktowe, aby zobaczyć szacunkową wycenę.</p>
+          <p class="wk-hint">{t.leadHint}</p>
           <label>
-            Imię
+            {t.name}
             <input
               type="text"
               required
@@ -152,7 +155,7 @@ function Calculator({ apiBase, slug, config }: { apiBase: string; slug: string; 
             />
           </label>
           <label>
-            E-mail
+            {t.email}
             <input
               type="email"
               required
@@ -161,7 +164,7 @@ function Calculator({ apiBase, slug, config }: { apiBase: string; slug: string; 
             />
           </label>
           <label>
-            Telefon
+            {t.phone}
             <input
               type="tel"
               required
@@ -172,10 +175,10 @@ function Calculator({ apiBase, slug, config }: { apiBase: string; slug: string; 
           {submitError && <p class="wk-error">{submitError}</p>}
           <div class="wk-actions">
             <button type="button" class="wk-btn wk-btn-secondary" onClick={handleBack}>
-              Wstecz
+              {t.back}
             </button>
             <button type="submit" class="wk-btn wk-btn-primary" disabled={!isLeadValid(lead) || submitting}>
-              {submitting ? "Wysyłanie…" : "Pokaż wycenę"}
+              {submitting ? t.sending : t.showEstimate}
             </button>
           </div>
         </form>
@@ -189,10 +192,10 @@ function Calculator({ apiBase, slug, config }: { apiBase: string; slug: string; 
           />
           <div class="wk-actions">
             <button type="button" class="wk-btn wk-btn-secondary" onClick={handleBack} disabled={stepIndex === 0}>
-              Wstecz
+              {t.back}
             </button>
             <button type="button" class="wk-btn wk-btn-primary" onClick={handleNext} disabled={!canAdvance(question, answers)}>
-              Dalej
+              {t.next}
             </button>
           </div>
         </div>

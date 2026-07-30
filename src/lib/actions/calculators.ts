@@ -68,8 +68,13 @@ export async function updateCalculatorDetails(
   const basePrice = Number(formData.get("base_price") ?? 0);
   const currency = String(formData.get("currency") ?? "PLN").trim();
   const spreadPercent = Number(formData.get("estimate_spread_percent") ?? 15) / 100;
+  const accentColor = String(formData.get("accent_color") ?? "#b54b24").trim();
+  const locale = formData.get("locale") === "en" ? "en" : "pl";
 
   if (!name) return { error: "Nazwa jest wymagana." };
+  if (!/^#[0-9a-fA-F]{6}$/.test(accentColor)) {
+    return { error: "Kolor akcentu musi być w formacie hex, np. #b54b24." };
+  }
 
   const supabase = await createClient();
   const { error } = await supabase
@@ -80,6 +85,8 @@ export async function updateCalculatorDetails(
       base_price: Number.isFinite(basePrice) ? basePrice : 0,
       currency: currency || "PLN",
       estimate_spread_percent: Number.isFinite(spreadPercent) ? spreadPercent : 0.15,
+      accent_color: accentColor,
+      locale,
     })
     .eq("id", calculatorId);
 

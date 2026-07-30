@@ -1,4 +1,4 @@
-// Hand-written to match supabase/migrations/0001_init.sql.
+// Hand-written to match supabase/migrations/0001_init.sql and 0002_stats_and_theming.sql.
 // Regenerate with `supabase gen types typescript` once the project is linked,
 // keeping this file's shape (Database.public.Tables.<table>.{Row,Insert,Update,Relationships}).
 
@@ -34,6 +34,8 @@ export interface Database {
           currency: string;
           estimate_spread_percent: number;
           is_published: boolean;
+          accent_color: string;
+          locale: "pl" | "en";
           created_at: string;
           updated_at: string;
         };
@@ -47,6 +49,8 @@ export interface Database {
           currency?: string;
           estimate_spread_percent?: number;
           is_published?: boolean;
+          accent_color?: string;
+          locale?: "pl" | "en";
           created_at?: string;
           updated_at?: string;
         };
@@ -60,6 +64,8 @@ export interface Database {
           currency?: string;
           estimate_spread_percent?: number;
           is_published?: boolean;
+          accent_color?: string;
+          locale?: "pl" | "en";
           created_at?: string;
           updated_at?: string;
         };
@@ -138,6 +144,7 @@ export interface Database {
           answers: Record<string, unknown>;
           estimated_min: number;
           estimated_max: number;
+          source_domain: string | null;
           created_at: string;
         };
         Insert: {
@@ -149,6 +156,7 @@ export interface Database {
           answers?: Record<string, unknown>;
           estimated_min: number;
           estimated_max: number;
+          source_domain?: string | null;
           created_at?: string;
         };
         Update: {
@@ -160,6 +168,28 @@ export interface Database {
           answers?: Record<string, unknown>;
           estimated_min?: number;
           estimated_max?: number;
+          source_domain?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+      calculator_views: {
+        Row: {
+          id: string;
+          calculator_id: string;
+          source_domain: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          calculator_id: string;
+          source_domain?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          calculator_id?: string;
+          source_domain?: string | null;
           created_at?: string;
         };
         Relationships: [];

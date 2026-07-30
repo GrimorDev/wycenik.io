@@ -19,7 +19,7 @@ export async function fetchCalculatorConfig(
 ): Promise<CalculatorConfig> {
   const res = await fetch(`${apiBase}/api/calculators/${encodeURIComponent(slug)}`);
   if (!res.ok) {
-    throw new Error("Nie udało się wczytać kalkulatora.");
+    throw new Error("load_failed");
   }
   return res.json();
 }
@@ -37,9 +37,10 @@ export async function submitLead(
       body: JSON.stringify(payload),
     },
   );
-  const data = await res.json();
   if (!res.ok) {
-    throw new Error(data.error ?? "Nie udało się wysłać formularza.");
+    // Don't surface the server's internal validation message to the widget UI;
+    // App.tsx shows a localized, generic error instead.
+    throw new Error("submit_failed");
   }
-  return data as LeadEstimate;
+  return (await res.json()) as LeadEstimate;
 }

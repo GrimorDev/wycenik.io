@@ -29,6 +29,8 @@ export interface RawCalculator {
   base_price: number;
   currency: string;
   estimate_spread_percent: number;
+  accent_color: string;
+  locale: "pl" | "en";
   questions: RawQuestion[];
 }
 
@@ -74,6 +76,8 @@ export function toCalculatorConfig(row: RawCalculator): CalculatorConfig {
     basePrice: Number(row.base_price),
     currency: row.currency,
     estimateSpreadPercent: Number(row.estimate_spread_percent),
+    accentColor: row.accent_color,
+    locale: row.locale,
     questions: [...row.questions]
       .sort((a, b) => a.position - b.position)
       .map(mapQuestion),

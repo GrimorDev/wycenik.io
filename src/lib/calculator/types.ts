@@ -45,6 +45,9 @@ export interface CalculatorConfig {
   currency: string;
   /** Fractional spread applied around the point estimate, e.g. 0.15 = +/-15%. */
   estimateSpreadPercent: number;
+  /** Widget accent color as a hex string, e.g. "#b54b24". */
+  accentColor: string;
+  locale: "pl" | "en";
   questions: CalculatorQuestion[];
 }
 

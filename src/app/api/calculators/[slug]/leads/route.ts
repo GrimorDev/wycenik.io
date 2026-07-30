@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { CORS_HEADERS } from "@/lib/http/cors";
+import { extractSourceDomain } from "@/lib/http/domain";
 import { calculatePrice } from "@/lib/calculator/engine";
 import { toCalculatorConfig, type RawCalculator } from "@/lib/calculator/mapper";
 import type { AnswersMap } from "@/lib/calculator/types";
@@ -7,7 +8,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { createPublicClient } from "@/lib/supabase/public";
 
 const CALCULATOR_SELECT =
-  "id,name,base_price,currency,estimate_spread_percent,questions(id,label,type,config,position,required,options(id,label,price_delta,price_multiplier,position))";
+  "id,name,base_price,currency,estimate_spread_percent,accent_color,locale,questions(id,label,type,config,position,required,options(id,label,price_delta,price_multiplier,position))";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -92,6 +93,7 @@ export async function POST(
     answers,
     estimated_min: estimate.min,
     estimated_max: estimate.max,
+    source_domain: extractSourceDomain(request),
   });
 
   if (insertError) {

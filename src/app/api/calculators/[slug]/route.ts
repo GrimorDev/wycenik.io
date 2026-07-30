@@ -1,17 +1,19 @@
 import { NextResponse } from "next/server";
 import { CORS_HEADERS } from "@/lib/http/cors";
+import { extractSourceDomain } from "@/lib/http/domain";
 import { toCalculatorConfig, type RawCalculator } from "@/lib/calculator/mapper";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { createPublicClient } from "@/lib/supabase/public";
 
 const CALCULATOR_SELECT =
-  "id,name,base_price,currency,estimate_spread_percent,questions(id,label,type,config,position,required,options(id,label,price_delta,price_multiplier,position))";
+  "id,name,base_price,currency,estimate_spread_percent,accent_color,locale,questions(id,label,type,config,position,required,options(id,label,price_delta,price_multiplier,position))";
 
 export async function OPTIONS() {
   return new NextResponse(null, { status: 204, headers: CORS_HEADERS });
 }
 
 export async function GET(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ slug: string }> },
 ) {
   const { slug } = await params;
@@ -31,7 +33,18 @@ export async function GET(
     );
   }
 
-  return NextResponse.json(toCalculatorConfig(data as unknown as RawCalculator), {
+  const calculator = data as unknown as RawCalculator;
+
+  // Best-effort view logging; never let this fail the actual response.
+  try {
+    await createAdminClient()
+      .from("calculator_views")
+      .insert({ calculator_id: calculator.id, source_domain: extractSourceDomain(request) });
+  } catch {
+    // ignored
+  }
+
+  return NextResponse.json(toCalculatorConfig(calculator), {
     headers: CORS_HEADERS,
   });
 }

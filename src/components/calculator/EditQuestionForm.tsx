@@ -1,10 +1,16 @@
 "use client";
 
-import { useActionState } from "react";
-import { updateQuestion, type ActionState } from "@/lib/actions/calculators";
+import { useActionState, useEffect, useRef, useState } from "react";
+import { deleteQuestion, updateQuestion, type ActionState } from "@/lib/actions/calculators";
 import type { RawQuestion } from "@/lib/calculator/mapper";
 
 const initialState: ActionState = { error: null };
+
+const QUESTION_TYPE_LABEL: Record<RawQuestion["type"], string> = {
+  number_slider: "Suwak liczbowy",
+  single_choice: "Jednokrotny wybór",
+  checkbox: "Checkboxy",
+};
 
 export function EditQuestionForm({
   calculatorId,
@@ -13,8 +19,52 @@ export function EditQuestionForm({
   calculatorId: string;
   question: RawQuestion;
 }) {
+  const [isEditing, setIsEditing] = useState(false);
   const action = updateQuestion.bind(null, calculatorId, question.id);
   const [state, formAction, pending] = useActionState(action, initialState);
+  const wasPending = useRef(false);
+
+  useEffect(() => {
+    if (wasPending.current && !pending && !state.error) {
+      setIsEditing(false);
+    }
+    wasPending.current = pending;
+  }, [pending, state.error]);
+
+  if (!isEditing) {
+    return (
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="font-display text-base">{question.label}</p>
+          <p className="text-xs text-ink-faint">
+            {QUESTION_TYPE_LABEL[question.type]} · {question.required ? "wymagane" : "opcjonalne"}
+            {question.type === "number_slider" && (
+              <>
+                {" · "}
+                Od {String(question.config.min)} do {String(question.config.max)}
+                {question.config.unit ? ` ${question.config.unit}` : ""} · krok{" "}
+                {String(question.config.step)} · {String(question.config.pricePerUnit)}/jedn.
+              </>
+            )}
+          </p>
+        </div>
+        <div className="flex shrink-0 gap-3">
+          <button
+            type="button"
+            onClick={() => setIsEditing(true)}
+            className="link-underline text-xs text-ink-soft hover:text-ink"
+          >
+            Edytuj
+          </button>
+          <form action={deleteQuestion.bind(null, calculatorId, question.id)}>
+            <button type="submit" className="link-underline text-xs text-rust-dark">
+              Usuń
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <form action={formAction} className="space-y-3">
@@ -59,9 +109,19 @@ export function EditQuestionForm({
       )}
 
       {state.error && <p className="text-sm text-rust-dark">{state.error}</p>}
-      <button type="submit" disabled={pending} className="btn btn-ghost px-3 py-1.5 text-xs">
-        {pending ? "Zapisywanie…" : "Zapisz pytanie"}
-      </button>
+      <div className="flex gap-2">
+        <button type="submit" disabled={pending} className="btn btn-primary px-3 py-1.5 text-xs">
+          {pending ? "Zapisywanie…" : "Zapisz pytanie"}
+        </button>
+        <button
+          type="button"
+          onClick={() => setIsEditing(false)}
+          disabled={pending}
+          className="btn btn-ghost px-3 py-1.5 text-xs"
+        >
+          Anuluj
+        </button>
+      </div>
     </form>
   );
 }
