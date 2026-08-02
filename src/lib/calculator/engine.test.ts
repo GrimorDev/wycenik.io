@@ -11,6 +11,9 @@ const config: CalculatorConfig = {
   accentColor: "#b54b24",
   locale: "pl",
   cornerStyle: "rounded",
+  bgColor: null,
+  textColor: null,
+  borderColor: null,
   questions: [
     {
       id: "q-area",

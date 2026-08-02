@@ -98,12 +98,20 @@ export async function updateWidgetTheme(
   const accentColor = String(formData.get("accent_color") ?? "#b54b24").trim();
   const locale = formData.get("locale") === "en" ? "en" : "pl";
   const cornerStyle = String(formData.get("corner_style") ?? "rounded");
+  const useCustomPalette = formData.get("use_custom_palette") === "on";
+  const bgColor = String(formData.get("bg_color") ?? "#ffffff").trim();
+  const textColor = String(formData.get("text_color") ?? "#1e1b16").trim();
+  const borderColor = String(formData.get("border_color") ?? "#e4dac5").trim();
 
-  if (!/^#[0-9a-fA-F]{6}$/.test(accentColor)) {
+  const HEX_RE = /^#[0-9a-fA-F]{6}$/;
+  if (!HEX_RE.test(accentColor)) {
     return { error: "Kolor akcentu musi być w formacie hex, np. #b54b24." };
   }
   if (!["sharp", "rounded", "soft"].includes(cornerStyle)) {
     return { error: "Nieprawidłowy wariant kształtu." };
+  }
+  if (useCustomPalette && !(HEX_RE.test(bgColor) && HEX_RE.test(textColor) && HEX_RE.test(borderColor))) {
+    return { error: "Kolory palety muszą być w formacie hex." };
   }
 
   const supabase = await createClient();
@@ -113,6 +121,9 @@ export async function updateWidgetTheme(
       accent_color: accentColor,
       locale,
       corner_style: cornerStyle as "sharp" | "rounded" | "soft",
+      bg_color: useCustomPalette ? bgColor : null,
+      text_color: useCustomPalette ? textColor : null,
+      border_color: useCustomPalette ? borderColor : null,
     })
     .eq("id", calculatorId);
 

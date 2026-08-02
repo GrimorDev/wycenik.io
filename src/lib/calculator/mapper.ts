@@ -32,6 +32,9 @@ export interface RawCalculator {
   accent_color: string;
   locale: "pl" | "en";
   corner_style: "sharp" | "rounded" | "soft";
+  bg_color: string | null;
+  text_color: string | null;
+  border_color: string | null;
   questions: RawQuestion[];
 }
 
@@ -80,6 +83,9 @@ export function toCalculatorConfig(row: RawCalculator): CalculatorConfig {
     accentColor: row.accent_color,
     locale: row.locale,
     cornerStyle: row.corner_style,
+    bgColor: row.bg_color,
+    textColor: row.text_color,
+    borderColor: row.border_color,
     questions: [...row.questions]
       .sort((a, b) => a.position - b.position)
       .map(mapQuestion),

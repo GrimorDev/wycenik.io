@@ -13,7 +13,7 @@ import type { RawCalculator } from "@/lib/calculator/mapper";
 import { createClient } from "@/lib/supabase/server";
 
 const CALCULATOR_SELECT =
-  "id,name,slug,description,base_price,currency,estimate_spread_percent,accent_color,locale,corner_style,is_published,user_id,questions(id,label,type,config,position,required,options(id,label,price_delta,price_multiplier,position))";
+  "id,name,slug,description,base_price,currency,estimate_spread_percent,accent_color,locale,corner_style,bg_color,text_color,border_color,is_published,user_id,questions(id,label,type,config,position,required,options(id,label,price_delta,price_multiplier,position))";
 
 async function getOrigin() {
   const h = await headers();

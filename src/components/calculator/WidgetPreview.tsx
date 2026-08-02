@@ -8,6 +8,9 @@ interface Props {
   accentColor: string;
   locale: Locale;
   cornerStyle: "sharp" | "rounded" | "soft";
+  bgColor: string | null;
+  textColor: string | null;
+  borderColor: string | null;
 }
 
 const RADIUS_MAP: Record<Props["cornerStyle"], string> = {
@@ -78,7 +81,7 @@ function buildWidgetPreview(
   return widget;
 }
 
-export function WidgetPreview({ accentColor, locale, cornerStyle }: Props) {
+export function WidgetPreview({ accentColor, locale, cornerStyle, bgColor, textColor, borderColor }: Props) {
   const hostRef = useRef<HTMLDivElement>(null);
   const shadowRef = useRef<ShadowRoot | null>(null);
 
@@ -99,9 +102,17 @@ export function WidgetPreview({ accentColor, locale, cornerStyle }: Props) {
     if (previous) previous.remove();
 
     const t = STRINGS[locale];
-    const cssStyle = `--wk-rust:${accentColor};--wk-radius:${RADIUS_MAP[cornerStyle]}`;
+    const cssStyle = [
+      `--wk-rust:${accentColor}`,
+      `--wk-radius:${RADIUS_MAP[cornerStyle]}`,
+      bgColor && `--wk-paper:${bgColor}`,
+      textColor && `--wk-ink:${textColor}`,
+      borderColor && `--wk-line:${borderColor}`,
+    ]
+      .filter(Boolean)
+      .join(";");
     shadow.appendChild(buildWidgetPreview(t, locale, cssStyle));
-  }, [accentColor, locale, cornerStyle]);
+  }, [accentColor, locale, cornerStyle, bgColor, textColor, borderColor]);
 
   return <div ref={hostRef} />;
 }

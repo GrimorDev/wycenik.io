@@ -86,7 +86,15 @@ function PoweredBy({ apiBase }: { apiBase: string }) {
 function Calculator({ apiBase, slug, config }: { apiBase: string; slug: string; config: CalculatorConfig }) {
   const t = STRINGS[config.locale as Locale] ?? STRINGS.pl;
   const radius = RADIUS_MAP[config.cornerStyle] ?? RADIUS_MAP.rounded;
-  const accentStyle = `--wk-rust:${config.accentColor};--wk-radius:${radius}`;
+  const accentStyle = [
+    `--wk-rust:${config.accentColor}`,
+    `--wk-radius:${radius}`,
+    config.bgColor && `--wk-paper:${config.bgColor}`,
+    config.textColor && `--wk-ink:${config.textColor}`,
+    config.borderColor && `--wk-line:${config.borderColor}`,
+  ]
+    .filter(Boolean)
+    .join(";");
 
   const [stepIndex, setStepIndex] = useState(0);
   const [answers, setAnswers] = useState<AnswersMap>(() => {

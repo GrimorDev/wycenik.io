@@ -49,6 +49,10 @@ export interface CalculatorConfig {
   accentColor: string;
   locale: "pl" | "en";
   cornerStyle: "sharp" | "rounded" | "soft";
+  /** Full palette overrides; null means auto-adapt to light/dark preference. */
+  bgColor: string | null;
+  textColor: string | null;
+  borderColor: string | null;
   questions: CalculatorQuestion[];
 }
 

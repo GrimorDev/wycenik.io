@@ -18,7 +18,7 @@ export default async function WidgetAppearancePage({
 
   const { data: calculator, error } = await supabase
     .from("calculators")
-    .select("id,name,user_id,accent_color,locale,corner_style")
+    .select("id,name,user_id,accent_color,locale,corner_style,bg_color,text_color,border_color")
     .eq("id", id)
     .single();
 
@@ -48,6 +48,9 @@ export default async function WidgetAppearancePage({
         accentColor={calculator.accent_color}
         locale={calculator.locale}
         cornerStyle={calculator.corner_style}
+        bgColor={calculator.bg_color}
+        textColor={calculator.text_color}
+        borderColor={calculator.border_color}
       />
     </div>
   );

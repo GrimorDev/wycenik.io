@@ -5,25 +5,23 @@ export const WIDGET_CSS = `
   all: initial;
   --wk-paper: #ffffff;
   --wk-ink: #1e1b16;
-  --wk-ink-soft: #6b6357;
   --wk-rust: #b54b24;
-  --wk-rust-dark: #8a3a1b;
   --wk-line: #e4dac5;
-  --wk-line-strong: #d2c4a3;
-  --wk-tint: #fbf0e4;
   --wk-radius: 14px;
+  /* Derived tones so overriding the four vars above always produces a
+     coherent look, instead of needing a matching "dark" shade for each. */
+  --wk-ink-soft: color-mix(in srgb, var(--wk-ink) 68%, var(--wk-paper));
+  --wk-line-strong: color-mix(in srgb, var(--wk-line) 55%, var(--wk-ink));
+  --wk-rust-hover: color-mix(in srgb, var(--wk-rust) 85%, black);
+  --wk-tint: color-mix(in srgb, var(--wk-rust) 12%, var(--wk-paper));
 }
 
 @media (prefers-color-scheme: dark) {
   :host {
     --wk-paper: #201f24;
     --wk-ink: #ede9e2;
-    --wk-ink-soft: #9e9a92;
     --wk-rust: #e08a52;
-    --wk-rust-dark: #f0a06c;
     --wk-line: #2c2a30;
-    --wk-line-strong: #3a373e;
-    --wk-tint: #2c2317;
   }
 }
 
@@ -138,7 +136,7 @@ export const WIDGET_CSS = `
 }
 .wk-btn:active { transform: scale(0.97); }
 .wk-btn-primary { background: var(--wk-rust); color: var(--wk-paper); }
-.wk-btn-primary:hover { background: var(--wk-rust-dark); }
+.wk-btn-primary:hover { background: var(--wk-rust-hover); }
 .wk-btn-primary:disabled { opacity: .5; cursor: not-allowed; }
 .wk-btn-secondary { background: transparent; color: var(--wk-ink-soft); border: 1.5px solid var(--wk-line-strong); }
 .wk-btn-secondary:disabled { opacity: .3; cursor: not-allowed; }

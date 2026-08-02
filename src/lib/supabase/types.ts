@@ -37,6 +37,9 @@ export interface Database {
           accent_color: string;
           locale: "pl" | "en";
           corner_style: "sharp" | "rounded" | "soft";
+          bg_color: string | null;
+          text_color: string | null;
+          border_color: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -53,6 +56,9 @@ export interface Database {
           accent_color?: string;
           locale?: "pl" | "en";
           corner_style?: "sharp" | "rounded" | "soft";
+          bg_color?: string | null;
+          text_color?: string | null;
+          border_color?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -69,6 +75,9 @@ export interface Database {
           accent_color?: string;
           locale?: "pl" | "en";
           corner_style?: "sharp" | "rounded" | "soft";
+          bg_color?: string | null;
+          text_color?: string | null;
+          border_color?: string | null;
           created_at?: string;
           updated_at?: string;
         };

@@ -8,7 +8,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { createPublicClient } from "@/lib/supabase/public";
 
 const CALCULATOR_SELECT =
-  "id,name,base_price,currency,estimate_spread_percent,accent_color,locale,corner_style,questions(id,label,type,config,position,required,options(id,label,price_delta,price_multiplier,position))";
+  "id,name,base_price,currency,estimate_spread_percent,accent_color,locale,corner_style,bg_color,text_color,border_color,questions(id,label,type,config,position,required,options(id,label,price_delta,price_multiplier,position))";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
