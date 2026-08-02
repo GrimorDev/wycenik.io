@@ -54,6 +54,36 @@ export function CircleIcon({ className }: IconProps) {
   );
 }
 
+export function GridIcon({ className }: IconProps) {
+  return (
+    <svg {...BASE_PROPS} className={className} aria-hidden="true">
+      <rect x="3.5" y="3.5" width="7" height="7" rx="1.5" />
+      <rect x="13.5" y="3.5" width="7" height="7" rx="1.5" />
+      <rect x="3.5" y="13.5" width="7" height="7" rx="1.5" />
+      <rect x="13.5" y="13.5" width="7" height="7" rx="1.5" />
+    </svg>
+  );
+}
+
+export function GearIcon({ className }: IconProps) {
+  return (
+    <svg {...BASE_PROPS} className={className} aria-hidden="true">
+      <circle cx="12" cy="12" r="3" />
+      <path d="M19.4 13a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V19a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H4a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1.08 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H10a1.65 1.65 0 0 0 1-1.51V4a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V10a1.65 1.65 0 0 0 1.51 1H20a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+    </svg>
+  );
+}
+
+export function CreditCardIcon({ className }: IconProps) {
+  return (
+    <svg {...BASE_PROPS} className={className} aria-hidden="true">
+      <rect x="2.5" y="5" width="19" height="14" rx="2.25" />
+      <path d="M2.5 9.5h19" />
+      <path d="M6.5 14h4" />
+    </svg>
+  );
+}
+
 export function StatusDotIcon({ className, filled }: IconProps & { filled?: boolean }) {
   return (
     <svg viewBox="0 0 12 12" className={className} aria-hidden="true">
