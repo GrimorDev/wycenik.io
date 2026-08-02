@@ -13,7 +13,7 @@ import type { RawCalculator } from "@/lib/calculator/mapper";
 import { createClient } from "@/lib/supabase/server";
 
 const CALCULATOR_SELECT =
-  "id,name,slug,description,base_price,currency,estimate_spread_percent,accent_color,locale,is_published,user_id,questions(id,label,type,config,position,required,options(id,label,price_delta,price_multiplier,position))";
+  "id,name,slug,description,base_price,currency,estimate_spread_percent,accent_color,locale,corner_style,is_published,user_id,questions(id,label,type,config,position,required,options(id,label,price_delta,price_multiplier,position))";
 
 async function getOrigin() {
   const h = await headers();
@@ -138,7 +138,15 @@ export default async function EditCalculatorPage({
       </section>
 
       <section className="space-y-3">
-        <h2 className="font-display text-xl">Kod do wdrożenia</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="font-display text-xl">Kod do wdrożenia</h2>
+          <Link
+            href={`/dashboard/calculators/${calculator.id}/widget`}
+            className="link-underline text-sm text-ink-soft hover:text-ink"
+          >
+            Edytuj wygląd widgetu
+          </Link>
+        </div>
         {calculator.is_published ? (
           <EmbedSnippet snippet={embedSnippet} />
         ) : (
@@ -162,8 +170,6 @@ export default async function EditCalculatorPage({
           basePrice={calculator.base_price}
           currency={calculator.currency}
           estimateSpreadPercent={calculator.estimate_spread_percent}
-          accentColor={calculator.accent_color}
-          locale={calculator.locale}
         />
       </section>
 

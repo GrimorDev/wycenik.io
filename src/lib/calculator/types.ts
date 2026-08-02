@@ -48,6 +48,7 @@ export interface CalculatorConfig {
   /** Widget accent color as a hex string, e.g. "#b54b24". */
   accentColor: string;
   locale: "pl" | "en";
+  cornerStyle: "sharp" | "rounded" | "soft";
   questions: CalculatorQuestion[];
 }
 

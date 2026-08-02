@@ -66,9 +66,27 @@ function canAdvance(question: CalculatorQuestion | null, answers: AnswersMap): b
   return true;
 }
 
+const RADIUS_MAP: Record<CalculatorConfig["cornerStyle"], string> = {
+  sharp: "4px",
+  rounded: "14px",
+  soft: "28px",
+};
+
+function PoweredBy({ apiBase }: { apiBase: string }) {
+  return (
+    <p class="wk-powered">
+      Powered by{" "}
+      <a href={apiBase} target="_blank" rel="noopener noreferrer">
+        Wycenik.io
+      </a>
+    </p>
+  );
+}
+
 function Calculator({ apiBase, slug, config }: { apiBase: string; slug: string; config: CalculatorConfig }) {
   const t = STRINGS[config.locale as Locale] ?? STRINGS.pl;
-  const accentStyle = `--wk-rust:${config.accentColor}`;
+  const radius = RADIUS_MAP[config.cornerStyle] ?? RADIUS_MAP.rounded;
+  const accentStyle = `--wk-rust:${config.accentColor};--wk-radius:${radius}`;
 
   const [stepIndex, setStepIndex] = useState(0);
   const [answers, setAnswers] = useState<AnswersMap>(() => {
@@ -131,6 +149,7 @@ function Calculator({ apiBase, slug, config }: { apiBase: string; slug: string; 
           {result.max.toLocaleString(locale)} {result.currency}
         </p>
         <p class="wk-hint">{t.resultHint}</p>
+        <PoweredBy apiBase={apiBase} />
       </div>
     );
   }
@@ -200,6 +219,7 @@ function Calculator({ apiBase, slug, config }: { apiBase: string; slug: string; 
           </div>
         </div>
       )}
+      <PoweredBy apiBase={apiBase} />
     </div>
   );
 }

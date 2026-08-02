@@ -12,8 +12,6 @@ interface Props {
   basePrice: number;
   currency: string;
   estimateSpreadPercent: number;
-  accentColor: string;
-  locale: "pl" | "en";
 }
 
 export function DetailsForm({
@@ -23,8 +21,6 @@ export function DetailsForm({
   basePrice,
   currency,
   estimateSpreadPercent,
-  accentColor,
-  locale,
 }: Props) {
   const action = updateCalculatorDetails.bind(null, calculatorId);
   const [state, formAction, pending] = useActionState(action, initialState);
@@ -60,31 +56,6 @@ export function DetailsForm({
             className="field tabular mt-1"
           />
         </label>
-      </div>
-
-      <div>
-        <p className="mb-2 text-xs font-medium uppercase tracking-wide text-ink-faint">Wygląd widgetu</p>
-        <div className="grid grid-cols-2 gap-4">
-          <label className="block text-sm text-ink-soft">
-            Kolor akcentu
-            <div className="mt-1 flex items-center gap-2">
-              <input
-                type="color"
-                name="accent_color"
-                defaultValue={accentColor}
-                className="h-9 w-12 cursor-pointer rounded-lg border border-line-strong bg-transparent p-1"
-              />
-              <span className="tabular text-xs text-ink-faint">{accentColor}</span>
-            </div>
-          </label>
-          <label className="block text-sm text-ink-soft">
-            Język widgetu
-            <select name="locale" defaultValue={locale} className="field mt-1">
-              <option value="pl">Polski</option>
-              <option value="en">English</option>
-            </select>
-          </label>
-        </div>
       </div>
 
       {state.error && <p className="text-sm text-rust-dark">{state.error}</p>}

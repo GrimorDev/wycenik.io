@@ -36,6 +36,7 @@ export interface Database {
           is_published: boolean;
           accent_color: string;
           locale: "pl" | "en";
+          corner_style: "sharp" | "rounded" | "soft";
           created_at: string;
           updated_at: string;
         };
@@ -51,6 +52,7 @@ export interface Database {
           is_published?: boolean;
           accent_color?: string;
           locale?: "pl" | "en";
+          corner_style?: "sharp" | "rounded" | "soft";
           created_at?: string;
           updated_at?: string;
         };
@@ -66,6 +68,7 @@ export interface Database {
           is_published?: boolean;
           accent_color?: string;
           locale?: "pl" | "en";
+          corner_style?: "sharp" | "rounded" | "soft";
           created_at?: string;
           updated_at?: string;
         };

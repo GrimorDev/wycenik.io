@@ -11,6 +11,7 @@ export const WIDGET_CSS = `
   --wk-line: #e4dac5;
   --wk-line-strong: #d2c4a3;
   --wk-tint: #fbf0e4;
+  --wk-radius: 14px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -30,7 +31,7 @@ export const WIDGET_CSS = `
   font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   max-width: 480px;
   border: 1px solid var(--wk-line);
-  border-radius: 14px;
+  border-radius: var(--wk-radius);
   padding: 22px;
   box-sizing: border-box;
   background: var(--wk-paper);
@@ -96,7 +97,7 @@ export const WIDGET_CSS = `
   gap: 10px;
   padding: 11px 13px;
   border: 1.5px solid var(--wk-line);
-  border-radius: 10px;
+  border-radius: calc(var(--wk-radius) * 0.7);
   cursor: pointer;
   transition: border-color .15s ease, background-color .15s ease;
 }
@@ -112,7 +113,7 @@ export const WIDGET_CSS = `
   margin-top: 5px;
   padding: 9px 11px;
   border: 1.5px solid var(--wk-line-strong);
-  border-radius: 9px;
+  border-radius: calc(var(--wk-radius) * 0.65);
   font-size: 14px;
   font-family: inherit;
   background: var(--wk-paper);
@@ -165,4 +166,19 @@ export const WIDGET_CSS = `
 }
 .wk-center { padding: 28px; text-align: center; color: var(--wk-ink-soft); }
 .wk-error { color: #c0392b; }
+
+.wk-powered {
+  margin: 16px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--wk-line);
+  text-align: center;
+  font-size: 11px;
+  color: var(--wk-ink-soft);
+}
+.wk-powered a {
+  color: inherit;
+  font-weight: 600;
+  text-decoration: none;
+}
+.wk-powered a:hover { text-decoration: underline; }
 `;

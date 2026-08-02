@@ -10,6 +10,7 @@ const config: CalculatorConfig = {
   estimateSpreadPercent: 0.1,
   accentColor: "#b54b24",
   locale: "pl",
+  cornerStyle: "rounded",
   questions: [
     {
       id: "q-area",

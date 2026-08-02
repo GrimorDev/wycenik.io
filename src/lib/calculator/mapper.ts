@@ -31,6 +31,7 @@ export interface RawCalculator {
   estimate_spread_percent: number;
   accent_color: string;
   locale: "pl" | "en";
+  corner_style: "sharp" | "rounded" | "soft";
   questions: RawQuestion[];
 }
 
@@ -78,6 +79,7 @@ export function toCalculatorConfig(row: RawCalculator): CalculatorConfig {
     estimateSpreadPercent: Number(row.estimate_spread_percent),
     accentColor: row.accent_color,
     locale: row.locale,
+    cornerStyle: row.corner_style,
     questions: [...row.questions]
       .sort((a, b) => a.position - b.position)
       .map(mapQuestion),
