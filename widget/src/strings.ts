@@ -16,6 +16,9 @@ interface WidgetStrings {
   resultHint: string;
   rangeFrom: string;
   rangeTo: string;
+  step: string;
+  stepOf: string;
+  contactStep: string;
 }
 
 export const STRINGS: Record<Locale, WidgetStrings> = {
@@ -35,6 +38,9 @@ export const STRINGS: Record<Locale, WidgetStrings> = {
     resultHint: "Dokładną wycenę prześlemy na podany adres e-mail.",
     rangeFrom: "Od",
     rangeTo: "do",
+    step: "Pytanie",
+    stepOf: "z",
+    contactStep: "Dane kontaktowe",
   },
   en: {
     loading: "Loading calculator…",
@@ -52,5 +58,8 @@ export const STRINGS: Record<Locale, WidgetStrings> = {
     resultHint: "We'll send the exact quote to your email.",
     rangeFrom: "From",
     rangeTo: "to",
+    step: "Question",
+    stepOf: "of",
+    contactStep: "Contact details",
   },
 };

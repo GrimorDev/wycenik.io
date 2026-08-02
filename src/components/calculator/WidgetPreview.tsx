@@ -19,6 +19,8 @@ const RADIUS_MAP: Record<Props["cornerStyle"], string> = {
   soft: "28px",
 };
 
+const SVG_NS = "http://www.w3.org/2000/svg";
+
 function el<K extends keyof HTMLElementTagNameMap>(
   tag: K,
   className?: string,
@@ -30,6 +32,21 @@ function el<K extends keyof HTMLElementTagNameMap>(
   return node;
 }
 
+function checkIcon(): SVGSVGElement {
+  const svg = document.createElementNS(SVG_NS, "svg");
+  svg.setAttribute("class", "wk-check");
+  svg.setAttribute("viewBox", "0 0 16 16");
+  const path = document.createElementNS(SVG_NS, "path");
+  path.setAttribute("d", "M3.5 8.5l3 3 6-6.5");
+  path.setAttribute("fill", "none");
+  path.setAttribute("stroke", "currentColor");
+  path.setAttribute("stroke-width", "2");
+  path.setAttribute("stroke-linecap", "round");
+  path.setAttribute("stroke-linejoin", "round");
+  svg.appendChild(path);
+  return svg;
+}
+
 function buildWidgetPreview(
   t: (typeof STRINGS)["pl"],
   locale: Locale,
@@ -37,6 +54,11 @@ function buildWidgetPreview(
 ): HTMLDivElement {
   const widget = el("div", "wk-widget");
   widget.setAttribute("style", style);
+
+  const progressRow = el("div", "wk-progress-row");
+  progressRow.appendChild(el("span", undefined, `${t.step} 2 ${t.stepOf} 4`));
+  progressRow.appendChild(el("span", "wk-progress-pct", "45%"));
+  widget.appendChild(progressRow);
 
   const progress = el("div", "wk-progress");
   const progressBar = el("div", "wk-progress-bar");
@@ -53,10 +75,14 @@ function buildWidgetPreview(
     const option = el("label", i === 0 ? "wk-option wk-option-selected" : "wk-option");
     const input = document.createElement("input");
     input.type = "radio";
+    input.className = "wk-option-input";
     input.disabled = true;
     if (i === 0) input.checked = true;
+    const indicator = el("span", "wk-option-indicator");
+    indicator.appendChild(checkIcon());
     option.appendChild(input);
-    option.appendChild(document.createTextNode(label));
+    option.appendChild(indicator);
+    option.appendChild(el("span", "wk-option-label", label));
     options.appendChild(option);
   });
   step.appendChild(options);

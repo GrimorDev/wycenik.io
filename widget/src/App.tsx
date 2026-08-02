@@ -144,6 +144,9 @@ function Calculator({ apiBase, slug, config }: { apiBase: string; slug: string; 
   }
 
   const locale = config.locale === "en" ? "en-US" : "pl-PL";
+  const stepLabel = isLeadStep
+    ? t.contactStep
+    : `${t.step} ${stepIndex + 1} ${t.stepOf} ${config.questions.length}`;
 
   if (result) {
     return (
@@ -164,6 +167,10 @@ function Calculator({ apiBase, slug, config }: { apiBase: string; slug: string; 
 
   return (
     <div class="wk-widget" style={accentStyle}>
+      <div class="wk-progress-row">
+        <span>{stepLabel}</span>
+        <span class="wk-progress-pct">{progressPct}%</span>
+      </div>
       <div class="wk-progress">
         <div class="wk-progress-bar" style={{ width: `${progressPct}%` }} />
       </div>

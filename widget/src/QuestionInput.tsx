@@ -6,6 +6,21 @@ interface Props {
   onChange: (answer: Answer) => void;
 }
 
+function CheckIcon() {
+  return (
+    <svg class="wk-check" viewBox="0 0 16 16" aria-hidden="true">
+      <path
+        d="M3.5 8.5l3 3 6-6.5"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function QuestionInput({ question, answer, onChange }: Props) {
   if (question.type === "number_slider") {
     const value = answer?.type === "number_slider" ? answer.value : question.config.min;
@@ -45,12 +60,16 @@ export function QuestionInput({ question, answer, onChange }: Props) {
             <input
               type="radio"
               name={question.id}
+              class="wk-option-input"
               checked={selected === option.id}
               onChange={() =>
                 onChange({ questionId: question.id, type: "single_choice", optionId: option.id })
               }
             />
-            {option.label}
+            <span class="wk-option-indicator">
+              <CheckIcon />
+            </span>
+            <span class="wk-option-label">{option.label}</span>
           </label>
         ))}
       </div>
@@ -66,6 +85,7 @@ export function QuestionInput({ question, answer, onChange }: Props) {
           <label key={option.id} class={`wk-option${checked ? " wk-option-selected" : ""}`}>
             <input
               type="checkbox"
+              class="wk-option-input"
               checked={checked}
               onChange={() => {
                 const next = checked
@@ -74,7 +94,10 @@ export function QuestionInput({ question, answer, onChange }: Props) {
                 onChange({ questionId: question.id, type: "checkbox", optionIds: next });
               }}
             />
-            {option.label}
+            <span class="wk-option-indicator wk-option-indicator-square">
+              <CheckIcon />
+            </span>
+            <span class="wk-option-label">{option.label}</span>
           </label>
         );
       })}
