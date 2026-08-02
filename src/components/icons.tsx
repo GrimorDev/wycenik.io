@@ -37,6 +37,14 @@ export function ChevronDownIcon({ className }: IconProps) {
   );
 }
 
+export function ChevronUpIcon({ className }: IconProps) {
+  return (
+    <svg {...BASE_PROPS} className={className} aria-hidden="true">
+      <path d="M6 15l6-6 6 6" />
+    </svg>
+  );
+}
+
 export function CheckCircleIcon({ className }: IconProps) {
   return (
     <svg {...BASE_PROPS} className={className} aria-hidden="true">

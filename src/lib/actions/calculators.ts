@@ -102,6 +102,7 @@ export async function updateWidgetTheme(
   const bgColor = String(formData.get("bg_color") ?? "#ffffff").trim();
   const textColor = String(formData.get("text_color") ?? "#1e1b16").trim();
   const borderColor = String(formData.get("border_color") ?? "#e4dac5").trim();
+  const allowedDomainInput = String(formData.get("allowed_domain") ?? "").trim();
 
   const HEX_RE = /^#[0-9a-fA-F]{6}$/;
   if (!HEX_RE.test(accentColor)) {
@@ -114,6 +115,18 @@ export async function updateWidgetTheme(
     return { error: "Kolory palety muszą być w formacie hex." };
   }
 
+  let allowedDomain: string | null = null;
+  if (allowedDomainInput) {
+    try {
+      const withProtocol = /^https?:\/\//i.test(allowedDomainInput)
+        ? allowedDomainInput
+        : `https://${allowedDomainInput}`;
+      allowedDomain = new URL(withProtocol).hostname;
+    } catch {
+      return { error: "Nieprawidłowa domena. Podaj np. mojafirma.pl." };
+    }
+  }
+
   const supabase = await createClient();
   const { error } = await supabase
     .from("calculators")
@@ -124,6 +137,7 @@ export async function updateWidgetTheme(
       bg_color: useCustomPalette ? bgColor : null,
       text_color: useCustomPalette ? textColor : null,
       border_color: useCustomPalette ? borderColor : null,
+      allowed_domain: allowedDomain,
     })
     .eq("id", calculatorId);
 
@@ -244,6 +258,37 @@ export async function deleteQuestion(calculatorId: string, questionId: string) {
   await requireUserId();
   const supabase = await createClient();
   await supabase.from("questions").delete().eq("id", questionId);
+  revalidatePath(`/dashboard/calculators/${calculatorId}`);
+}
+
+export async function moveQuestion(
+  calculatorId: string,
+  questionId: string,
+  direction: "up" | "down",
+) {
+  await requireUserId();
+  const supabase = await createClient();
+
+  const { data: questions } = await supabase
+    .from("questions")
+    .select("id,position")
+    .eq("calculator_id", calculatorId)
+    .order("position", { ascending: true });
+
+  if (!questions) return;
+
+  const index = questions.findIndex((q) => q.id === questionId);
+  const swapIndex = direction === "up" ? index - 1 : index + 1;
+  if (index === -1 || swapIndex < 0 || swapIndex >= questions.length) return;
+
+  const current = questions[index];
+  const swapWith = questions[swapIndex];
+
+  await Promise.all([
+    supabase.from("questions").update({ position: swapWith.position }).eq("id", current.id),
+    supabase.from("questions").update({ position: current.position }).eq("id", swapWith.id),
+  ]);
+
   revalidatePath(`/dashboard/calculators/${calculatorId}`);
 }
 

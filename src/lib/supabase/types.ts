@@ -40,6 +40,7 @@ export interface Database {
           bg_color: string | null;
           text_color: string | null;
           border_color: string | null;
+          allowed_domain: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -59,6 +60,7 @@ export interface Database {
           bg_color?: string | null;
           text_color?: string | null;
           border_color?: string | null;
+          allowed_domain?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -78,6 +80,7 @@ export interface Database {
           bg_color?: string | null;
           text_color?: string | null;
           border_color?: string | null;
+          allowed_domain?: string | null;
           created_at?: string;
           updated_at?: string;
         };

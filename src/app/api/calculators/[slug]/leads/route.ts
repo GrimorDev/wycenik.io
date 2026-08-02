@@ -1,16 +1,15 @@
 import { NextResponse } from "next/server";
 import { CORS_HEADERS } from "@/lib/http/cors";
-import { extractSourceDomain } from "@/lib/http/domain";
+import { extractSourceDomain, isDomainAllowed } from "@/lib/http/domain";
 import { calculatePrice } from "@/lib/calculator/engine";
 import { toCalculatorConfig, type RawCalculator } from "@/lib/calculator/mapper";
 import type { AnswersMap } from "@/lib/calculator/types";
+import { isValidEmail, isValidPolishPhone } from "@/lib/calculator/validation";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createPublicClient } from "@/lib/supabase/public";
 
 const CALCULATOR_SELECT =
-  "id,name,base_price,currency,estimate_spread_percent,accent_color,locale,corner_style,bg_color,text_color,border_color,questions(id,label,type,config,position,required,options(id,label,price_delta,price_multiplier,position))";
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  "id,name,base_price,currency,estimate_spread_percent,accent_color,locale,corner_style,bg_color,text_color,border_color,allowed_domain,questions(id,label,type,config,position,required,options(id,label,price_delta,price_multiplier,position))";
 
 interface LeadRequestBody {
   name?: string;
@@ -50,9 +49,15 @@ export async function POST(
       { status: 400, headers: CORS_HEADERS },
     );
   }
-  if (!EMAIL_RE.test(email)) {
+  if (!isValidEmail(email)) {
     return NextResponse.json(
       { error: "Invalid email" },
+      { status: 400, headers: CORS_HEADERS },
+    );
+  }
+  if (!isValidPolishPhone(phone)) {
+    return NextResponse.json(
+      { error: "Invalid phone" },
       { status: 400, headers: CORS_HEADERS },
     );
   }
@@ -72,7 +77,16 @@ export async function POST(
     );
   }
 
-  const config = toCalculatorConfig(data as unknown as RawCalculator);
+  const raw = data as unknown as RawCalculator & { allowed_domain: string | null };
+
+  if (!isDomainAllowed(raw.allowed_domain, extractSourceDomain(request))) {
+    return NextResponse.json(
+      { error: "Domain not allowed" },
+      { status: 403, headers: CORS_HEADERS },
+    );
+  }
+
+  const config = toCalculatorConfig(raw);
 
   let estimate;
   try {

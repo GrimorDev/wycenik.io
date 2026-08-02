@@ -7,8 +7,8 @@ import { DetailsForm } from "@/components/calculator/DetailsForm";
 import { EditOptionForm } from "@/components/calculator/EditOptionForm";
 import { EditQuestionForm } from "@/components/calculator/EditQuestionForm";
 import { EmbedSnippet } from "@/components/calculator/EmbedSnippet";
-import { ArrowLeftIcon } from "@/components/icons";
-import { deleteCalculator, togglePublish } from "@/lib/actions/calculators";
+import { ArrowLeftIcon, ChevronDownIcon, ChevronUpIcon } from "@/components/icons";
+import { deleteCalculator, moveQuestion, togglePublish } from "@/lib/actions/calculators";
 import type { RawCalculator } from "@/lib/calculator/mapper";
 import { createClient } from "@/lib/supabase/server";
 
@@ -181,28 +181,53 @@ export default async function EditCalculatorPage({
         )}
 
         <ul className="space-y-4">
-          {questions.map((question) => (
-            <li key={question.id} className="ticket p-4">
-              <EditQuestionForm calculatorId={calculator.id} question={question} />
+          {questions.map((question, index) => (
+            <li key={question.id} className="ticket flex gap-3 p-4">
+              <div className="flex shrink-0 flex-col gap-0.5 pt-0.5">
+                <form action={moveQuestion.bind(null, calculator.id, question.id, "up")}>
+                  <button
+                    type="submit"
+                    disabled={index === 0}
+                    aria-label="Przenieś wyżej"
+                    className="rounded p-1 text-ink-faint hover:text-ink disabled:opacity-20"
+                  >
+                    <ChevronUpIcon className="h-4 w-4" />
+                  </button>
+                </form>
+                <form action={moveQuestion.bind(null, calculator.id, question.id, "down")}>
+                  <button
+                    type="submit"
+                    disabled={index === questions.length - 1}
+                    aria-label="Przenieś niżej"
+                    className="rounded p-1 text-ink-faint hover:text-ink disabled:opacity-20"
+                  >
+                    <ChevronDownIcon className="h-4 w-4" />
+                  </button>
+                </form>
+              </div>
 
-              {question.type !== "number_slider" && (
-                <div className="mt-4 space-y-2 border-t border-dashed border-line-strong pt-4">
-                  <ul className="space-y-2">
-                    {[...question.options]
-                      .sort((a, b) => a.position - b.position)
-                      .map((option) => (
-                        <li key={option.id}>
-                          <EditOptionForm
-                            calculatorId={calculator.id}
-                            option={option}
-                            currency={calculator.currency}
-                          />
-                        </li>
-                      ))}
-                  </ul>
-                  <AddOptionForm calculatorId={calculator.id} questionId={question.id} />
-                </div>
-              )}
+              <div className="min-w-0 flex-1">
+                <EditQuestionForm calculatorId={calculator.id} question={question} />
+
+                {question.type !== "number_slider" && (
+                  <div className="mt-4 space-y-2 border-t border-dashed border-line-strong pt-4">
+                    <ul className="space-y-2">
+                      {[...question.options]
+                        .sort((a, b) => a.position - b.position)
+                        .map((option) => (
+                          <li key={option.id}>
+                            <EditOptionForm
+                              calculatorId={calculator.id}
+                              option={option}
+                              currency={calculator.currency}
+                            />
+                          </li>
+                        ))}
+                    </ul>
+                    <AddOptionForm calculatorId={calculator.id} questionId={question.id} />
+                  </div>
+                )}
+              </div>
             </li>
           ))}
         </ul>

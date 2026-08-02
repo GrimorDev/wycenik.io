@@ -1,5 +1,6 @@
 import { useEffect, useState } from "preact/hooks";
 import type { Answer, AnswersMap, CalculatorConfig, CalculatorQuestion } from "../../src/lib/calculator/types";
+import { isValidEmail, isValidPolishPhone } from "../../src/lib/calculator/validation";
 import { fetchCalculatorConfig, submitLead, type LeadEstimate } from "./api";
 import { QuestionInput } from "./QuestionInput";
 import { STRINGS, type Locale } from "./strings";
@@ -52,8 +53,8 @@ function initialAnswer(question: CalculatorQuestion): Answer | undefined {
 function isLeadValid(lead: { name: string; email: string; phone: string }): boolean {
   return (
     lead.name.trim().length > 0 &&
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(lead.email) &&
-    lead.phone.trim().length > 0
+    isValidEmail(lead.email) &&
+    isValidPolishPhone(lead.phone)
   );
 }
 

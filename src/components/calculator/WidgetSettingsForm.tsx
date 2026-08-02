@@ -27,6 +27,7 @@ interface Props {
   bgColor: string | null;
   textColor: string | null;
   borderColor: string | null;
+  allowedDomain: string | null;
 }
 
 export function WidgetSettingsForm({
@@ -37,6 +38,7 @@ export function WidgetSettingsForm({
   bgColor,
   textColor,
   borderColor,
+  allowedDomain,
 }: Props) {
   const [color, setColor] = useState(accentColor);
   const [loc, setLoc] = useState<Locale>(locale);
@@ -161,6 +163,25 @@ export function WidgetSettingsForm({
               </label>
             </div>
           )}
+        </div>
+
+        <div className="border-t border-dashed border-line-strong pt-5">
+          <p className="mb-2 text-xs font-medium uppercase tracking-wide text-ink-faint">
+            Bezpieczeństwo
+          </p>
+          <label className="block text-sm text-ink-soft">
+            Dozwolona domena (opcjonalnie)
+            <input
+              name="allowed_domain"
+              defaultValue={allowedDomain ?? ""}
+              placeholder="mojafirma.pl"
+              className="field mt-1"
+            />
+          </label>
+          <p className="mt-1 text-xs text-ink-faint">
+            Puste = widget działa wszędzie. Ustawione = widget ładuje się tylko na tej domenie
+            (ochrona przed skopiowaniem kodu przez kogoś innego).
+          </p>
         </div>
 
         {state.error && <p className="text-sm text-rust-dark">{state.error}</p>}
