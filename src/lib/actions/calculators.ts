@@ -1,5 +1,6 @@
 "use server";
 
+import { randomBytes } from "node:crypto";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { CALCULATOR_TEMPLATES } from "@/lib/calculator/templates";
@@ -429,4 +430,52 @@ export async function deleteOption(calculatorId: string, optionId: string) {
   const supabase = await createClient();
   await supabase.from("options").delete().eq("id", optionId);
   revalidatePath(`/dashboard/calculators/${calculatorId}`);
+}
+
+// ── webhooks ───────────────────────────────────────────────────────────
+
+export async function updateWebhookUrl(
+  calculatorId: string,
+  _prevState: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  await requireUserId();
+  const webhookUrl = String(formData.get("webhook_url") ?? "").trim();
+
+  if (webhookUrl && !/^https:\/\//i.test(webhookUrl)) {
+    return { error: "Adres webhooka musi zaczynać się od https://." };
+  }
+
+  const supabase = await createClient();
+
+  const update: { webhook_url: string | null; webhook_secret?: string } = {
+    webhook_url: webhookUrl || null,
+  };
+
+  if (webhookUrl) {
+    const { data: existing } = await supabase
+      .from("calculators")
+      .select("webhook_secret")
+      .eq("id", calculatorId)
+      .single();
+    if (!existing?.webhook_secret) {
+      update.webhook_secret = randomBytes(24).toString("hex");
+    }
+  }
+
+  const { error } = await supabase.from("calculators").update(update).eq("id", calculatorId);
+  if (error) return { error: "Nie udało się zapisać adresu webhooka." };
+
+  revalidatePath(`/dashboard/calculators/${calculatorId}/webhooks`);
+  return { error: null };
+}
+
+export async function regenerateWebhookSecret(calculatorId: string) {
+  await requireUserId();
+  const supabase = await createClient();
+  await supabase
+    .from("calculators")
+    .update({ webhook_secret: randomBytes(24).toString("hex") })
+    .eq("id", calculatorId);
+  revalidatePath(`/dashboard/calculators/${calculatorId}/webhooks`);
 }

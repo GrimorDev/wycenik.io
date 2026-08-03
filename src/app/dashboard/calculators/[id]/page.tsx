@@ -144,12 +144,20 @@ export default async function EditCalculatorPage({
           <section className="space-y-3">
             <div className="flex items-center justify-between">
               <h2 className="font-display text-xl">Kod do wdrożenia</h2>
-              <Link
-                href={`/dashboard/calculators/${calculator.id}/widget`}
-                className="link-underline text-sm text-ink-soft hover:text-ink"
-              >
-                Edytuj wygląd widgetu
-              </Link>
+              <div className="flex items-center gap-4">
+                <Link
+                  href={`/dashboard/calculators/${calculator.id}/webhooks`}
+                  className="link-underline text-sm text-ink-soft hover:text-ink"
+                >
+                  Webhooki
+                </Link>
+                <Link
+                  href={`/dashboard/calculators/${calculator.id}/widget`}
+                  className="link-underline text-sm text-ink-soft hover:text-ink"
+                >
+                  Edytuj wygląd widgetu
+                </Link>
+              </div>
             </div>
             {calculator.is_published ? (
               <EmbedSnippet snippet={embedSnippet} />

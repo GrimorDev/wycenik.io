@@ -7,9 +7,10 @@ import type { AnswersMap } from "@/lib/calculator/types";
 import { isValidEmail, isValidPolishPhone } from "@/lib/calculator/validation";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createPublicClient } from "@/lib/supabase/public";
+import { dispatchLeadWebhook } from "@/lib/webhooks/dispatch";
 
 const CALCULATOR_SELECT =
-  "id,name,base_price,currency,estimate_spread_percent,accent_color,locale,corner_style,bg_color,text_color,border_color,allowed_domain,questions(id,label,type,config,position,required,options(id,label,price_delta,price_multiplier,position))";
+  "id,name,base_price,currency,estimate_spread_percent,accent_color,locale,corner_style,bg_color,text_color,border_color,allowed_domain,webhook_url,webhook_secret,questions(id,label,type,config,position,required,options(id,label,price_delta,price_multiplier,position))";
 
 interface LeadRequestBody {
   name?: string;
@@ -77,7 +78,11 @@ export async function POST(
     );
   }
 
-  const raw = data as unknown as RawCalculator & { allowed_domain: string | null };
+  const raw = data as unknown as RawCalculator & {
+    allowed_domain: string | null;
+    webhook_url: string | null;
+    webhook_secret: string | null;
+  };
 
   if (!isDomainAllowed(raw.allowed_domain, extractSourceDomain(request))) {
     return NextResponse.json(
@@ -116,6 +121,20 @@ export async function POST(
       { status: 500, headers: CORS_HEADERS },
     );
   }
+
+  // Intentionally not awaited: a slow or unreachable receiver must never
+  // delay the widget's own response to the end customer.
+  void dispatchLeadWebhook({
+    calculatorId: config.id,
+    webhookUrl: raw.webhook_url,
+    webhookSecret: raw.webhook_secret,
+    name,
+    email,
+    phone,
+    config,
+    answers,
+    estimate,
+  });
 
   return NextResponse.json(
     { min: estimate.min, max: estimate.max, currency: estimate.currency },

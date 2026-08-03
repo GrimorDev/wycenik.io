@@ -41,6 +41,8 @@ export interface Database {
           text_color: string | null;
           border_color: string | null;
           allowed_domain: string | null;
+          webhook_url: string | null;
+          webhook_secret: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -61,6 +63,8 @@ export interface Database {
           text_color?: string | null;
           border_color?: string | null;
           allowed_domain?: string | null;
+          webhook_url?: string | null;
+          webhook_secret?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -81,6 +85,8 @@ export interface Database {
           text_color?: string | null;
           border_color?: string | null;
           allowed_domain?: string | null;
+          webhook_url?: string | null;
+          webhook_secret?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -205,6 +211,36 @@ export interface Database {
           id?: string;
           calculator_id?: string;
           source_domain?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+      webhook_logs: {
+        Row: {
+          id: string;
+          calculator_id: string;
+          status_code: number | null;
+          response_time_ms: number | null;
+          attempts: number;
+          error: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          calculator_id: string;
+          status_code?: number | null;
+          response_time_ms?: number | null;
+          attempts?: number;
+          error?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          calculator_id?: string;
+          status_code?: number | null;
+          response_time_ms?: number | null;
+          attempts?: number;
+          error?: string | null;
           created_at?: string;
         };
         Relationships: [];
