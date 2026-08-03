@@ -7,6 +7,9 @@ import type { RawOption } from "@/lib/calculator/mapper";
 
 const initialState: ActionState = { error: null };
 
+const FIELD_CLASS =
+  "w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-900 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100";
+
 export function EditOptionForm({
   calculatorId,
   option,
@@ -31,7 +34,7 @@ export function EditOptionForm({
   if (!isEditing) {
     return (
       <div className="flex items-center justify-between text-sm">
-        <span className="tabular text-ink-soft">
+        <span className="tabular text-slate-600">
           {option.label} ({option.price_delta} {currency}
           {option.price_multiplier !== 1 ? ` · ×${option.price_multiplier}` : ""})
         </span>
@@ -39,12 +42,12 @@ export function EditOptionForm({
           <button
             type="button"
             onClick={() => setIsEditing(true)}
-            className="link-underline text-xs text-ink-soft hover:text-ink"
+            className="text-xs font-medium text-slate-500 hover:text-slate-800"
           >
             Edytuj
           </button>
           <form action={deleteOption.bind(null, calculatorId, option.id)}>
-            <button type="submit" className="link-underline text-xs text-rust-dark">
+            <button type="submit" className="text-xs font-medium text-red-600 hover:text-red-700">
               Usuń
             </button>
           </form>
@@ -56,12 +59,12 @@ export function EditOptionForm({
   return (
     <div>
       <form action={formAction} className="space-y-2">
-        <label className="block text-xs text-ink-faint">
+        <label className="block text-xs text-slate-500">
           Opcja
-          <input name="label" required defaultValue={option.label} className="field mt-1 py-1.5" />
+          <input name="label" required defaultValue={option.label} className={`mt-1 ${FIELD_CLASS}`} />
         </label>
         <div className="flex flex-wrap items-end gap-2">
-          <label className="text-xs text-ink-faint">
+          <label className="text-xs text-slate-500">
             Dopłata
             <InfoTooltip text="Kwota doliczana do wyceny, jeśli klient wybierze tę opcję. Może być ujemna (rabat)." />
             <input
@@ -69,10 +72,10 @@ export function EditOptionForm({
               type="number"
               step="0.01"
               defaultValue={option.price_delta}
-              className="field tabular mt-1 w-24 py-1.5"
+              className={`tabular mt-1 w-24 ${FIELD_CLASS}`}
             />
           </label>
-          <label className="text-xs text-ink-faint">
+          <label className="text-xs text-slate-500">
             Mnożnik
             <InfoTooltip text="Przemnaża całą dotychczasową sumę. 1 = bez zmian, 0.8 = 20% taniej." />
             <input
@@ -80,23 +83,27 @@ export function EditOptionForm({
               type="number"
               step="0.01"
               defaultValue={option.price_multiplier}
-              className="field tabular mt-1 w-20 py-1.5"
+              className={`tabular mt-1 w-20 ${FIELD_CLASS}`}
             />
           </label>
-          <button type="submit" disabled={pending} className="btn btn-primary px-3 py-1.5 text-xs">
+          <button
+            type="submit"
+            disabled={pending}
+            className="rounded-lg bg-emerald-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-600 disabled:opacity-60"
+          >
             {pending ? "…" : "Zapisz"}
           </button>
           <button
             type="button"
             onClick={() => setIsEditing(false)}
             disabled={pending}
-            className="btn btn-ghost px-3 py-1.5 text-xs"
+            className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-700 hover:border-slate-400"
           >
             Anuluj
           </button>
         </div>
       </form>
-      {state.error && <p className="mt-1 text-xs text-rust-dark">{state.error}</p>}
+      {state.error && <p className="mt-1 text-xs text-red-600">{state.error}</p>}
     </div>
   );
 }

@@ -1,7 +1,6 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
-import { DashboardNav } from "@/components/DashboardNav";
-import { LogoutButton } from "@/components/LogoutButton";
+import { DashboardSidebar } from "@/components/DashboardSidebar";
+import { getPlanUsage } from "@/lib/plans";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function DashboardLayout({
@@ -18,24 +17,12 @@ export default async function DashboardLayout({
     redirect("/login");
   }
 
+  const usage = await getPlanUsage(supabase, user.id);
+
   return (
-    <div className="flex flex-1 flex-col md:flex-row">
-      <aside className="flex flex-col gap-4 border-b border-line px-5 py-4 md:w-60 md:shrink-0 md:border-b-0 md:border-r md:py-6">
-        <Link href="/dashboard" className="font-display text-lg font-semibold">
-          Wycenik<span className="text-rust">.io</span>
-        </Link>
-
-        <DashboardNav />
-
-        <div className="mt-auto border-t border-dashed border-line-strong pt-4">
-          <p className="tabular truncate text-xs text-ink-faint">{user.email}</p>
-          <div className="mt-1">
-            <LogoutButton />
-          </div>
-        </div>
-      </aside>
-
-      <main className="flex flex-1 flex-col px-6 py-10">{children}</main>
+    <div className="flex min-h-screen flex-1 flex-col bg-slate-50 md:flex-row">
+      <DashboardSidebar email={user.email ?? ""} usage={usage} />
+      <main className="flex flex-1 flex-col px-6 py-10 md:px-10">{children}</main>
     </div>
   );
 }

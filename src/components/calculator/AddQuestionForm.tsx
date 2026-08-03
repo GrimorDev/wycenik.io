@@ -5,6 +5,9 @@ import { addQuestion, type ActionState } from "@/lib/actions/calculators";
 
 const initialState: ActionState = { error: null };
 
+const FIELD_CLASS =
+  "w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100";
+
 export function AddQuestionForm({ calculatorId }: { calculatorId: string }) {
   const [isAdding, setIsAdding] = useState(false);
   const action = addQuestion.bind(null, calculatorId);
@@ -27,7 +30,7 @@ export function AddQuestionForm({ calculatorId }: { calculatorId: string }) {
       <button
         type="button"
         onClick={() => setIsAdding(true)}
-        className="btn btn-ghost w-full justify-center border-dashed"
+        className="flex w-full items-center justify-center rounded-xl border border-dashed border-slate-300 py-3 text-sm font-medium text-slate-500 hover:border-emerald-400 hover:text-emerald-600"
       >
         + Dodaj pytanie
       </button>
@@ -35,67 +38,71 @@ export function AddQuestionForm({ calculatorId }: { calculatorId: string }) {
   }
 
   return (
-    <form ref={formRef} action={formAction} className="ticket-dashed space-y-3 p-4">
-      <p className="stamp text-rust">Dodaj pytanie</p>
-      <label className="block text-sm text-ink-soft">
+    <form ref={formRef} action={formAction} className="space-y-3 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-4">
+      <p className="text-sm font-semibold text-slate-900">Dodaj pytanie</p>
+      <label className="block text-sm text-slate-600">
         Treść pytania
-        <input name="label" required className="field mt-1" />
+        <input name="label" required className={`mt-1 ${FIELD_CLASS}`} />
       </label>
       <div className="flex items-end gap-4">
-        <label className="block text-sm text-ink-soft">
+        <label className="block text-sm text-slate-600">
           Typ
           <select
             name="type"
             value={type}
             onChange={(e) => setType(e.target.value as typeof type)}
-            className="field mt-1"
+            className={`mt-1 ${FIELD_CLASS}`}
           >
             <option value="single_choice">Jednokrotny wybór</option>
             <option value="checkbox">Checkboxy (wielokrotny wybór)</option>
             <option value="number_slider">Suwak liczbowy</option>
           </select>
         </label>
-        <label className="flex items-center gap-2 pb-2.5 text-sm text-ink-soft">
-          <input type="checkbox" name="required" defaultChecked className="accent-rust" />
+        <label className="flex items-center gap-2 pb-2.5 text-sm text-slate-600">
+          <input type="checkbox" name="required" defaultChecked className="accent-emerald-500" />
           Wymagane
         </label>
       </div>
 
       {type === "number_slider" && (
         <div className="grid grid-cols-4 gap-3">
-          <label className="text-sm text-ink-soft">
+          <label className="text-sm text-slate-500">
             Min
-            <input name="min" type="number" defaultValue={0} className="field tabular mt-1" />
+            <input name="min" type="number" defaultValue={0} className={`tabular mt-1 ${FIELD_CLASS}`} />
           </label>
-          <label className="text-sm text-ink-soft">
+          <label className="text-sm text-slate-500">
             Max
-            <input name="max" type="number" defaultValue={100} className="field tabular mt-1" />
+            <input name="max" type="number" defaultValue={100} className={`tabular mt-1 ${FIELD_CLASS}`} />
           </label>
-          <label className="text-sm text-ink-soft">
+          <label className="text-sm text-slate-500">
             Krok
-            <input name="step" type="number" defaultValue={1} className="field tabular mt-1" />
+            <input name="step" type="number" defaultValue={1} className={`tabular mt-1 ${FIELD_CLASS}`} />
           </label>
-          <label className="text-sm text-ink-soft">
+          <label className="text-sm text-slate-500">
             Cena / jednostkę
-            <input name="price_per_unit" type="number" step="0.01" defaultValue={0} className="field tabular mt-1" />
+            <input name="price_per_unit" type="number" step="0.01" defaultValue={0} className={`tabular mt-1 ${FIELD_CLASS}`} />
           </label>
-          <label className="col-span-4 text-sm text-ink-soft">
+          <label className="col-span-4 text-sm text-slate-500">
             Jednostka (np. m2)
-            <input name="unit" className="field mt-1" />
+            <input name="unit" className={`mt-1 ${FIELD_CLASS}`} />
           </label>
         </div>
       )}
 
-      {state.error && <p className="text-sm text-rust-dark">{state.error}</p>}
+      {state.error && <p className="text-sm text-red-600">{state.error}</p>}
       <div className="flex gap-2">
-        <button type="submit" disabled={pending} className="btn btn-primary px-3 py-1.5 text-xs">
+        <button
+          type="submit"
+          disabled={pending}
+          className="rounded-lg bg-emerald-500 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-600 disabled:opacity-60"
+        >
           {pending ? "Dodawanie…" : "Dodaj pytanie"}
         </button>
         <button
           type="button"
           onClick={() => setIsAdding(false)}
           disabled={pending}
-          className="btn btn-ghost px-3 py-1.5 text-xs"
+          className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:border-slate-400"
         >
           Anuluj
         </button>

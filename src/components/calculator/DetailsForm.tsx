@@ -6,6 +6,9 @@ import { updateCalculatorDetails, type ActionState } from "@/lib/actions/calcula
 
 const initialState: ActionState = { error: null };
 
+const FIELD_CLASS =
+  "w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100";
+
 interface Props {
   calculatorId: string;
   name: string;
@@ -28,25 +31,25 @@ export function DetailsForm({
 
   return (
     <form action={formAction} className="space-y-4">
-      <label className="block text-sm text-ink-soft">
+      <label className="block text-sm text-slate-600">
         Nazwa
-        <input name="name" required defaultValue={name} className="field mt-1" />
+        <input name="name" required defaultValue={name} className={`mt-1 ${FIELD_CLASS}`} />
       </label>
-      <label className="block text-sm text-ink-soft">
+      <label className="block text-sm text-slate-600">
         Opis (opcjonalnie)
-        <textarea name="description" defaultValue={description ?? ""} rows={2} className="field mt-1" />
+        <textarea name="description" defaultValue={description ?? ""} rows={2} className={`mt-1 ${FIELD_CLASS}`} />
       </label>
       <div className="grid grid-cols-3 gap-4">
-        <label className="block text-sm text-ink-soft">
+        <label className="block text-sm text-slate-600">
           Cena bazowa
           <InfoTooltip text="Minimalna kwota, od której zaczynasz wycenę — np. koszt dojazdu lub minimalna wartość zlecenia." />
-          <input name="base_price" type="number" step="0.01" defaultValue={basePrice} className="field tabular mt-1" />
+          <input name="base_price" type="number" step="0.01" defaultValue={basePrice} className={`tabular mt-1 ${FIELD_CLASS}`} />
         </label>
-        <label className="block text-sm text-ink-soft">
+        <label className="block text-sm text-slate-600">
           Waluta
-          <input name="currency" defaultValue={currency} className="field tabular mt-1" />
+          <input name="currency" defaultValue={currency} className={`tabular mt-1 ${FIELD_CLASS}`} />
         </label>
-        <label className="block text-sm text-ink-soft">
+        <label className="block text-sm text-slate-600">
           Widełki wyceny (%)
           <InfoTooltip text="Zalecane 10–15%. Klienci chętniej zostawiają kontakt, widząc przedział cenowy (np. 1500–1800 zł), niż jedną sztywną kwotę." />
           <input
@@ -56,13 +59,17 @@ export function DetailsForm({
             min="0"
             max="100"
             defaultValue={Math.round(estimateSpreadPercent * 100)}
-            className="field tabular mt-1"
+            className={`tabular mt-1 ${FIELD_CLASS}`}
           />
         </label>
       </div>
 
-      {state.error && <p className="text-sm text-rust-dark">{state.error}</p>}
-      <button type="submit" disabled={pending} className="btn btn-primary">
+      {state.error && <p className="text-sm text-red-600">{state.error}</p>}
+      <button
+        type="submit"
+        disabled={pending}
+        className="rounded-lg bg-emerald-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-600 disabled:opacity-60"
+      >
         {pending ? "Zapisywanie…" : "Zapisz zmiany"}
       </button>
     </form>

@@ -12,23 +12,30 @@ export function CalculatorTabs({ calculatorId }: Props) {
   const base = `/dashboard/calculators/${calculatorId}`;
 
   const tabs = [
-    { href: base, label: "Edycja" },
-    { href: `${base}/widget`, label: "Wygląd widgetu" },
-    { href: `${base}/webhooks`, label: "Webhooki" },
-    { href: `${base}/leads`, label: "Leady" },
+    { href: base, label: "Pytania" },
+    { href: `${base}/pricing`, label: "Ustawienia wyceny" },
+    { href: `${base}/widget`, label: "Styling" },
+    { href: `${base}/webhooks`, label: "Integracje" },
   ];
 
   return (
-    <nav className="tab-row">
-      {tabs.map((tab) => (
-        <Link
-          key={tab.href}
-          href={tab.href}
-          className={`tab ${pathname === tab.href ? "tab-active" : ""}`}
-        >
-          {tab.label}
-        </Link>
-      ))}
+    <nav className="flex gap-1 border-b border-slate-200">
+      {tabs.map((tab) => {
+        const active = pathname === tab.href;
+        return (
+          <Link
+            key={tab.href}
+            href={tab.href}
+            className={`border-b-2 px-3 py-2.5 text-sm font-medium transition-colors ${
+              active
+                ? "border-emerald-500 text-slate-900"
+                : "border-transparent text-slate-500 hover:text-slate-800"
+            }`}
+          >
+            {tab.label}
+          </Link>
+        );
+      })}
     </nav>
   );
 }

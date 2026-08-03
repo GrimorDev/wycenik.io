@@ -4,7 +4,11 @@ import { randomBytes } from "node:crypto";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { CALCULATOR_TEMPLATES } from "@/lib/calculator/templates";
+import { FREE_PLAN, getPlanUsage } from "@/lib/plans";
+import { randomSlugSuffix, slugify } from "@/lib/slug";
 import { createClient } from "@/lib/supabase/server";
+
+const CALCULATOR_LIMIT_ERROR = `Osiągnięto limit planu Free (${FREE_PLAN.maxCalculators} kalkulator). Przejdź na wyższy plan, aby dodać kolejny.`;
 
 export interface ActionState {
   error: string | null;
@@ -21,7 +25,31 @@ async function requireUserId(): Promise<string> {
   return user.id;
 }
 
-const SLUG_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
+
+// The slug is derived from the name (no manual slug field in the UI), so a
+// collision just means retrying with a random suffix rather than surfacing
+// an error the user has no field to fix.
+async function insertCalculatorWithUniqueSlug(
+  supabase: SupabaseServerClient,
+  base: { user_id: string; name: string; base_price: number; currency?: string },
+): Promise<{ id: string } | { error: string }> {
+  const baseSlug = slugify(base.name);
+
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const slug = attempt === 0 ? baseSlug : `${baseSlug}-${randomSlugSuffix()}`;
+    const { data, error } = await supabase
+      .from("calculators")
+      .insert({ ...base, slug })
+      .select("id")
+      .single();
+
+    if (!error) return { id: data.id };
+    if (error.code !== "23505") return { error: "Nie udało się utworzyć kalkulatora." };
+  }
+
+  return { error: "Nie udało się utworzyć kalkulatora." };
+}
 
 export async function createCalculator(
   _prevState: ActionState,
@@ -29,34 +57,27 @@ export async function createCalculator(
 ): Promise<ActionState> {
   const userId = await requireUserId();
   const name = String(formData.get("name") ?? "").trim();
-  const slug = String(formData.get("slug") ?? "").trim();
   const basePrice = Number(formData.get("base_price") ?? 0);
 
   if (!name) return { error: "Nazwa jest wymagana." };
-  if (!SLUG_RE.test(slug)) {
-    return { error: "Slug może zawierać tylko małe litery, cyfry i myślniki." };
-  }
 
   const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("calculators")
-    .insert({
-      user_id: userId,
-      name,
-      slug,
-      base_price: Number.isFinite(basePrice) ? basePrice : 0,
-    })
-    .select("id")
-    .single();
-
-  if (error) {
-    return {
-      error: error.code === "23505" ? "Ten slug jest już zajęty." : "Nie udało się utworzyć kalkulatora.",
-    };
+  const usage = await getPlanUsage(supabase, userId);
+  if (usage.calculatorCount >= usage.maxCalculators) {
+    return { error: CALCULATOR_LIMIT_ERROR };
   }
 
+  const result = await insertCalculatorWithUniqueSlug(supabase, {
+    user_id: userId,
+    name,
+    base_price: Number.isFinite(basePrice) ? basePrice : 0,
+  });
+
+  if ("error" in result) return { error: result.error };
+
   revalidatePath("/dashboard");
-  redirect(`/dashboard/calculators/${data.id}`);
+  revalidatePath("/dashboard/calculators");
+  redirect(`/dashboard/calculators/${result.id}`);
 }
 
 export async function createCalculatorFromTemplate(
@@ -66,34 +87,27 @@ export async function createCalculatorFromTemplate(
 ): Promise<ActionState> {
   const userId = await requireUserId();
   const name = String(formData.get("name") ?? "").trim();
-  const slug = String(formData.get("slug") ?? "").trim();
 
   if (!name) return { error: "Nazwa jest wymagana." };
-  if (!SLUG_RE.test(slug)) {
-    return { error: "Slug może zawierać tylko małe litery, cyfry i myślniki." };
-  }
 
   const template = CALCULATOR_TEMPLATES.find((t) => t.key === templateKey);
   if (!template) return { error: "Nieznany szablon." };
 
   const supabase = await createClient();
-  const { data: calculator, error } = await supabase
-    .from("calculators")
-    .insert({
-      user_id: userId,
-      name,
-      slug,
-      base_price: template.basePrice,
-      currency: template.currency,
-    })
-    .select("id")
-    .single();
-
-  if (error) {
-    return {
-      error: error.code === "23505" ? "Ten slug jest już zajęty." : "Nie udało się utworzyć kalkulatora.",
-    };
+  const usage = await getPlanUsage(supabase, userId);
+  if (usage.calculatorCount >= usage.maxCalculators) {
+    return { error: CALCULATOR_LIMIT_ERROR };
   }
+
+  const result = await insertCalculatorWithUniqueSlug(supabase, {
+    user_id: userId,
+    name,
+    base_price: template.basePrice,
+    currency: template.currency,
+  });
+
+  if ("error" in result) return { error: result.error };
+  const calculator = { id: result.id };
 
   for (const [qIndex, question] of template.questions.entries()) {
     const { data: createdQuestion, error: qError } = await supabase
@@ -123,6 +137,7 @@ export async function createCalculatorFromTemplate(
   }
 
   revalidatePath("/dashboard");
+  revalidatePath("/dashboard/calculators");
   redirect(`/dashboard/calculators/${calculator.id}`);
 }
 
@@ -226,6 +241,7 @@ export async function togglePublish(calculatorId: string, isPublished: boolean) 
     .eq("id", calculatorId);
   revalidatePath(`/dashboard/calculators/${calculatorId}`);
   revalidatePath("/dashboard");
+  revalidatePath("/dashboard/calculators");
 }
 
 export async function deleteCalculator(calculatorId: string) {
@@ -233,6 +249,7 @@ export async function deleteCalculator(calculatorId: string) {
   const supabase = await createClient();
   await supabase.from("calculators").delete().eq("id", calculatorId);
   revalidatePath("/dashboard");
+  revalidatePath("/dashboard/calculators");
   redirect("/dashboard");
 }
 

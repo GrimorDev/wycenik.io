@@ -28,7 +28,7 @@ export default async function WidgetAppearancePage({
   }
 
   return (
-    <div className="mx-auto w-full max-w-3xl space-y-6">
+    <div className="mx-auto w-full max-w-3xl">
       <CalculatorHeader
         calculatorId={id}
         name={calculator.name}
@@ -36,11 +36,11 @@ export default async function WidgetAppearancePage({
         isPublished={calculator.is_published}
       />
 
-      <div>
-        <h2 className="font-display text-xl">Wygląd widgetu</h2>
-        <p className="mt-1 text-sm text-ink-soft">
+      <div className="mt-8 mb-6">
+        <h2 className="text-base font-semibold text-slate-900">Styling</h2>
+        <p className="mt-1 text-sm text-slate-500">
           Zmiany widoczne są od razu poniżej, ale nie trafią do klientów, dopóki nie klikniesz
-          &bdquo;Zapisz wygląd&rdquo;.
+          „Zapisz wygląd”.
         </p>
       </div>
 
