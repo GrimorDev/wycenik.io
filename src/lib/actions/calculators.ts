@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { CALCULATOR_TEMPLATES } from "@/lib/calculator/templates";
 import { createClient } from "@/lib/supabase/server";
 
 export interface ActionState {
@@ -55,6 +56,73 @@ export async function createCalculator(
 
   revalidatePath("/dashboard");
   redirect(`/dashboard/calculators/${data.id}`);
+}
+
+export async function createCalculatorFromTemplate(
+  templateKey: string,
+  _prevState: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const userId = await requireUserId();
+  const name = String(formData.get("name") ?? "").trim();
+  const slug = String(formData.get("slug") ?? "").trim();
+
+  if (!name) return { error: "Nazwa jest wymagana." };
+  if (!SLUG_RE.test(slug)) {
+    return { error: "Slug może zawierać tylko małe litery, cyfry i myślniki." };
+  }
+
+  const template = CALCULATOR_TEMPLATES.find((t) => t.key === templateKey);
+  if (!template) return { error: "Nieznany szablon." };
+
+  const supabase = await createClient();
+  const { data: calculator, error } = await supabase
+    .from("calculators")
+    .insert({
+      user_id: userId,
+      name,
+      slug,
+      base_price: template.basePrice,
+      currency: template.currency,
+    })
+    .select("id")
+    .single();
+
+  if (error) {
+    return {
+      error: error.code === "23505" ? "Ten slug jest już zajęty." : "Nie udało się utworzyć kalkulatora.",
+    };
+  }
+
+  for (const [qIndex, question] of template.questions.entries()) {
+    const { data: createdQuestion, error: qError } = await supabase
+      .from("questions")
+      .insert({
+        calculator_id: calculator.id,
+        label: question.label,
+        type: question.type,
+        required: question.required,
+        position: qIndex,
+        config: question.config ?? {},
+      })
+      .select("id")
+      .single();
+
+    if (qError || !createdQuestion || !question.options?.length) continue;
+
+    await supabase.from("options").insert(
+      question.options.map((option, oIndex) => ({
+        question_id: createdQuestion.id,
+        label: option.label,
+        price_delta: option.priceDelta,
+        price_multiplier: option.priceMultiplier,
+        position: oIndex,
+      })),
+    );
+  }
+
+  revalidatePath("/dashboard");
+  redirect(`/dashboard/calculators/${calculator.id}`);
 }
 
 export async function updateCalculatorDetails(

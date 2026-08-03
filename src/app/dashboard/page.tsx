@@ -1,6 +1,10 @@
 import Link from "next/link";
 import { StatusDotIcon } from "@/components/icons";
+import { OnboardingChecklist } from "@/components/OnboardingChecklist";
 import { createClient } from "@/lib/supabase/server";
+
+const DEFAULT_ACCENT_COLOR = "#b54b24";
+const DEFAULT_CORNER_STYLE = "rounded";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -12,12 +16,48 @@ export default async function DashboardPage() {
   // widget), so this list must be scoped to the owner explicitly.
   const { data: calculators } = await supabase
     .from("calculators")
-    .select("id,name,slug,is_published,created_at")
+    .select("id,name,slug,is_published,created_at,accent_color,corner_style,bg_color")
     .eq("user_id", user?.id ?? "")
     .order("created_at", { ascending: false });
 
+  const calculatorIds = (calculators ?? []).map((c) => c.id);
+
+  let hasQuestions = false;
+  let hasViews = false;
+  let hasLeads = false;
+
+  if (calculatorIds.length > 0) {
+    const [{ count: questionCount }, { count: viewCount }, { count: leadCount }] = await Promise.all([
+      supabase.from("questions").select("id", { count: "exact", head: true }).in("calculator_id", calculatorIds),
+      supabase
+        .from("calculator_views")
+        .select("id", { count: "exact", head: true })
+        .in("calculator_id", calculatorIds),
+      supabase.from("leads").select("id", { count: "exact", head: true }).in("calculator_id", calculatorIds),
+    ]);
+    hasQuestions = (questionCount ?? 0) > 0;
+    hasViews = (viewCount ?? 0) > 0;
+    hasLeads = (leadCount ?? 0) > 0;
+  }
+
+  const hasCustomizedAppearance = (calculators ?? []).some(
+    (c) =>
+      c.accent_color !== DEFAULT_ACCENT_COLOR ||
+      c.corner_style !== DEFAULT_CORNER_STYLE ||
+      c.bg_color !== null,
+  );
+
+  const onboardingSteps = [
+    { label: "Skonfiguruj kalkulator", done: calculatorIds.length > 0 && hasQuestions },
+    { label: "Dostosuj kolory do swojej strony", done: hasCustomizedAppearance },
+    { label: "Wklej kod na swoją stronę WWW", done: hasViews },
+    { label: "Odbierz pierwszego leada", done: hasLeads },
+  ];
+
   return (
     <div className="mx-auto w-full max-w-3xl">
+      <OnboardingChecklist steps={onboardingSteps} />
+
       <div className="mb-8 flex items-center justify-between">
         <h1 className="font-display text-3xl">Twoje kalkulatory</h1>
         <Link href="/dashboard/calculators/new" className="btn btn-primary">

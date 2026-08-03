@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { InfoTooltip } from "@/components/InfoTooltip";
 import { updateCalculatorDetails, type ActionState } from "@/lib/actions/calculators";
 
 const initialState: ActionState = { error: null };
@@ -38,6 +39,7 @@ export function DetailsForm({
       <div className="grid grid-cols-3 gap-4">
         <label className="block text-sm text-ink-soft">
           Cena bazowa
+          <InfoTooltip text="Minimalna kwota, od której zaczynasz wycenę — np. koszt dojazdu lub minimalna wartość zlecenia." />
           <input name="base_price" type="number" step="0.01" defaultValue={basePrice} className="field tabular mt-1" />
         </label>
         <label className="block text-sm text-ink-soft">
@@ -46,6 +48,7 @@ export function DetailsForm({
         </label>
         <label className="block text-sm text-ink-soft">
           Widełki wyceny (%)
+          <InfoTooltip text="Zalecane 10–15%. Klienci chętniej zostawiają kontakt, widząc przedział cenowy (np. 1500–1800 zł), niż jedną sztywną kwotę." />
           <input
             name="estimate_spread_percent"
             type="number"

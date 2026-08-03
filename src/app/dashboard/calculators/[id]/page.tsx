@@ -3,13 +3,14 @@ import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { AddOptionForm } from "@/components/calculator/AddOptionForm";
 import { AddQuestionForm } from "@/components/calculator/AddQuestionForm";
+import { AdminCalculatorPreview } from "@/components/calculator/AdminCalculatorPreview";
 import { DetailsForm } from "@/components/calculator/DetailsForm";
 import { EditOptionForm } from "@/components/calculator/EditOptionForm";
 import { EditQuestionForm } from "@/components/calculator/EditQuestionForm";
 import { EmbedSnippet } from "@/components/calculator/EmbedSnippet";
 import { ArrowLeftIcon, ChevronDownIcon, ChevronUpIcon } from "@/components/icons";
 import { deleteCalculator, moveQuestion, togglePublish } from "@/lib/actions/calculators";
-import type { RawCalculator } from "@/lib/calculator/mapper";
+import { toCalculatorConfig, type RawCalculator } from "@/lib/calculator/mapper";
 import { createClient } from "@/lib/supabase/server";
 
 const CALCULATOR_SELECT =
@@ -87,9 +88,10 @@ export default async function EditCalculatorPage({
   const origin = await getOrigin();
   const embedSnippet = `<script src="${origin}/widget.js" data-calculator="${calculator.slug}"></script>`;
   const questions = [...calculator.questions].sort((a, b) => a.position - b.position);
+  const previewConfig = toCalculatorConfig(calculator);
 
   return (
-    <div className="mx-auto w-full max-w-2xl space-y-12">
+    <div className="mx-auto w-full max-w-6xl">
       <div>
         <Link href="/dashboard" className="link-underline flex items-center gap-1.5 text-sm text-ink-soft">
           <ArrowLeftIcon className="h-3.5 w-3.5" />
@@ -104,144 +106,157 @@ export default async function EditCalculatorPage({
         <p className="tabular text-sm text-ink-faint">/{calculator.slug}</p>
       </div>
 
-      <section className="space-y-3">
-        <h2 className="font-display text-xl">Statystyki</h2>
-        <div className="grid grid-cols-3 gap-3">
-          <div className="ticket p-4 text-center">
-            <p className="tabular font-display text-2xl text-rust">{views}</p>
-            <p className="mt-1 text-xs text-ink-faint">Wyświetlenia</p>
-          </div>
-          <div className="ticket p-4 text-center">
-            <p className="tabular font-display text-2xl text-rust">{leads}</p>
-            <p className="mt-1 text-xs text-ink-faint">Leady</p>
-          </div>
-          <div className="ticket p-4 text-center">
-            <p className="tabular font-display text-2xl text-rust">{conversion}%</p>
-            <p className="mt-1 text-xs text-ink-faint">Konwersja</p>
-          </div>
-        </div>
-        {topDomains.length > 0 && (
-          <div className="ticket-dashed p-4">
-            <p className="mb-2 text-xs font-medium uppercase tracking-wide text-ink-faint">
-              Aktywny na domenach
-            </p>
-            <ul className="space-y-1">
-              {topDomains.map(([domain, count]) => (
-                <li key={domain} className="flex items-center justify-between text-sm">
-                  <span className="tabular text-ink-soft">{domain}</span>
-                  <span className="tabular text-ink-faint">{count}</span>
+      <div className="mt-10 grid gap-10 xl:grid-cols-[1fr_380px]">
+        <div className="max-w-2xl space-y-12">
+          <section className="space-y-3">
+            <h2 className="font-display text-xl">Statystyki</h2>
+            <div className="grid grid-cols-3 gap-3">
+              <div className="ticket p-4 text-center">
+                <p className="tabular font-display text-2xl text-rust">{views}</p>
+                <p className="mt-1 text-xs text-ink-faint">Wyświetlenia</p>
+              </div>
+              <div className="ticket p-4 text-center">
+                <p className="tabular font-display text-2xl text-rust">{leads}</p>
+                <p className="mt-1 text-xs text-ink-faint">Leady</p>
+              </div>
+              <div className="ticket p-4 text-center">
+                <p className="tabular font-display text-2xl text-rust">{conversion}%</p>
+                <p className="mt-1 text-xs text-ink-faint">Konwersja</p>
+              </div>
+            </div>
+            {topDomains.length > 0 && (
+              <div className="ticket-dashed p-4">
+                <p className="mb-2 text-xs font-medium uppercase tracking-wide text-ink-faint">
+                  Aktywny na domenach
+                </p>
+                <ul className="space-y-1">
+                  {topDomains.map(([domain, count]) => (
+                    <li key={domain} className="flex items-center justify-between text-sm">
+                      <span className="tabular text-ink-soft">{domain}</span>
+                      <span className="tabular text-ink-faint">{count}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </section>
+
+          <section className="space-y-3">
+            <div className="flex items-center justify-between">
+              <h2 className="font-display text-xl">Kod do wdrożenia</h2>
+              <Link
+                href={`/dashboard/calculators/${calculator.id}/widget`}
+                className="link-underline text-sm text-ink-soft hover:text-ink"
+              >
+                Edytuj wygląd widgetu
+              </Link>
+            </div>
+            {calculator.is_published ? (
+              <EmbedSnippet snippet={embedSnippet} />
+            ) : (
+              <p className="text-sm text-ink-soft">
+                Opublikuj kalkulator, aby otrzymać kod do wklejenia na stronę.
+              </p>
+            )}
+            <form action={togglePublish.bind(null, calculator.id, !calculator.is_published)}>
+              <button type="submit" className="btn btn-ghost">
+                {calculator.is_published ? "Cofnij publikację" : "Opublikuj"}
+              </button>
+            </form>
+          </section>
+
+          <section className="space-y-3">
+            <h2 className="font-display text-xl">Ustawienia</h2>
+            <DetailsForm
+              calculatorId={calculator.id}
+              name={calculator.name}
+              description={calculator.description}
+              basePrice={calculator.base_price}
+              currency={calculator.currency}
+              estimateSpreadPercent={calculator.estimate_spread_percent}
+            />
+          </section>
+
+          <section className="space-y-4">
+            <h2 className="font-display text-xl">Pytania</h2>
+
+            {questions.length === 0 && (
+              <p className="text-sm text-ink-soft">Ten kalkulator nie ma jeszcze żadnych pytań.</p>
+            )}
+
+            <ul className="space-y-4">
+              {questions.map((question, index) => (
+                <li key={question.id} className="ticket flex gap-3 p-4">
+                  <div className="flex shrink-0 flex-col gap-0.5 pt-0.5">
+                    <form action={moveQuestion.bind(null, calculator.id, question.id, "up")}>
+                      <button
+                        type="submit"
+                        disabled={index === 0}
+                        aria-label="Przenieś wyżej"
+                        className="rounded p-1 text-ink-faint hover:text-ink disabled:opacity-20"
+                      >
+                        <ChevronUpIcon className="h-4 w-4" />
+                      </button>
+                    </form>
+                    <form action={moveQuestion.bind(null, calculator.id, question.id, "down")}>
+                      <button
+                        type="submit"
+                        disabled={index === questions.length - 1}
+                        aria-label="Przenieś niżej"
+                        className="rounded p-1 text-ink-faint hover:text-ink disabled:opacity-20"
+                      >
+                        <ChevronDownIcon className="h-4 w-4" />
+                      </button>
+                    </form>
+                  </div>
+
+                  <div className="min-w-0 flex-1">
+                    <EditQuestionForm calculatorId={calculator.id} question={question} />
+
+                    {question.type !== "number_slider" && (
+                      <div className="mt-4 space-y-2 border-t border-dashed border-line-strong pt-4">
+                        <ul className="space-y-2">
+                          {[...question.options]
+                            .sort((a, b) => a.position - b.position)
+                            .map((option) => (
+                              <li key={option.id}>
+                                <EditOptionForm
+                                  calculatorId={calculator.id}
+                                  option={option}
+                                  currency={calculator.currency}
+                                />
+                              </li>
+                            ))}
+                        </ul>
+                        <AddOptionForm calculatorId={calculator.id} questionId={question.id} />
+                      </div>
+                    )}
+                  </div>
                 </li>
               ))}
             </ul>
-          </div>
-        )}
-      </section>
 
-      <section className="space-y-3">
-        <div className="flex items-center justify-between">
-          <h2 className="font-display text-xl">Kod do wdrożenia</h2>
-          <Link
-            href={`/dashboard/calculators/${calculator.id}/widget`}
-            className="link-underline text-sm text-ink-soft hover:text-ink"
-          >
-            Edytuj wygląd widgetu
-          </Link>
+            <AddQuestionForm calculatorId={calculator.id} />
+          </section>
+
+          <section className="border-t border-dashed border-line-strong pt-6">
+            <form action={deleteCalculator.bind(null, calculator.id)}>
+              <button type="submit" className="link-underline text-sm text-rust-dark">
+                Usuń kalkulator
+              </button>
+            </form>
+          </section>
         </div>
-        {calculator.is_published ? (
-          <EmbedSnippet snippet={embedSnippet} />
-        ) : (
-          <p className="text-sm text-ink-soft">
-            Opublikuj kalkulator, aby otrzymać kod do wklejenia na stronę.
+
+        <div className="xl:sticky xl:top-10 xl:self-start">
+          <p className="mb-3 text-xs font-medium uppercase tracking-wide text-ink-faint">
+            Podgląd na żywo
           </p>
-        )}
-        <form action={togglePublish.bind(null, calculator.id, !calculator.is_published)}>
-          <button type="submit" className="btn btn-ghost">
-            {calculator.is_published ? "Cofnij publikację" : "Opublikuj"}
-          </button>
-        </form>
-      </section>
-
-      <section className="space-y-3">
-        <h2 className="font-display text-xl">Ustawienia</h2>
-        <DetailsForm
-          calculatorId={calculator.id}
-          name={calculator.name}
-          description={calculator.description}
-          basePrice={calculator.base_price}
-          currency={calculator.currency}
-          estimateSpreadPercent={calculator.estimate_spread_percent}
-        />
-      </section>
-
-      <section className="space-y-4">
-        <h2 className="font-display text-xl">Pytania</h2>
-
-        {questions.length === 0 && (
-          <p className="text-sm text-ink-soft">Ten kalkulator nie ma jeszcze żadnych pytań.</p>
-        )}
-
-        <ul className="space-y-4">
-          {questions.map((question, index) => (
-            <li key={question.id} className="ticket flex gap-3 p-4">
-              <div className="flex shrink-0 flex-col gap-0.5 pt-0.5">
-                <form action={moveQuestion.bind(null, calculator.id, question.id, "up")}>
-                  <button
-                    type="submit"
-                    disabled={index === 0}
-                    aria-label="Przenieś wyżej"
-                    className="rounded p-1 text-ink-faint hover:text-ink disabled:opacity-20"
-                  >
-                    <ChevronUpIcon className="h-4 w-4" />
-                  </button>
-                </form>
-                <form action={moveQuestion.bind(null, calculator.id, question.id, "down")}>
-                  <button
-                    type="submit"
-                    disabled={index === questions.length - 1}
-                    aria-label="Przenieś niżej"
-                    className="rounded p-1 text-ink-faint hover:text-ink disabled:opacity-20"
-                  >
-                    <ChevronDownIcon className="h-4 w-4" />
-                  </button>
-                </form>
-              </div>
-
-              <div className="min-w-0 flex-1">
-                <EditQuestionForm calculatorId={calculator.id} question={question} />
-
-                {question.type !== "number_slider" && (
-                  <div className="mt-4 space-y-2 border-t border-dashed border-line-strong pt-4">
-                    <ul className="space-y-2">
-                      {[...question.options]
-                        .sort((a, b) => a.position - b.position)
-                        .map((option) => (
-                          <li key={option.id}>
-                            <EditOptionForm
-                              calculatorId={calculator.id}
-                              option={option}
-                              currency={calculator.currency}
-                            />
-                          </li>
-                        ))}
-                    </ul>
-                    <AddOptionForm calculatorId={calculator.id} questionId={question.id} />
-                  </div>
-                )}
-              </div>
-            </li>
-          ))}
-        </ul>
-
-        <AddQuestionForm calculatorId={calculator.id} />
-      </section>
-
-      <section className="border-t border-dashed border-line-strong pt-6">
-        <form action={deleteCalculator.bind(null, calculator.id)}>
-          <button type="submit" className="link-underline text-sm text-rust-dark">
-            Usuń kalkulator
-          </button>
-        </form>
-      </section>
+          <div className="flex justify-center">
+            <AdminCalculatorPreview key={JSON.stringify(previewConfig)} config={previewConfig} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

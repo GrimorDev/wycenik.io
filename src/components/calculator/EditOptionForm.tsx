@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useRef, useState } from "react";
+import { InfoTooltip } from "@/components/InfoTooltip";
 import { deleteOption, updateOption, type ActionState } from "@/lib/actions/calculators";
 import type { RawOption } from "@/lib/calculator/mapper";
 
@@ -61,6 +62,7 @@ export function EditOptionForm({
         </label>
         <label className="text-xs text-ink-faint">
           Dopłata
+          <InfoTooltip text="Kwota doliczana do wyceny, jeśli klient wybierze tę opcję. Może być ujemna (rabat)." />
           <input
             name="price_delta"
             type="number"
@@ -71,6 +73,7 @@ export function EditOptionForm({
         </label>
         <label className="text-xs text-ink-faint">
           Mnożnik
+          <InfoTooltip text="Przemnaża całą dotychczasową sumę. 1 = bez zmian, 0.8 = 20% taniej." />
           <input
             name="price_multiplier"
             type="number"

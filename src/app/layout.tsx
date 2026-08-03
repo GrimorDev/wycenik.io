@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, IBM_Plex_Mono, Work_Sans } from "next/font/google";
 import "./globals.css";
+import "@/styles/widget-preview.css";
 
 const bricolage = Bricolage_Grotesque({
   variable: "--font-display",

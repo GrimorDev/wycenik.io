@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { InfoTooltip } from "@/components/InfoTooltip";
 import { addOption, type ActionState } from "@/lib/actions/calculators";
 
 const initialState: ActionState = { error: null };
@@ -23,6 +24,7 @@ export function AddOptionForm({
       </label>
       <label className="text-sm text-ink-soft">
         Dopłata
+        <InfoTooltip text="Kwota doliczana do wyceny, jeśli klient wybierze tę opcję. Może być ujemna (rabat)." />
         <input
           name="price_delta"
           type="number"
@@ -33,6 +35,7 @@ export function AddOptionForm({
       </label>
       <label className="text-sm text-ink-soft">
         Mnożnik
+        <InfoTooltip text="Przemnaża całą dotychczasową sumę. 1 = bez zmian, 0.8 = 20% taniej, 1.5 = 50% drożej. Zostaw 1, jeśli nie wiesz, po co to jest." />
         <input
           name="price_multiplier"
           type="number"
