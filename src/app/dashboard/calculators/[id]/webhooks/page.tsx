@@ -75,7 +75,7 @@ export default async function WebhookSettingsPage({
             </p>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-6">
+          <div className="panel p-6">
             <WebhookSettingsForm
               calculatorId={calculator.id}
               webhookUrl={calculator.webhook_url}
@@ -90,7 +90,7 @@ export default async function WebhookSettingsPage({
                 Brak jeszcze żadnych wysyłek.
               </div>
             ) : (
-              <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white">
+              <div className="overflow-x-auto panel">
                 <table className="w-full text-left text-sm">
                   <thead className="border-b border-slate-200 text-slate-500">
                     <tr>

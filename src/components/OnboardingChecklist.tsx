@@ -15,28 +15,30 @@ export function OnboardingChecklist({ steps }: { steps: Step[] }) {
   const currentIndex = steps.findIndex((s) => !s.done);
 
   return (
-    <div className="mb-8 rounded-2xl border border-slate-200 bg-white p-6">
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+    <div className="panel mb-8 overflow-hidden">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 px-5 py-4">
         <div>
           <p className="text-base font-semibold text-slate-900">Zacznij zbierać leady</p>
-          <p className="mt-0.5 text-sm text-slate-500">
+          <p className="text-sm text-slate-500">
             Ukończono {doneCount} z {steps.length} kroków — zostało już niewiele.
           </p>
         </div>
-        <div className="h-1.5 w-32 shrink-0 overflow-hidden rounded-full bg-slate-100">
-          <div className="h-full rounded-full bg-slate-900 transition-all" style={{ width: `${pct}%` }} />
+        <div className="w-40">
+          <div className="h-2 w-full overflow-hidden rounded-full bg-brand-primary/20">
+            <div className="h-full rounded-full bg-brand-primary transition-all" style={{ width: `${pct}%` }} />
+          </div>
         </div>
       </div>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-px bg-slate-200 sm:grid-cols-2 lg:grid-cols-4">
         {steps.map((step, i) => (
-          <div key={step.label} className="rounded-lg border border-slate-100 bg-slate-50 p-3">
+          <div key={step.label} className="bg-white p-4">
             <div className="flex items-center gap-2">
               {step.done ? (
-                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-accent text-brand-accent-ink">
-                  <CheckIcon className="h-3 w-3" />
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-accent text-brand-accent-ink">
+                  <CheckIcon className="h-3.5 w-3.5" />
                 </span>
               ) : (
-                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-slate-300 text-[11px] text-slate-500">
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs font-semibold text-slate-500">
                   {i + 1}
                 </span>
               )}
@@ -47,10 +49,10 @@ export function OnboardingChecklist({ steps }: { steps: Step[] }) {
             {!step.done && i === currentIndex && step.href && (
               <Link
                 href={step.href}
-                className="mt-1.5 inline-flex items-center gap-1 text-xs font-medium text-brand-accent hover:text-brand-accent-hover"
+                className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-brand-accent hover:text-brand-accent-hover"
               >
                 Wykonaj krok
-                <ArrowRightIcon className="h-3 w-3" />
+                <ArrowRightIcon className="h-3.5 w-3.5" />
               </Link>
             )}
           </div>

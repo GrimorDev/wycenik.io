@@ -3,11 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LogoutButton } from "@/components/LogoutButton";
-import { BoltIcon, ChartIcon, CodeIcon, GearIcon, GridIcon, UsersIcon } from "@/components/icons";
+import { BoltIcon, ChartIcon, CodeIcon, GaugeIcon, GearIcon, GridIcon, UsersIcon } from "@/components/icons";
 import type { PlanUsage } from "@/lib/plans";
 
 const NAV_ITEMS = [
-  { href: "/dashboard", label: "Pulpit", icon: ChartIcon, exact: true },
+  { href: "/dashboard", label: "Pulpit", icon: GaugeIcon, exact: true },
   { href: "/dashboard/calculators", label: "Kalkulatory", icon: GridIcon, exact: false },
   { href: "/dashboard/leads", label: "Baza leadów", icon: UsersIcon, exact: false },
   { href: "/dashboard/embed", label: "Osadzanie", icon: CodeIcon, exact: false },
@@ -36,7 +36,7 @@ export function DashboardSidebar({ email, usage }: { email: string; usage: PlanU
   return (
     <aside className="sticky top-0 flex h-screen w-full shrink-0 flex-col gap-6 overflow-y-auto bg-brand-sidebar px-4 py-5 md:w-64">
       <Link href="/dashboard" className="flex items-center gap-2 px-1">
-        <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-accent text-brand-accent-ink">
+        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-accent text-brand-accent-ink">
           <BoltIcon className="h-4 w-4" />
         </span>
         <span className="text-base font-semibold text-white">
@@ -85,7 +85,7 @@ export function DashboardSidebar({ email, usage }: { email: string; usage: PlanU
           </div>
           <Link
             href="/dashboard/billing"
-            className="mt-4 flex w-full items-center justify-center rounded-[10px] bg-brand-accent px-3 py-2 text-sm font-medium text-brand-accent-ink transition-colors hover:bg-brand-accent-hover"
+            className="mt-4 flex h-8 w-full items-center justify-center rounded-md bg-brand-accent px-3 text-xs font-medium text-brand-accent-ink transition-colors hover:bg-brand-accent-hover"
           >
             Zwiększ limity
           </Link>

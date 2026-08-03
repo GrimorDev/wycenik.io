@@ -14,22 +14,20 @@ interface StatCardProps {
 
 export function StatCard({ label, value, icon: Icon, trend }: StatCardProps) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5">
+    <div className="panel p-5">
       <div className="flex items-center justify-between">
         <p className="text-sm text-slate-500">{label}</p>
-        <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-brand-mint text-brand-mint-ink">
+        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-mint text-brand-mint-ink">
           <Icon className="h-4 w-4" />
         </span>
       </div>
       <p className="tabular mt-3 text-3xl font-semibold text-slate-900">{value}</p>
       {trend && (
-        <p
-          className={`mt-1.5 flex items-center gap-1 text-xs ${
-            trend.direction === "down" ? "text-red-500" : "text-brand-accent"
-          }`}
-        >
+        <p className="mt-1.5 flex items-center gap-1 text-xs text-slate-500">
           {trend.direction !== "flat" && (
-            <TrendUpIcon className={`h-3 w-3 ${trend.direction === "down" ? "rotate-180" : ""}`} />
+            <TrendUpIcon
+              className={`h-3 w-3 ${trend.direction === "down" ? "rotate-180 text-red-500" : "text-brand-accent"}`}
+            />
           )}
           {trend.text}
         </p>

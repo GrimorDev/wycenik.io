@@ -3,7 +3,7 @@ import { CalculatorsTable } from "@/components/dashboard/CalculatorsTable";
 import { NewCalculatorModal } from "@/components/dashboard/NewCalculatorModal";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { StatCard } from "@/components/dashboard/StatCard";
-import { EyeIcon, SparkleIcon, UsersIcon } from "@/components/icons";
+import { CursorClickIcon, EyeIcon, UsersIcon } from "@/components/icons";
 import { OnboardingChecklist } from "@/components/OnboardingChecklist";
 import { getCalculatorsWithStats } from "@/lib/dashboard-data";
 import { getPlanUsage } from "@/lib/plans";
@@ -142,7 +142,7 @@ export default async function DashboardPage() {
           <StatCard
             label="Stopa konwersji"
             value={`${conversionThisPeriod.toFixed(1)}%`}
-            icon={SparkleIcon}
+            icon={CursorClickIcon}
             trend={trendFor(conversionThisPeriod, conversionPreviousPeriod, "points")}
           />
         </div>

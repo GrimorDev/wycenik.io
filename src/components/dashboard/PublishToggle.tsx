@@ -20,7 +20,7 @@ export function PublishToggle({ calculatorId, isPublished }: { calculatorId: str
       aria-pressed={isPublished}
       aria-label={isPublished ? "Cofnij publikację" : "Opublikuj"}
       className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors disabled:opacity-60 ${
-        isPublished ? "bg-slate-900" : "bg-slate-200"
+        isPublished ? "bg-brand-primary" : "bg-slate-200"
       }`}
     >
       <span

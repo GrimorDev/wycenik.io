@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { XIcon } from "@/components/icons";
+import { PlusIcon, XIcon } from "@/components/icons";
 import {
   createCalculator,
   createCalculatorFromTemplate,
@@ -53,7 +53,8 @@ export function NewCalculatorModal({
         title={disabled ? disabledReason : undefined}
         className="flex items-center gap-1.5 rounded-[10px] bg-brand-accent px-4 py-2 text-sm font-medium text-brand-accent-ink transition-colors hover:bg-brand-accent-hover disabled:cursor-not-allowed disabled:opacity-50"
       >
-        + Nowy kalkulator
+        <PlusIcon className="h-4 w-4" />
+        Nowy kalkulator
       </button>
 
       {open && (

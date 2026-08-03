@@ -14,9 +14,9 @@ export function CalculatorsTable({ calculators }: { calculators: CalculatorSumma
   }
 
   return (
-    <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white">
+    <div className="panel overflow-x-auto">
       <table className="w-full text-left text-sm">
-        <thead className="border-b border-slate-200 text-slate-500">
+        <thead className="border-b border-slate-200 bg-slate-50/60 text-slate-500">
           <tr>
             <th className="px-5 py-3 font-medium">Kalkulator</th>
             <th className="px-5 py-3 font-medium">Odsłony</th>

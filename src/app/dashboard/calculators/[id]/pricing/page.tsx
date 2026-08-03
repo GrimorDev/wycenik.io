@@ -68,15 +68,15 @@ export default async function CalculatorPricingPage({
           <section className="space-y-3">
             <h2 className="text-base font-semibold text-slate-900">Statystyki</h2>
             <div className="grid grid-cols-3 gap-3">
-              <div className="rounded-2xl border border-slate-200 bg-white p-4 text-center">
+              <div className="panel p-4 text-center">
                 <p className="tabular text-2xl font-semibold text-slate-900">{views}</p>
                 <p className="mt-1 text-xs text-slate-400">Wyświetlenia</p>
               </div>
-              <div className="rounded-2xl border border-slate-200 bg-white p-4 text-center">
+              <div className="panel p-4 text-center">
                 <p className="tabular text-2xl font-semibold text-slate-900">{leads}</p>
                 <p className="mt-1 text-xs text-slate-400">Leady</p>
               </div>
-              <div className="rounded-2xl border border-slate-200 bg-white p-4 text-center">
+              <div className="panel p-4 text-center">
                 <p className="tabular text-2xl font-semibold text-slate-900">{conversion}%</p>
                 <p className="mt-1 text-xs text-slate-400">Konwersja</p>
               </div>
@@ -98,7 +98,7 @@ export default async function CalculatorPricingPage({
 
           <section className="space-y-3">
             <h2 className="text-base font-semibold text-slate-900">Ustawienia wyceny</h2>
-            <div className="rounded-2xl border border-slate-200 bg-white p-6">
+            <div className="panel p-6">
               <DetailsForm
                 calculatorId={calculator.id}
                 name={calculator.name}

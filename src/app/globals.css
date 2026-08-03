@@ -104,6 +104,15 @@ body > div {
    declared at the top of this file. */
 @layer components {
 
+/* Dashboard redesign card treatment — matches the reference's .panel exactly
+   (box-shadow sampled from its computed --shadow-card token). */
+.panel {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  box-shadow: 0 1px 2px rgba(15, 20, 30, 0.05), 0 8px 24px -12px rgba(15, 20, 30, 0.16);
+}
+
 .ticket {
   background-color: var(--paper-raised);
   border: 1px solid var(--line);
