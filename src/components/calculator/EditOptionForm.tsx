@@ -55,44 +55,46 @@ export function EditOptionForm({
 
   return (
     <div>
-      <form action={formAction} className="flex flex-wrap items-end gap-2">
-        <label className="flex-1 text-xs text-ink-faint">
+      <form action={formAction} className="space-y-2">
+        <label className="block text-xs text-ink-faint">
           Opcja
           <input name="label" required defaultValue={option.label} className="field mt-1 py-1.5" />
         </label>
-        <label className="text-xs text-ink-faint">
-          Dopłata
-          <InfoTooltip text="Kwota doliczana do wyceny, jeśli klient wybierze tę opcję. Może być ujemna (rabat)." />
-          <input
-            name="price_delta"
-            type="number"
-            step="0.01"
-            defaultValue={option.price_delta}
-            className="field tabular mt-1 w-24 py-1.5"
-          />
-        </label>
-        <label className="text-xs text-ink-faint">
-          Mnożnik
-          <InfoTooltip text="Przemnaża całą dotychczasową sumę. 1 = bez zmian, 0.8 = 20% taniej." />
-          <input
-            name="price_multiplier"
-            type="number"
-            step="0.01"
-            defaultValue={option.price_multiplier}
-            className="field tabular mt-1 w-20 py-1.5"
-          />
-        </label>
-        <button type="submit" disabled={pending} className="btn btn-primary px-3 py-1.5 text-xs">
-          {pending ? "…" : "Zapisz"}
-        </button>
-        <button
-          type="button"
-          onClick={() => setIsEditing(false)}
-          disabled={pending}
-          className="btn btn-ghost px-3 py-1.5 text-xs"
-        >
-          Anuluj
-        </button>
+        <div className="flex flex-wrap items-end gap-2">
+          <label className="text-xs text-ink-faint">
+            Dopłata
+            <InfoTooltip text="Kwota doliczana do wyceny, jeśli klient wybierze tę opcję. Może być ujemna (rabat)." />
+            <input
+              name="price_delta"
+              type="number"
+              step="0.01"
+              defaultValue={option.price_delta}
+              className="field tabular mt-1 w-24 py-1.5"
+            />
+          </label>
+          <label className="text-xs text-ink-faint">
+            Mnożnik
+            <InfoTooltip text="Przemnaża całą dotychczasową sumę. 1 = bez zmian, 0.8 = 20% taniej." />
+            <input
+              name="price_multiplier"
+              type="number"
+              step="0.01"
+              defaultValue={option.price_multiplier}
+              className="field tabular mt-1 w-20 py-1.5"
+            />
+          </label>
+          <button type="submit" disabled={pending} className="btn btn-primary px-3 py-1.5 text-xs">
+            {pending ? "…" : "Zapisz"}
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsEditing(false)}
+            disabled={pending}
+            className="btn btn-ghost px-3 py-1.5 text-xs"
+          >
+            Anuluj
+          </button>
+        </div>
       </form>
       {state.error && <p className="mt-1 text-xs text-rust-dark">{state.error}</p>}
     </div>
