@@ -60,7 +60,7 @@ export function CalculatorsTable({ calculators }: { calculators: CalculatorSumma
                   </Link>
                   <Link
                     href={`/dashboard/calculators/${calc.id}`}
-                    className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700 hover:bg-emerald-100"
+                    className="rounded-[10px] bg-brand-mint px-3 py-1 text-xs font-medium text-brand-mint-ink hover:opacity-80"
                   >
                     Edytuj
                   </Link>

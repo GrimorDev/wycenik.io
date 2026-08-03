@@ -23,7 +23,7 @@ export function CalculatorHeader({ calculatorId, name, slug, isPublished, questi
       </Link>
       <div className="mt-3 flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-900">{name}</h1>
+          <h1 className="text-xl font-semibold text-slate-900">{name}</h1>
           <p className="tabular mt-1 text-sm text-slate-500">
             /{slug}
             {questionCount != null ? ` · ${questionCount} ${questionCount === 1 ? "pytanie" : "pytań"}` : ""}
@@ -40,7 +40,7 @@ export function CalculatorHeader({ calculatorId, name, slug, isPublished, questi
           <form action={togglePublish.bind(null, calculatorId, !isPublished)}>
             <button
               type="submit"
-              className="rounded-lg bg-emerald-500 px-4 py-1.5 text-sm font-medium text-white transition-colors hover:bg-emerald-600"
+              className="rounded-[10px] bg-brand-accent px-4 py-1.5 text-sm font-medium text-brand-accent-ink transition-colors hover:bg-brand-accent-hover"
             >
               {isPublished ? "Cofnij publikację" : "Opublikuj"}
             </button>

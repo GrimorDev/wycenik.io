@@ -32,7 +32,7 @@ export function OnboardingChecklist({ steps }: { steps: Step[] }) {
           <div key={step.label} className="rounded-lg border border-slate-100 bg-slate-50 p-3">
             <div className="flex items-center gap-2">
               {step.done ? (
-                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-white">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-accent text-brand-accent-ink">
                   <CheckIcon className="h-3 w-3" />
                 </span>
               ) : (
@@ -47,7 +47,7 @@ export function OnboardingChecklist({ steps }: { steps: Step[] }) {
             {!step.done && i === currentIndex && step.href && (
               <Link
                 href={step.href}
-                className="mt-1.5 inline-flex items-center gap-1 text-xs font-medium text-emerald-600 hover:text-emerald-700"
+                className="mt-1.5 inline-flex items-center gap-1 text-xs font-medium text-brand-accent hover:text-brand-accent-hover"
               >
                 Wykonaj krok
                 <ArrowRightIcon className="h-3 w-3" />

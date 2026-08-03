@@ -56,14 +56,14 @@ export function InstallInstructions() {
       <ol className="space-y-2.5">
         {platform.steps.map((step, i) => (
           <li key={step} className="flex gap-2.5 text-sm text-slate-600">
-            <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-xs font-medium text-emerald-700">
+            <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-mint text-xs font-medium text-brand-mint-ink">
               {i + 1}
             </span>
             {step}
           </li>
         ))}
       </ol>
-      <div className="mt-4 flex items-start gap-2 rounded-lg bg-emerald-50 p-3 text-xs text-emerald-800">
+      <div className="mt-4 flex items-start gap-2 rounded-lg bg-brand-mint p-3 text-xs text-brand-mint-ink">
         Widget ładuje się asynchronicznie i nie spowalnia strony. Zmiany w edytorze pojawiają się
         u klientów bez ponownego wklejania kodu.
       </div>

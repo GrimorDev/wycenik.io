@@ -116,7 +116,7 @@ export default async function DashboardPage() {
     <div className="mx-auto w-full max-w-6xl">
       <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-900">Pulpit</h1>
+          <h1 className="text-xl font-semibold text-slate-900">Pulpit</h1>
           <p className="mt-1 text-sm text-slate-500">
             Przegląd wyników Twoich kalkulatorów w ostatnich 30 dniach.
           </p>
@@ -152,7 +152,7 @@ export default async function DashboardPage() {
 
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-base font-semibold text-slate-900">Twoje kalkulatory</h2>
-        <Link href="/dashboard/leads" className="text-sm font-medium text-emerald-600 hover:text-emerald-700">
+        <Link href="/dashboard/leads" className="text-sm font-medium text-brand-accent hover:text-brand-accent-hover">
           Zobacz leady
         </Link>
       </div>

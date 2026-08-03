@@ -29,7 +29,7 @@ export default async function EmbedPage({
     <div className="mx-auto w-full max-w-5xl">
       <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-900">Osadzanie</h1>
+          <h1 className="text-xl font-semibold text-slate-900">Osadzanie</h1>
           <p className="mt-1 text-sm text-slate-500">Wklej kod na swoją stronę — widget działa w kilkanaście sekund.</p>
         </div>
         {rows.length > 0 && <CalculatorPicker calculators={rows} selectedId={active?.id} />}

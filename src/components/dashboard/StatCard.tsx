@@ -14,18 +14,18 @@ interface StatCardProps {
 
 export function StatCard({ label, value, icon: Icon, trend }: StatCardProps) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-6">
+    <div className="rounded-2xl border border-slate-200 bg-white p-5">
       <div className="flex items-center justify-between">
         <p className="text-sm text-slate-500">{label}</p>
-        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
+        <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-brand-mint text-brand-mint-ink">
           <Icon className="h-4 w-4" />
         </span>
       </div>
-      <p className="tabular mt-3 text-4xl font-semibold tracking-tight text-slate-900">{value}</p>
+      <p className="tabular mt-3 text-3xl font-semibold text-slate-900">{value}</p>
       {trend && (
         <p
-          className={`mt-2 flex items-center gap-1 text-xs ${
-            trend.direction === "down" ? "text-red-500" : "text-emerald-600"
+          className={`mt-1.5 flex items-center gap-1 text-xs ${
+            trend.direction === "down" ? "text-red-500" : "text-brand-accent"
           }`}
         >
           {trend.direction !== "flat" && (

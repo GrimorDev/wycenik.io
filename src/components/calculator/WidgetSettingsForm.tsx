@@ -20,7 +20,7 @@ const DEFAULT_TEXT = "#1e1b16";
 const DEFAULT_BORDER = "#e4dac5";
 
 const FIELD_CLASS =
-  "w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100";
+  "w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-brand-accent focus:outline-none focus:ring-2 focus:ring-brand-accent/20";
 
 interface Props {
   calculatorId: string;
@@ -91,7 +91,7 @@ export function WidgetSettingsForm({
               <label
                 key={key}
                 className={`cursor-pointer rounded-lg border p-3 text-center text-xs transition-colors ${
-                  corner === key ? "border-emerald-400 bg-emerald-50 text-emerald-700" : "border-slate-200 text-slate-500 hover:border-slate-300"
+                  corner === key ? "border-brand-accent bg-brand-mint text-brand-mint-ink" : "border-slate-200 text-slate-500 hover:border-slate-300"
                 }`}
               >
                 <input
@@ -115,7 +115,7 @@ export function WidgetSettingsForm({
               name="use_custom_palette"
               checked={customPalette}
               onChange={(e) => setCustomPalette(e.target.checked)}
-              className="accent-emerald-500"
+              className="accent-brand-accent"
             />
             Własne kolory tła, tekstu i obramowania
           </label>
@@ -191,7 +191,7 @@ export function WidgetSettingsForm({
         <button
           type="submit"
           disabled={pending}
-          className="rounded-lg bg-emerald-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-600 disabled:opacity-60"
+          className="rounded-[10px] bg-brand-accent px-4 py-2 text-sm font-medium text-brand-accent-ink transition-colors hover:bg-brand-accent-hover disabled:opacity-60"
         >
           {pending ? "Zapisywanie…" : "Zapisz wygląd"}
         </button>

@@ -13,7 +13,7 @@ const QUESTION_TYPE_LABEL: Record<RawQuestion["type"], string> = {
 };
 
 const FIELD_CLASS =
-  "w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100";
+  "w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-brand-accent focus:outline-none focus:ring-2 focus:ring-brand-accent/20";
 
 export function EditQuestionForm({
   calculatorId,
@@ -58,7 +58,7 @@ export function EditQuestionForm({
       <div className="flex flex-wrap items-center gap-3">
         <input name="label" required defaultValue={question.label} className={`${FIELD_CLASS} flex-1`} />
         <label className="flex items-center gap-2 whitespace-nowrap text-sm text-slate-600">
-          <input type="checkbox" name="required" defaultChecked={question.required} className="accent-emerald-500" />
+          <input type="checkbox" name="required" defaultChecked={question.required} className="accent-brand-accent" />
           Wymagane
         </label>
       </div>
@@ -99,7 +99,7 @@ export function EditQuestionForm({
         <button
           type="submit"
           disabled={pending}
-          className="rounded-lg bg-emerald-500 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-emerald-600 disabled:opacity-60"
+          className="rounded-[10px] bg-brand-accent px-3 py-1.5 text-xs font-medium text-brand-accent-ink transition-colors hover:bg-brand-accent-hover disabled:opacity-60"
         >
           {pending ? "Zapisywanie…" : "Zapisz pytanie"}
         </button>

@@ -39,7 +39,7 @@ export function LeadsTable({ leads }: { leads: LeadRow[] }) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Szukaj po nazwisku, e-mailu…"
-            className="w-full rounded-lg border border-slate-300 bg-white py-2 pl-9 pr-3 text-sm text-slate-900 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100"
+            className="w-full rounded-lg border border-slate-300 bg-white py-2 pl-9 pr-3 text-sm text-slate-900 focus:border-brand-accent focus:outline-none focus:ring-2 focus:ring-brand-accent/20"
           />
         </div>
       </div>
@@ -73,7 +73,7 @@ export function LeadsTable({ leads }: { leads: LeadRow[] }) {
                       {lead.calculatorName}
                     </span>
                   </td>
-                  <td className="tabular px-5 py-4 font-medium text-emerald-700">
+                  <td className="tabular px-5 py-4 font-medium text-brand-accent">
                     {lead.estimated_min}–{lead.estimated_max} zł
                   </td>
                   <td className="tabular px-5 py-4 text-slate-400">

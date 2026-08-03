@@ -51,7 +51,7 @@ export function NewCalculatorModal({
         onClick={() => setOpen(true)}
         disabled={disabled}
         title={disabled ? disabledReason : undefined}
-        className="flex items-center gap-1.5 rounded-lg bg-emerald-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-50"
+        className="flex items-center gap-1.5 rounded-[10px] bg-brand-accent px-4 py-2 text-sm font-medium text-brand-accent-ink transition-colors hover:bg-brand-accent-hover disabled:cursor-not-allowed disabled:opacity-50"
       >
         + Nowy kalkulator
       </button>
@@ -91,11 +91,11 @@ export function NewCalculatorModal({
                       type="button"
                       onClick={() => setSelection({ kind: "template", key: template.key })}
                       className={`relative rounded-xl border p-3 text-left transition-colors ${
-                        active ? "border-emerald-400 bg-emerald-50/50" : "border-slate-200 hover:border-slate-300"
+                        active ? "border-brand-accent bg-brand-mint/50" : "border-slate-200 hover:border-slate-300"
                       }`}
                     >
                       {active && (
-                        <span className="absolute right-2 top-2 flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-[10px] text-white">
+                        <span className="absolute right-2 top-2 flex h-4 w-4 items-center justify-center rounded-full bg-brand-accent text-[10px] text-brand-accent-ink">
                           ✓
                         </span>
                       )}
@@ -111,11 +111,11 @@ export function NewCalculatorModal({
                   type="button"
                   onClick={() => setSelection({ kind: "blank" })}
                   className={`relative rounded-xl border p-3 text-left transition-colors ${
-                    selection.kind === "blank" ? "border-emerald-400 bg-emerald-50/50" : "border-slate-200 hover:border-slate-300"
+                    selection.kind === "blank" ? "border-brand-accent bg-brand-mint/50" : "border-slate-200 hover:border-slate-300"
                   }`}
                 >
                   {selection.kind === "blank" && (
-                    <span className="absolute right-2 top-2 flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-[10px] text-white">
+                    <span className="absolute right-2 top-2 flex h-4 w-4 items-center justify-center rounded-full bg-brand-accent text-[10px] text-brand-accent-ink">
                       ✓
                     </span>
                   )}
@@ -164,14 +164,14 @@ function TemplatePanel({ templateKey }: { templateKey: string }) {
           name="name"
           required
           defaultValue={`${template.title} — mój widget`}
-          className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100"
+          className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-brand-accent focus:outline-none focus:ring-2 focus:ring-brand-accent/20"
         />
       </label>
       {state.error && <p className="mt-2 text-xs text-red-600">{state.error}</p>}
       <button
         type="submit"
         disabled={pending}
-        className="mt-4 flex items-center justify-center gap-1.5 rounded-lg bg-emerald-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-600 disabled:opacity-60"
+        className="mt-4 flex items-center justify-center gap-1.5 rounded-[10px] bg-brand-accent px-4 py-2 text-sm font-medium text-brand-accent-ink transition-colors hover:bg-brand-accent-hover disabled:opacity-60"
       >
         {pending ? "Tworzenie…" : "Utwórz kalkulator →"}
       </button>
@@ -191,7 +191,7 @@ function BlankPanel() {
         <input
           name="name"
           required
-          className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100"
+          className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-brand-accent focus:outline-none focus:ring-2 focus:ring-brand-accent/20"
         />
       </label>
       <label className="mt-3 block text-xs font-medium text-slate-600">
@@ -201,14 +201,14 @@ function BlankPanel() {
           type="number"
           step="0.01"
           defaultValue={0}
-          className="tabular mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100"
+          className="tabular mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-brand-accent focus:outline-none focus:ring-2 focus:ring-brand-accent/20"
         />
       </label>
       {state.error && <p className="mt-2 text-xs text-red-600">{state.error}</p>}
       <button
         type="submit"
         disabled={pending}
-        className="mt-4 flex items-center justify-center gap-1.5 rounded-lg bg-emerald-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-600 disabled:opacity-60"
+        className="mt-4 flex items-center justify-center gap-1.5 rounded-[10px] bg-brand-accent px-4 py-2 text-sm font-medium text-brand-accent-ink transition-colors hover:bg-brand-accent-hover disabled:opacity-60"
       >
         {pending ? "Tworzenie…" : "Utwórz kalkulator →"}
       </button>

@@ -44,6 +44,16 @@
   --font-display: var(--font-display);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
+
+  /* Dashboard redesign palette — sampled from the design reference. */
+  --color-brand-sidebar: #14202e;
+  --color-brand-sidebar-active: #222f3e;
+  --color-brand-accent: #009f7d;
+  --color-brand-accent-hover: #00876a;
+  --color-brand-accent-ink: #f5fefb;
+  --color-brand-mint: #ddf7ee;
+  --color-brand-mint-ink: #013d31;
+  --font-dashboard: var(--font-dm-sans);
 }
 
 body {

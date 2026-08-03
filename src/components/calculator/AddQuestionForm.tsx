@@ -6,7 +6,7 @@ import { addQuestion, type ActionState } from "@/lib/actions/calculators";
 const initialState: ActionState = { error: null };
 
 const FIELD_CLASS =
-  "w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100";
+  "w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-brand-accent focus:outline-none focus:ring-2 focus:ring-brand-accent/20";
 
 export function AddQuestionForm({ calculatorId }: { calculatorId: string }) {
   const [isAdding, setIsAdding] = useState(false);
@@ -30,7 +30,7 @@ export function AddQuestionForm({ calculatorId }: { calculatorId: string }) {
       <button
         type="button"
         onClick={() => setIsAdding(true)}
-        className="flex w-full items-center justify-center rounded-xl border border-dashed border-slate-300 py-3 text-sm font-medium text-slate-500 hover:border-emerald-400 hover:text-emerald-600"
+        className="flex w-full items-center justify-center rounded-xl border border-dashed border-slate-300 py-3 text-sm font-medium text-slate-500 hover:border-brand-accent hover:text-brand-accent"
       >
         + Dodaj pytanie
       </button>
@@ -59,7 +59,7 @@ export function AddQuestionForm({ calculatorId }: { calculatorId: string }) {
           </select>
         </label>
         <label className="flex items-center gap-2 pb-2.5 text-sm text-slate-600">
-          <input type="checkbox" name="required" defaultChecked className="accent-emerald-500" />
+          <input type="checkbox" name="required" defaultChecked className="accent-brand-accent" />
           Wymagane
         </label>
       </div>
@@ -94,7 +94,7 @@ export function AddQuestionForm({ calculatorId }: { calculatorId: string }) {
         <button
           type="submit"
           disabled={pending}
-          className="rounded-lg bg-emerald-500 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-600 disabled:opacity-60"
+          className="rounded-[10px] bg-brand-accent px-4 py-2 text-sm font-medium text-brand-accent-ink hover:bg-brand-accent-hover disabled:opacity-60"
         >
           {pending ? "Dodawanie…" : "Dodaj pytanie"}
         </button>

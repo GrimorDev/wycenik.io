@@ -28,7 +28,7 @@ export function CalculatorTabs({ calculatorId }: Props) {
             href={tab.href}
             className={`border-b-2 px-3 py-2.5 text-sm font-medium transition-colors ${
               active
-                ? "border-emerald-500 text-slate-900"
+                ? "border-brand-accent text-slate-900"
                 : "border-transparent text-slate-500 hover:text-slate-800"
             }`}
           >

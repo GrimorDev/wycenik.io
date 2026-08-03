@@ -10,7 +10,7 @@ import {
 const initialState: ActionState = { error: null };
 
 const FIELD_CLASS =
-  "w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100";
+  "w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-brand-accent focus:outline-none focus:ring-2 focus:ring-brand-accent/20";
 
 interface Props {
   calculatorId: string;
@@ -52,7 +52,7 @@ export function WebhookSettingsForm({ calculatorId, webhookUrl, webhookSecret }:
         <button
           type="submit"
           disabled={pending}
-          className="rounded-lg bg-emerald-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-600 disabled:opacity-60"
+          className="rounded-[10px] bg-brand-accent px-4 py-2 text-sm font-medium text-brand-accent-ink transition-colors hover:bg-brand-accent-hover disabled:opacity-60"
         >
           {pending ? "Zapisywanie…" : "Zapisz"}
         </button>

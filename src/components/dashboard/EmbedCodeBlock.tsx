@@ -19,7 +19,7 @@ export function EmbedCodeBlock({ title, code }: { title: string; code: string })
         <button
           type="button"
           onClick={handleCopy}
-          className="flex items-center gap-1.5 rounded-lg bg-emerald-500 px-3 py-1 text-xs font-medium text-white hover:bg-emerald-600"
+          className="flex items-center gap-1.5 rounded-[10px] bg-brand-accent px-3 py-1 text-xs font-medium text-brand-accent-ink hover:bg-brand-accent-hover"
         >
           <CopyIcon className="h-3.5 w-3.5" />
           {copied ? "Skopiowano!" : "Kopiuj kod"}

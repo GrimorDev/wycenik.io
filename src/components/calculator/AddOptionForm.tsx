@@ -7,7 +7,7 @@ import { addOption, type ActionState } from "@/lib/actions/calculators";
 const initialState: ActionState = { error: null };
 
 const FIELD_CLASS =
-  "w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-900 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100";
+  "w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-900 focus:border-brand-accent focus:outline-none focus:ring-2 focus:ring-brand-accent/20";
 
 export function AddOptionForm({
   calculatorId,
@@ -32,7 +32,7 @@ export function AddOptionForm({
 
   if (!isAdding) {
     return (
-      <button type="button" onClick={() => setIsAdding(true)} className="text-sm font-medium text-emerald-600 hover:text-emerald-700">
+      <button type="button" onClick={() => setIsAdding(true)} className="text-sm font-medium text-brand-accent hover:text-brand-accent-hover">
         + Dodaj opcję
       </button>
     );
@@ -71,7 +71,7 @@ export function AddOptionForm({
           <button
             type="submit"
             disabled={pending}
-            className="rounded-lg bg-emerald-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-600 disabled:opacity-60"
+            className="rounded-[10px] bg-brand-accent px-3 py-1.5 text-xs font-medium text-brand-accent-ink hover:bg-brand-accent-hover disabled:opacity-60"
           >
             {pending ? "Dodawanie…" : "Dodaj opcję"}
           </button>
