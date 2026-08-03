@@ -1,8 +1,20 @@
 import { ExportCsvButton } from "@/components/calculator/ExportCsvButton";
+import { LeadsSearchBox } from "@/components/dashboard/LeadsSearchBox";
 import { LeadsTable, type LeadRow } from "@/components/dashboard/LeadsTable";
+import { PageHeader } from "@/components/dashboard/PageHeader";
 import { createClient } from "@/lib/supabase/server";
 
-export default async function LeadsPage() {
+function startOfMonthIso(): string {
+  const now = new Date();
+  return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)).toISOString();
+}
+
+export default async function LeadsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string }>;
+}) {
+  const { q } = await searchParams;
   const supabase = await createClient();
   const {
     data: { user },
@@ -11,6 +23,7 @@ export default async function LeadsPage() {
   const { data } = await supabase
     .from("leads")
     .select("id,name,email,phone,estimated_min,estimated_max,created_at,calculators(name)")
+    .gte("created_at", startOfMonthIso())
     .order("created_at", { ascending: false })
     .limit(500);
 
@@ -25,7 +38,7 @@ export default async function LeadsPage() {
     calculators: { name: string } | null;
   }>;
 
-  const leads: LeadRow[] = rows.map((lead) => ({
+  const allLeads: LeadRow[] = rows.map((lead) => ({
     id: lead.id,
     name: lead.name,
     email: lead.email,
@@ -36,19 +49,31 @@ export default async function LeadsPage() {
     calculatorName: lead.calculators?.name ?? "—",
   }));
 
-  return (
-    <div className="mx-auto w-full max-w-6xl">
-      <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <h1 className="text-xl font-semibold text-slate-900">Baza leadów</h1>
-          <p className="mt-1 text-sm text-slate-500">
-            Wszystkie zgłoszenia ze wszystkich Twoich kalkulatorów.
-          </p>
-        </div>
-        <ExportCsvButton leads={leads} filename={`leady-${user?.id ?? "wszystkie"}.csv`} />
-      </div>
+  const query = q?.trim().toLowerCase() ?? "";
+  const leads = query
+    ? allLeads.filter(
+        (lead) =>
+          lead.name.toLowerCase().includes(query) ||
+          lead.email.toLowerCase().includes(query) ||
+          lead.calculatorName.toLowerCase().includes(query),
+      )
+    : allLeads;
 
-      <LeadsTable leads={leads} />
-    </div>
+  return (
+    <>
+      <PageHeader
+        title="Baza leadów"
+        subtitle={`${allLeads.length} zgłoszeń w tym miesiącu`}
+        actions={
+          <>
+            <LeadsSearchBox />
+            <ExportCsvButton leads={leads} filename={`leady-${user?.id ?? "wszystkie"}.csv`} />
+          </>
+        }
+      />
+      <main className="mx-auto w-full max-w-6xl p-6 md:p-10">
+        <LeadsTable leads={leads} hasQuery={query.length > 0} />
+      </main>
+    </>
   );
 }

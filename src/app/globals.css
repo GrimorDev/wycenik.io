@@ -48,6 +48,8 @@
   /* Dashboard redesign palette — sampled from the design reference. */
   --color-brand-sidebar: #14202e;
   --color-brand-sidebar-active: #222f3e;
+  --color-brand-primary: #182535;
+  --color-brand-primary-ink: #f7f9fc;
   --color-brand-accent: #009f7d;
   --color-brand-accent-hover: #00876a;
   --color-brand-accent-ink: #f5fefb;

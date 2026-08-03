@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CalculatorsTable } from "@/components/dashboard/CalculatorsTable";
 import { NewCalculatorModal } from "@/components/dashboard/NewCalculatorModal";
+import { PageHeader } from "@/components/dashboard/PageHeader";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { EyeIcon, SparkleIcon, UsersIcon } from "@/components/icons";
 import { OnboardingChecklist } from "@/components/OnboardingChecklist";
@@ -113,50 +114,49 @@ export default async function DashboardPage() {
   ];
 
   return (
-    <div className="mx-auto w-full max-w-6xl">
-      <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <h1 className="text-xl font-semibold text-slate-900">Pulpit</h1>
-          <p className="mt-1 text-sm text-slate-500">
-            Przegląd wyników Twoich kalkulatorów w ostatnich 30 dniach.
-          </p>
+    <>
+      <PageHeader
+        title="Pulpit"
+        subtitle="Przegląd wyników Twoich kalkulatorów w ostatnich 30 dniach."
+        actions={
+          <NewCalculatorModal
+            disabled={atCalculatorLimit}
+            disabledReason={atCalculatorLimit ? "Osiągnięto limit planu Free — przejdź na wyższy plan." : undefined}
+          />
+        }
+      />
+      <main className="mx-auto w-full max-w-6xl p-6 md:p-10">
+        <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <StatCard
+            label="Odebrane leady"
+            value={String(leadsThisPeriod)}
+            icon={UsersIcon}
+            trend={trendFor(leadsThisPeriod, leadsPreviousPeriod)}
+          />
+          <StatCard
+            label="Odsłony widgetu"
+            value={String(viewsThisPeriod)}
+            icon={EyeIcon}
+            trend={trendFor(viewsThisPeriod, viewsPreviousPeriod)}
+          />
+          <StatCard
+            label="Stopa konwersji"
+            value={`${conversionThisPeriod.toFixed(1)}%`}
+            icon={SparkleIcon}
+            trend={trendFor(conversionThisPeriod, conversionPreviousPeriod, "points")}
+          />
         </div>
-        <NewCalculatorModal
-          disabled={atCalculatorLimit}
-          disabledReason={atCalculatorLimit ? "Osiągnięto limit planu Free — przejdź na wyższy plan." : undefined}
-        />
-      </div>
 
-      <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <StatCard
-          label="Odebrane leady"
-          value={String(leadsThisPeriod)}
-          icon={UsersIcon}
-          trend={trendFor(leadsThisPeriod, leadsPreviousPeriod)}
-        />
-        <StatCard
-          label="Odsłony widgetu"
-          value={String(viewsThisPeriod)}
-          icon={EyeIcon}
-          trend={trendFor(viewsThisPeriod, viewsPreviousPeriod)}
-        />
-        <StatCard
-          label="Stopa konwersji"
-          value={`${conversionThisPeriod.toFixed(1)}%`}
-          icon={SparkleIcon}
-          trend={trendFor(conversionThisPeriod, conversionPreviousPeriod, "points")}
-        />
-      </div>
+        <OnboardingChecklist steps={onboardingSteps} />
 
-      <OnboardingChecklist steps={onboardingSteps} />
-
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-base font-semibold text-slate-900">Twoje kalkulatory</h2>
-        <Link href="/dashboard/leads" className="text-sm font-medium text-brand-accent hover:text-brand-accent-hover">
-          Zobacz leady
-        </Link>
-      </div>
-      <CalculatorsTable calculators={calculatorsWithStats} />
-    </div>
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-base font-semibold text-slate-900">Twoje kalkulatory</h2>
+          <Link href="/dashboard/leads" className="text-sm font-medium text-brand-accent hover:text-brand-accent-hover">
+            Zobacz leady
+          </Link>
+        </div>
+        <CalculatorsTable calculators={calculatorsWithStats} />
+      </main>
+    </>
   );
 }

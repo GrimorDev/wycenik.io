@@ -7,9 +7,9 @@ import type { RawQuestion } from "@/lib/calculator/mapper";
 const initialState: ActionState = { error: null };
 
 const QUESTION_TYPE_LABEL: Record<RawQuestion["type"], string> = {
-  number_slider: "Suwak liczbowy",
-  single_choice: "Jednokrotny wybór",
-  checkbox: "Checkboxy",
+  number_slider: "Suwak / zakres",
+  single_choice: "Wybór jednokrotny",
+  checkbox: "Wybór wielokrotny",
 };
 
 const FIELD_CLASS =

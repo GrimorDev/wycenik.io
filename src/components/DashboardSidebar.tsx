@@ -13,11 +13,28 @@ const NAV_ITEMS = [
   { href: "/dashboard/embed", label: "Osadzanie", icon: CodeIcon, exact: false },
 ];
 
+function UsageBar({ label, current, max }: { label: string; current: number; max: number }) {
+  const pct = max > 0 ? Math.min(100, Math.round((current / max) * 100)) : 0;
+  return (
+    <div>
+      <div className="flex items-center justify-between text-sm">
+        <span className="text-slate-400">{label}</span>
+        <span className="tabular text-slate-200">
+          {current}/{max}
+        </span>
+      </div>
+      <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-brand-sidebar-active">
+        <div className="h-full rounded-full bg-brand-primary transition-all" style={{ width: `${pct}%` }} />
+      </div>
+    </div>
+  );
+}
+
 export function DashboardSidebar({ email, usage }: { email: string; usage: PlanUsage }) {
   const pathname = usePathname();
 
   return (
-    <aside className="flex w-full shrink-0 flex-col gap-6 bg-brand-sidebar px-4 py-5 md:w-64 md:min-h-screen">
+    <aside className="sticky top-0 flex h-screen w-full shrink-0 flex-col gap-6 overflow-y-auto bg-brand-sidebar px-4 py-5 md:w-64">
       <Link href="/dashboard" className="flex items-center gap-2 px-1">
         <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-accent text-brand-accent-ink">
           <BoltIcon className="h-4 w-4" />
@@ -62,19 +79,9 @@ export function DashboardSidebar({ email, usage }: { email: string; usage: PlanU
             <ChartIcon className="h-3.5 w-3.5" />
             PLAN FREE
           </p>
-          <div className="space-y-2 text-sm">
-            <div className="flex items-center justify-between">
-              <span className="text-slate-400">Kalkulatory</span>
-              <span className="tabular text-slate-200">
-                {usage.calculatorCount}/{usage.maxCalculators}
-              </span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-slate-400">Leady w tym miesiącu</span>
-              <span className="tabular text-slate-200">
-                {usage.leadsThisMonth}/{usage.maxLeadsPerMonth}
-              </span>
-            </div>
+          <div className="space-y-3">
+            <UsageBar label="Kalkulatory" current={usage.calculatorCount} max={usage.maxCalculators} />
+            <UsageBar label="Leady w tym miesiącu" current={usage.leadsThisMonth} max={usage.maxLeadsPerMonth} />
           </div>
           <Link
             href="/dashboard/billing"

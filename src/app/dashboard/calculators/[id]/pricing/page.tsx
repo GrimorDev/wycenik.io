@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { CalculatorHeader } from "@/components/calculator/CalculatorHeader";
+import { CalculatorTabs } from "@/components/calculator/CalculatorTabs";
 import { DetailsForm } from "@/components/calculator/DetailsForm";
 import { createClient } from "@/lib/supabase/server";
 
@@ -51,60 +52,65 @@ export default async function CalculatorPricingPage({
   const topDomains = topDomainsFrom(viewRows ?? []);
 
   return (
-    <div className="mx-auto w-full max-w-3xl">
+    <>
       <CalculatorHeader
         calculatorId={calculator.id}
         name={calculator.name}
         slug={calculator.slug}
         isPublished={calculator.is_published}
       />
+      <main className="mx-auto w-full max-w-3xl p-6 md:p-10">
+        <div className="mb-6">
+          <CalculatorTabs calculatorId={calculator.id} />
+        </div>
 
-      <div className="mt-8 space-y-8">
-        <section className="space-y-3">
-          <h2 className="text-base font-semibold text-slate-900">Statystyki</h2>
-          <div className="grid grid-cols-3 gap-3">
-            <div className="rounded-xl border border-slate-200 bg-white p-4 text-center">
-              <p className="tabular text-2xl font-semibold text-slate-900">{views}</p>
-              <p className="mt-1 text-xs text-slate-400">Wyświetlenia</p>
+        <div className="space-y-8">
+          <section className="space-y-3">
+            <h2 className="text-base font-semibold text-slate-900">Statystyki</h2>
+            <div className="grid grid-cols-3 gap-3">
+              <div className="rounded-2xl border border-slate-200 bg-white p-4 text-center">
+                <p className="tabular text-2xl font-semibold text-slate-900">{views}</p>
+                <p className="mt-1 text-xs text-slate-400">Wyświetlenia</p>
+              </div>
+              <div className="rounded-2xl border border-slate-200 bg-white p-4 text-center">
+                <p className="tabular text-2xl font-semibold text-slate-900">{leads}</p>
+                <p className="mt-1 text-xs text-slate-400">Leady</p>
+              </div>
+              <div className="rounded-2xl border border-slate-200 bg-white p-4 text-center">
+                <p className="tabular text-2xl font-semibold text-slate-900">{conversion}%</p>
+                <p className="mt-1 text-xs text-slate-400">Konwersja</p>
+              </div>
             </div>
-            <div className="rounded-xl border border-slate-200 bg-white p-4 text-center">
-              <p className="tabular text-2xl font-semibold text-slate-900">{leads}</p>
-              <p className="mt-1 text-xs text-slate-400">Leady</p>
-            </div>
-            <div className="rounded-xl border border-slate-200 bg-white p-4 text-center">
-              <p className="tabular text-2xl font-semibold text-slate-900">{conversion}%</p>
-              <p className="mt-1 text-xs text-slate-400">Konwersja</p>
-            </div>
-          </div>
-          {topDomains.length > 0 && (
-            <div className="rounded-xl border border-dashed border-slate-300 bg-white p-4">
-              <p className="mb-2 text-xs font-medium uppercase tracking-wide text-slate-400">Aktywny na domenach</p>
-              <ul className="space-y-1">
-                {topDomains.map(([domain, count]) => (
-                  <li key={domain} className="flex items-center justify-between text-sm">
-                    <span className="tabular text-slate-600">{domain}</span>
-                    <span className="tabular text-slate-400">{count}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </section>
+            {topDomains.length > 0 && (
+              <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-4">
+                <p className="mb-2 text-xs font-medium uppercase tracking-wide text-slate-400">Aktywny na domenach</p>
+                <ul className="space-y-1">
+                  {topDomains.map(([domain, count]) => (
+                    <li key={domain} className="flex items-center justify-between text-sm">
+                      <span className="tabular text-slate-600">{domain}</span>
+                      <span className="tabular text-slate-400">{count}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </section>
 
-        <section className="space-y-3">
-          <h2 className="text-base font-semibold text-slate-900">Ustawienia wyceny</h2>
-          <div className="rounded-xl border border-slate-200 bg-white p-6">
-            <DetailsForm
-              calculatorId={calculator.id}
-              name={calculator.name}
-              description={calculator.description}
-              basePrice={calculator.base_price}
-              currency={calculator.currency}
-              estimateSpreadPercent={calculator.estimate_spread_percent}
-            />
-          </div>
-        </section>
-      </div>
-    </div>
+          <section className="space-y-3">
+            <h2 className="text-base font-semibold text-slate-900">Ustawienia wyceny</h2>
+            <div className="rounded-2xl border border-slate-200 bg-white p-6">
+              <DetailsForm
+                calculatorId={calculator.id}
+                name={calculator.name}
+                description={calculator.description}
+                basePrice={calculator.base_price}
+                currency={calculator.currency}
+                estimateSpreadPercent={calculator.estimate_spread_percent}
+              />
+            </div>
+          </section>
+        </div>
+      </main>
+    </>
   );
 }

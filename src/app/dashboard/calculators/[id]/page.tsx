@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { AddQuestionForm } from "@/components/calculator/AddQuestionForm";
 import { AdminCalculatorPreview } from "@/components/calculator/AdminCalculatorPreview";
 import { CalculatorHeader } from "@/components/calculator/CalculatorHeader";
+import { CalculatorTabs } from "@/components/calculator/CalculatorTabs";
 import { QuestionCard } from "@/components/calculator/QuestionCard";
 import { toCalculatorConfig, type RawCalculator } from "@/lib/calculator/mapper";
 import { createClient } from "@/lib/supabase/server";
@@ -44,7 +45,7 @@ export default async function EditCalculatorPage({
   const previewConfig = toCalculatorConfig(calculator);
 
   return (
-    <div className="mx-auto w-full max-w-6xl">
+    <>
       <CalculatorHeader
         calculatorId={calculator.id}
         name={calculator.name}
@@ -52,45 +53,50 @@ export default async function EditCalculatorPage({
         isPublished={calculator.is_published}
         questionCount={questions.length}
       />
-
-      <div className="mt-8 grid gap-8 xl:grid-cols-[1fr_380px]">
-        <div>
-          <p className="mb-3 text-sm text-slate-500">
-            Zmiany kolejności i treści widać natychmiast w podglądzie obok.
-          </p>
-
-          {questions.length === 0 ? (
-            <div className="rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-500">
-              Ten kalkulator nie ma jeszcze żadnych pytań.
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {questions.map((question, index) => (
-                <QuestionCard
-                  key={question.id}
-                  calculatorId={calculator.id}
-                  question={question}
-                  currency={calculator.currency}
-                  index={index}
-                  isFirst={index === 0}
-                  isLast={index === questions.length - 1}
-                />
-              ))}
-            </div>
-          )}
-
-          <div className="mt-3">
-            <AddQuestionForm calculatorId={calculator.id} />
-          </div>
+      <main className="mx-auto w-full max-w-6xl p-6 md:p-10">
+        <div className="mb-6">
+          <CalculatorTabs calculatorId={calculator.id} />
         </div>
 
-        <div className="xl:sticky xl:top-10 xl:self-start">
-          <p className="mb-3 text-xs font-medium uppercase tracking-wide text-slate-400">Podgląd na żywo</p>
-          <div className="flex justify-center">
-            <AdminCalculatorPreview key={JSON.stringify(previewConfig)} config={previewConfig} />
+        <div className="grid gap-8 xl:grid-cols-[1fr_380px]">
+          <div>
+            <p className="mb-3 text-sm text-slate-500">
+              Przeciągnij pytania, aby zmienić kolejność. Zmiany widać natychmiast w podglądzie.
+            </p>
+
+            {questions.length === 0 ? (
+              <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-500">
+                Ten kalkulator nie ma jeszcze żadnych pytań.
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {questions.map((question, index) => (
+                  <QuestionCard
+                    key={question.id}
+                    calculatorId={calculator.id}
+                    question={question}
+                    currency={calculator.currency}
+                    index={index}
+                    isFirst={index === 0}
+                    isLast={index === questions.length - 1}
+                  />
+                ))}
+              </div>
+            )}
+
+            <div className="mt-3">
+              <AddQuestionForm calculatorId={calculator.id} />
+            </div>
+          </div>
+
+          <div className="xl:sticky xl:top-24 xl:self-start">
+            <p className="mb-3 text-xs font-medium uppercase tracking-wide text-slate-400">Podgląd na żywo</p>
+            <div className="flex justify-center">
+              <AdminCalculatorPreview key={JSON.stringify(previewConfig)} config={previewConfig} />
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      </main>
+    </>
   );
 }

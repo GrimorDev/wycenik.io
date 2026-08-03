@@ -53,9 +53,9 @@ export function AddQuestionForm({ calculatorId }: { calculatorId: string }) {
             onChange={(e) => setType(e.target.value as typeof type)}
             className={`mt-1 ${FIELD_CLASS}`}
           >
-            <option value="single_choice">Jednokrotny wybór</option>
-            <option value="checkbox">Checkboxy (wielokrotny wybór)</option>
-            <option value="number_slider">Suwak liczbowy</option>
+            <option value="single_choice">Wybór jednokrotny</option>
+            <option value="checkbox">Wybór wielokrotny</option>
+            <option value="number_slider">Suwak / zakres</option>
           </select>
         </label>
         <label className="flex items-center gap-2 pb-2.5 text-sm text-slate-600">
