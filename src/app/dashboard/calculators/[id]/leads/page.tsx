@@ -1,7 +1,6 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import { CalculatorHeader } from "@/components/calculator/CalculatorHeader";
 import { ExportCsvButton } from "@/components/calculator/ExportCsvButton";
-import { ArrowLeftIcon } from "@/components/icons";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function CalculatorLeadsPage({
@@ -18,7 +17,7 @@ export default async function CalculatorLeadsPage({
 
   const { data: calculator } = await supabase
     .from("calculators")
-    .select("id,name,slug,user_id")
+    .select("id,name,slug,is_published,user_id")
     .eq("id", id)
     .single();
 
@@ -36,18 +35,16 @@ export default async function CalculatorLeadsPage({
 
   return (
     <div className="mx-auto w-full max-w-3xl space-y-6">
-      <div>
-        <Link
-          href={`/dashboard/calculators/${id}`}
-          className="link-underline flex items-center gap-1.5 text-sm text-ink-soft"
-        >
-          <ArrowLeftIcon className="h-3.5 w-3.5" />
-          {calculator.name}
-        </Link>
-        <div className="mt-2 flex items-center justify-between">
-          <h1 className="font-display text-3xl">Leady</h1>
-          <ExportCsvButton leads={rows} filename={`leady-${calculator.slug}.csv`} />
-        </div>
+      <CalculatorHeader
+        calculatorId={id}
+        name={calculator.name}
+        slug={calculator.slug}
+        isPublished={calculator.is_published}
+      />
+
+      <div className="flex items-center justify-between">
+        <h2 className="font-display text-xl">Leady</h2>
+        <ExportCsvButton leads={rows} filename={`leady-${calculator.slug}.csv`} />
       </div>
 
       {rows.length === 0 ? (

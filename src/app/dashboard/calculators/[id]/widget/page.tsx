@@ -1,6 +1,5 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeftIcon } from "@/components/icons";
+import { CalculatorHeader } from "@/components/calculator/CalculatorHeader";
 import { WidgetSettingsForm } from "@/components/calculator/WidgetSettingsForm";
 import { createClient } from "@/lib/supabase/server";
 
@@ -19,7 +18,7 @@ export default async function WidgetAppearancePage({
   const { data: calculator, error } = await supabase
     .from("calculators")
     .select(
-      "id,name,user_id,accent_color,locale,corner_style,bg_color,text_color,border_color,allowed_domain",
+      "id,name,slug,is_published,user_id,accent_color,locale,corner_style,bg_color,text_color,border_color,allowed_domain",
     )
     .eq("id", id)
     .single();
@@ -30,15 +29,15 @@ export default async function WidgetAppearancePage({
 
   return (
     <div className="mx-auto w-full max-w-3xl space-y-6">
+      <CalculatorHeader
+        calculatorId={id}
+        name={calculator.name}
+        slug={calculator.slug}
+        isPublished={calculator.is_published}
+      />
+
       <div>
-        <Link
-          href={`/dashboard/calculators/${id}`}
-          className="link-underline flex items-center gap-1.5 text-sm text-ink-soft"
-        >
-          <ArrowLeftIcon className="h-3.5 w-3.5" />
-          {calculator.name}
-        </Link>
-        <h1 className="mt-3 font-display text-3xl">Wygląd widgetu</h1>
+        <h2 className="font-display text-xl">Wygląd widgetu</h2>
         <p className="mt-1 text-sm text-ink-soft">
           Zmiany widoczne są od razu poniżej, ale nie trafią do klientów, dopóki nie klikniesz
           &bdquo;Zapisz wygląd&rdquo;.

@@ -1,14 +1,14 @@
-import Link from "next/link";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { AddOptionForm } from "@/components/calculator/AddOptionForm";
 import { AddQuestionForm } from "@/components/calculator/AddQuestionForm";
 import { AdminCalculatorPreview } from "@/components/calculator/AdminCalculatorPreview";
+import { CalculatorHeader } from "@/components/calculator/CalculatorHeader";
 import { DetailsForm } from "@/components/calculator/DetailsForm";
 import { EditOptionForm } from "@/components/calculator/EditOptionForm";
 import { EditQuestionForm } from "@/components/calculator/EditQuestionForm";
 import { EmbedSnippet } from "@/components/calculator/EmbedSnippet";
-import { ArrowLeftIcon, ChevronDownIcon, ChevronUpIcon } from "@/components/icons";
+import { ChevronDownIcon, ChevronUpIcon } from "@/components/icons";
 import { deleteCalculator, moveQuestion, togglePublish } from "@/lib/actions/calculators";
 import { toCalculatorConfig, type RawCalculator } from "@/lib/calculator/mapper";
 import { createClient } from "@/lib/supabase/server";
@@ -92,19 +92,12 @@ export default async function EditCalculatorPage({
 
   return (
     <div className="mx-auto w-full max-w-6xl">
-      <div>
-        <Link href="/dashboard" className="link-underline flex items-center gap-1.5 text-sm text-ink-soft">
-          <ArrowLeftIcon className="h-3.5 w-3.5" />
-          Twoje kalkulatory
-        </Link>
-        <div className="mb-1 mt-3 flex items-center justify-between">
-          <h1 className="font-display text-3xl">{calculator.name}</h1>
-          <span className={`stamp ${calculator.is_published ? "text-sage" : "text-ink-faint"}`}>
-            {calculator.is_published ? "Opublikowany" : "Szkic"}
-          </span>
-        </div>
-        <p className="tabular text-sm text-ink-faint">/{calculator.slug}</p>
-      </div>
+      <CalculatorHeader
+        calculatorId={calculator.id}
+        name={calculator.name}
+        slug={calculator.slug}
+        isPublished={calculator.is_published}
+      />
 
       <div className="mt-10 grid gap-10 xl:grid-cols-[1fr_380px]">
         <div className="max-w-2xl space-y-12">
@@ -142,23 +135,7 @@ export default async function EditCalculatorPage({
           </section>
 
           <section className="space-y-3">
-            <div className="flex items-center justify-between">
-              <h2 className="font-display text-xl">Kod do wdrożenia</h2>
-              <div className="flex items-center gap-4">
-                <Link
-                  href={`/dashboard/calculators/${calculator.id}/webhooks`}
-                  className="link-underline text-sm text-ink-soft hover:text-ink"
-                >
-                  Webhooki
-                </Link>
-                <Link
-                  href={`/dashboard/calculators/${calculator.id}/widget`}
-                  className="link-underline text-sm text-ink-soft hover:text-ink"
-                >
-                  Edytuj wygląd widgetu
-                </Link>
-              </div>
-            </div>
+            <h2 className="font-display text-xl">Kod do wdrożenia</h2>
             {calculator.is_published ? (
               <EmbedSnippet snippet={embedSnippet} />
             ) : (

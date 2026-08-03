@@ -1,6 +1,5 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeftIcon } from "@/components/icons";
+import { CalculatorHeader } from "@/components/calculator/CalculatorHeader";
 import { WebhookSettingsForm } from "@/components/calculator/WebhookSettingsForm";
 import { createClient } from "@/lib/supabase/server";
 
@@ -36,7 +35,7 @@ export default async function WebhookSettingsPage({
 
   const { data: calculator, error } = await supabase
     .from("calculators")
-    .select("id,name,user_id,webhook_url,webhook_secret")
+    .select("id,name,slug,is_published,user_id,webhook_url,webhook_secret")
     .eq("id", id)
     .single();
 
@@ -55,15 +54,15 @@ export default async function WebhookSettingsPage({
 
   return (
     <div className="mx-auto w-full max-w-3xl space-y-6">
+      <CalculatorHeader
+        calculatorId={id}
+        name={calculator.name}
+        slug={calculator.slug}
+        isPublished={calculator.is_published}
+      />
+
       <div>
-        <Link
-          href={`/dashboard/calculators/${id}`}
-          className="link-underline flex items-center gap-1.5 text-sm text-ink-soft"
-        >
-          <ArrowLeftIcon className="h-3.5 w-3.5" />
-          {calculator.name}
-        </Link>
-        <h1 className="mt-3 font-display text-3xl">Webhooki</h1>
+        <h2 className="font-display text-xl">Webhooki</h2>
         <p className="mt-1 text-sm text-ink-soft">
           Wysyłamy POST z danymi każdego nowego leada pod wskazany adres — podłącz Make, Zapiera
           albo własny endpoint.
