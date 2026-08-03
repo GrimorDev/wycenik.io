@@ -57,7 +57,7 @@ export function DashboardSidebar({ email, usage }: { email: string; usage: PlanU
           </div>
         </div>
 
-        <div className="rounded-xl border border-slate-800 bg-slate-800/40 p-4">
+        <div className="rounded-2xl border border-slate-800 bg-slate-800/40 p-4">
           <p className="mb-3 flex items-center gap-1.5 text-[11px] font-semibold tracking-wide text-slate-300">
             <ChartIcon className="h-3.5 w-3.5" />
             PLAN FREE

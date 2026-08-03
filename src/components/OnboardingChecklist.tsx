@@ -15,7 +15,7 @@ export function OnboardingChecklist({ steps }: { steps: Step[] }) {
   const currentIndex = steps.findIndex((s) => !s.done);
 
   return (
-    <div className="mb-8 rounded-xl border border-slate-200 bg-white p-5">
+    <div className="mb-8 rounded-2xl border border-slate-200 bg-white p-6">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div>
           <p className="text-base font-semibold text-slate-900">Zacznij zbierać leady</p>

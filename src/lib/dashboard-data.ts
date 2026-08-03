@@ -6,6 +6,7 @@ export interface CalculatorSummary {
   name: string;
   slug: string;
   isPublished: boolean;
+  questionCount: number;
   views: number;
   leads: number;
   conversion: number;
@@ -26,15 +27,18 @@ export async function getCalculatorsWithStats(
 
   const ids = rows.map((r) => r.id);
 
-  const [{ data: viewRows }, { data: leadRows }] = await Promise.all([
+  const [{ data: viewRows }, { data: leadRows }, { data: questionRows }] = await Promise.all([
     supabase.from("calculator_views").select("calculator_id").in("calculator_id", ids).limit(5000),
     supabase.from("leads").select("calculator_id").in("calculator_id", ids).limit(5000),
+    supabase.from("questions").select("calculator_id").in("calculator_id", ids).limit(5000),
   ]);
 
   const viewCounts = new Map<string, number>();
   for (const v of viewRows ?? []) viewCounts.set(v.calculator_id, (viewCounts.get(v.calculator_id) ?? 0) + 1);
   const leadCounts = new Map<string, number>();
   for (const l of leadRows ?? []) leadCounts.set(l.calculator_id, (leadCounts.get(l.calculator_id) ?? 0) + 1);
+  const questionCounts = new Map<string, number>();
+  for (const q of questionRows ?? []) questionCounts.set(q.calculator_id, (questionCounts.get(q.calculator_id) ?? 0) + 1);
 
   return rows.map((r) => {
     const views = viewCounts.get(r.id) ?? 0;
@@ -44,6 +48,7 @@ export async function getCalculatorsWithStats(
       name: r.name,
       slug: r.slug,
       isPublished: r.is_published,
+      questionCount: questionCounts.get(r.id) ?? 0,
       views,
       leads,
       conversion: views > 0 ? (leads / views) * 100 : 0,

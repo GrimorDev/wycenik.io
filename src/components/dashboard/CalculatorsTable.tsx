@@ -7,14 +7,14 @@ import type { CalculatorSummary } from "@/lib/dashboard-data";
 export function CalculatorsTable({ calculators }: { calculators: CalculatorSummary[] }) {
   if (calculators.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-500">
+      <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-500">
         Nie masz jeszcze żadnego kalkulatora.
       </div>
     );
   }
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
+    <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white">
       <table className="w-full text-left text-sm">
         <thead className="border-b border-slate-200 text-slate-500">
           <tr>
@@ -31,7 +31,10 @@ export function CalculatorsTable({ calculators }: { calculators: CalculatorSumma
             <tr key={calc.id}>
               <td className="px-5 py-4">
                 <p className="font-medium text-slate-900">{calc.name}</p>
-                <p className="tabular text-xs text-slate-400">/{calc.slug}</p>
+                <p className="text-xs text-slate-400">
+                  {calc.questionCount} {calc.questionCount === 1 ? "pytanie" : "pytań"} ·{" "}
+                  <span className="tabular">/{calc.slug}</span>
+                </p>
               </td>
               <td className="tabular px-5 py-4 text-slate-700">{calc.views}</td>
               <td className="tabular px-5 py-4 text-slate-700">{calc.leads}</td>
