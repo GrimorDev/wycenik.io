@@ -1,17 +1,41 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { addQuestion, type ActionState } from "@/lib/actions/calculators";
 
 const initialState: ActionState = { error: null };
 
 export function AddQuestionForm({ calculatorId }: { calculatorId: string }) {
+  const [isAdding, setIsAdding] = useState(false);
   const action = addQuestion.bind(null, calculatorId);
   const [state, formAction, pending] = useActionState(action, initialState);
   const [type, setType] = useState<"number_slider" | "single_choice" | "checkbox">("single_choice");
+  const wasPending = useRef(false);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    if (wasPending.current && !pending && !state.error) {
+      formRef.current?.reset();
+      setType("single_choice");
+      setIsAdding(false);
+    }
+    wasPending.current = pending;
+  }, [pending, state.error]);
+
+  if (!isAdding) {
+    return (
+      <button
+        type="button"
+        onClick={() => setIsAdding(true)}
+        className="btn btn-ghost w-full justify-center border-dashed"
+      >
+        + Dodaj pytanie
+      </button>
+    );
+  }
 
   return (
-    <form action={formAction} className="ticket-dashed space-y-3 p-4">
+    <form ref={formRef} action={formAction} className="ticket-dashed space-y-3 p-4">
       <p className="stamp text-rust">Dodaj pytanie</p>
       <label className="block text-sm text-ink-soft">
         Treść pytania
@@ -63,9 +87,19 @@ export function AddQuestionForm({ calculatorId }: { calculatorId: string }) {
       )}
 
       {state.error && <p className="text-sm text-rust-dark">{state.error}</p>}
-      <button type="submit" disabled={pending} className="btn btn-ghost">
-        {pending ? "Dodawanie…" : "Dodaj pytanie"}
-      </button>
+      <div className="flex gap-2">
+        <button type="submit" disabled={pending} className="btn btn-primary px-3 py-1.5 text-xs">
+          {pending ? "Dodawanie…" : "Dodaj pytanie"}
+        </button>
+        <button
+          type="button"
+          onClick={() => setIsAdding(false)}
+          disabled={pending}
+          className="btn btn-ghost px-3 py-1.5 text-xs"
+        >
+          Anuluj
+        </button>
+      </div>
     </form>
   );
 }
