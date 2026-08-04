@@ -35,8 +35,8 @@ export default async function WidgetAppearancePage({
       isPublished={calculator.is_published}
     >
       <div className="mb-6">
-        <h2 className="text-base font-semibold text-slate-900">Styling</h2>
-        <p className="mt-1 text-sm text-slate-500">
+        <h2 className="text-base font-semibold text-foreground">Styling</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
           Zmiany widoczne są od razu poniżej, ale nie trafią do klientów, dopóki nie klikniesz
           „Zapisz wygląd”.
         </p>

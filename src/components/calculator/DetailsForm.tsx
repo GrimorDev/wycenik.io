@@ -1,13 +1,14 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { InfoTooltip } from "@/components/InfoTooltip";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
 import { updateCalculatorDetails, type ActionState } from "@/lib/actions/calculators";
 
 const initialState: ActionState = { error: null };
-
-const FIELD_CLASS =
-  "w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-brand-accent focus:outline-none focus:ring-2 focus:ring-brand-accent/20";
 
 interface Props {
   calculatorId: string;
@@ -28,50 +29,51 @@ export function DetailsForm({
 }: Props) {
   const action = updateCalculatorDetails.bind(null, calculatorId);
   const [state, formAction, pending] = useActionState(action, initialState);
+  const [spread, setSpread] = useState(Math.round(estimateSpreadPercent * 100));
 
   return (
     <form action={formAction} className="space-y-4">
-      <label className="block text-sm text-slate-600">
-        Nazwa
-        <input name="name" required defaultValue={name} className={`mt-1 ${FIELD_CLASS}`} />
-      </label>
-      <label className="block text-sm text-slate-600">
-        Opis (opcjonalnie)
-        <textarea name="description" defaultValue={description ?? ""} rows={2} className={`mt-1 ${FIELD_CLASS}`} />
-      </label>
-      <div className="grid grid-cols-3 gap-4">
-        <label className="block text-sm text-slate-600">
-          Cena bazowa
-          <InfoTooltip text="Minimalna kwota, od której zaczynasz wycenę — np. koszt dojazdu lub minimalna wartość zlecenia." />
-          <input name="base_price" type="number" step="0.01" defaultValue={basePrice} className={`tabular mt-1 ${FIELD_CLASS}`} />
-        </label>
-        <label className="block text-sm text-slate-600">
-          Waluta
-          <input name="currency" defaultValue={currency} className={`tabular mt-1 ${FIELD_CLASS}`} />
-        </label>
-        <label className="block text-sm text-slate-600">
-          Widełki wyceny (%)
-          <InfoTooltip text="Zalecane 10–15%. Klienci chętniej zostawiają kontakt, widząc przedział cenowy (np. 1500–1800 zł), niż jedną sztywną kwotę." />
-          <input
-            name="estimate_spread_percent"
-            type="number"
-            step="1"
-            min="0"
-            max="100"
-            defaultValue={Math.round(estimateSpreadPercent * 100)}
-            className={`tabular mt-1 ${FIELD_CLASS}`}
-          />
-        </label>
+      <div className="space-y-1.5">
+        <Label htmlFor="calc-name">Nazwa</Label>
+        <Input id="calc-name" name="name" required defaultValue={name} />
+      </div>
+      <div className="space-y-1.5">
+        <Label htmlFor="calc-description">Opis (opcjonalnie)</Label>
+        <textarea
+          id="calc-description"
+          name="description"
+          defaultValue={description ?? ""}
+          rows={2}
+          className="flex w-full rounded-md border border-input bg-transparent px-3 py-1.5 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+        />
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-1.5">
+          <Label className="flex items-center gap-1.5" htmlFor="calc-base-price">
+            Cena bazowa
+            <InfoTooltip text="Minimalna kwota, od której zaczynasz wycenę — np. koszt dojazdu lub minimalna wartość zlecenia." />
+          </Label>
+          <Input id="calc-base-price" name="base_price" type="number" step="0.01" defaultValue={basePrice} className="font-mono" />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="calc-currency">Waluta</Label>
+          <Input id="calc-currency" name="currency" defaultValue={currency} className="font-mono" />
+        </div>
       </div>
 
-      {state.error && <p className="text-sm text-red-600">{state.error}</p>}
-      <button
-        type="submit"
-        disabled={pending}
-        className="rounded-[10px] bg-brand-accent px-4 py-2 text-sm font-medium text-brand-accent-ink transition-colors hover:bg-brand-accent-hover disabled:opacity-60"
-      >
+      <div className="space-y-2">
+        <Label className="flex items-center gap-1.5">
+          Widełki wyceny: ±{spread}%
+          <InfoTooltip text="Zalecane 10–15%. Klienci chętniej zostawiają kontakt, widząc przedział cenowy (np. 1500–1800 zł), niż jedną sztywną kwotę." />
+        </Label>
+        <Slider value={[spread]} min={0} max={40} step={1} onValueChange={([v]) => setSpread(v ?? 0)} />
+        <input type="hidden" name="estimate_spread_percent" value={spread} />
+      </div>
+
+      {state.error && <p className="text-sm text-destructive">{state.error}</p>}
+      <Button type="submit" variant="brand" disabled={pending}>
         {pending ? "Zapisywanie…" : "Zapisz zmiany"}
-      </button>
+      </Button>
     </form>
   );
 }

@@ -1,6 +1,9 @@
 "use client";
 
 import { useActionState, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   regenerateWebhookSecret,
   updateWebhookUrl,
@@ -8,9 +11,6 @@ import {
 } from "@/lib/actions/calculators";
 
 const initialState: ActionState = { error: null };
-
-const FIELD_CLASS =
-  "w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-brand-accent focus:outline-none focus:ring-2 focus:ring-brand-accent/20";
 
 interface Props {
   calculatorId: string;
@@ -33,62 +33,49 @@ export function WebhookSettingsForm({ calculatorId, webhookUrl, webhookSecret }:
 
   return (
     <div className="space-y-6">
-      <form action={formAction} className="space-y-4">
-        <label className="block text-sm text-slate-600">
-          Adres URL webhooka
-          <input
-            name="webhook_url"
-            type="url"
-            placeholder="https://hook.make.com/..."
-            defaultValue={webhookUrl ?? ""}
-            className={`tabular mt-1 ${FIELD_CLASS}`}
-          />
-        </label>
-        <p className="text-xs text-slate-400">
+      <form action={formAction} className="space-y-2">
+        <Label htmlFor="webhook-url">Adres URL webhooka</Label>
+        <Input
+          id="webhook-url"
+          name="webhook_url"
+          type="url"
+          placeholder="https://hook.make.com/..."
+          defaultValue={webhookUrl ?? ""}
+          className="font-mono"
+        />
+        <p className="text-xs text-muted-foreground">
           Puste = wyłączone. Musi zaczynać się od https://. Po zapisaniu każdy nowy lead zostanie
           wysłany pod ten adres jako POST z JSON-em.
         </p>
-        {state.error && <p className="text-sm text-red-600">{state.error}</p>}
-        <button
-          type="submit"
-          disabled={pending}
-          className="rounded-[10px] bg-brand-accent px-4 py-2 text-sm font-medium text-brand-accent-ink transition-colors hover:bg-brand-accent-hover disabled:opacity-60"
-        >
+        {state.error && <p className="text-sm text-destructive">{state.error}</p>}
+        <Button type="submit" variant="brand" disabled={pending}>
           {pending ? "Zapisywanie…" : "Zapisz"}
-        </button>
+        </Button>
       </form>
 
       {webhookSecret && (
-        <div className="border-t border-dashed border-slate-200 pt-5">
-          <p className="mb-2 text-sm text-slate-600">Sekret podpisu (HMAC)</p>
+        <div className="space-y-2 border-t border-border pt-5">
+          <Label>Sekret podpisu (HMAC)</Label>
           <div className="flex flex-wrap items-center gap-2">
-            <code className={`tabular flex-1 overflow-x-auto py-2 text-xs ${FIELD_CLASS}`}>
+            <code className="font-mono flex h-9 flex-1 items-center overflow-x-auto rounded-md border border-input bg-transparent px-3 text-xs shadow-sm">
               {revealed ? webhookSecret : "•".repeat(24)}
             </code>
-            <button
-              type="button"
-              onClick={() => setRevealed((v) => !v)}
-              className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-700 hover:border-slate-400"
-            >
+            <Button type="button" variant="outline" size="sm" onClick={() => setRevealed((v) => !v)}>
               {revealed ? "Ukryj" : "Pokaż"}
-            </button>
-            <button
-              type="button"
-              onClick={handleCopy}
-              className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-700 hover:border-slate-400"
-            >
+            </Button>
+            <Button type="button" variant="outline" size="sm" onClick={handleCopy}>
               {copied ? "Skopiowano!" : "Kopiuj"}
-            </button>
+            </Button>
           </div>
-          <p className="mt-2 text-xs text-slate-400">
-            Każde żądanie zawiera nagłówek <code className="tabular">X-Wycenik-Signature</code> —
+          <p className="text-xs text-muted-foreground">
+            Każde żądanie zawiera nagłówek <code className="font-mono">X-Wycenik-Signature</code> —
             HMAC-SHA256 treści żądania z tym sekretem. Użyj go, żeby zweryfikować, że webhook
             faktycznie pochodzi z Wycenik.io.
           </p>
-          <form action={regenerateWebhookSecret.bind(null, calculatorId)} className="mt-3">
-            <button type="submit" className="text-xs font-medium text-red-600 hover:text-red-700">
+          <form action={regenerateWebhookSecret.bind(null, calculatorId)}>
+            <Button type="submit" variant="link" size="sm" className="h-auto p-0 text-destructive">
               Wygeneruj nowy sekret
-            </button>
+            </Button>
           </form>
         </div>
       )}

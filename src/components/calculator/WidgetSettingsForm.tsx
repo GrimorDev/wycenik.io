@@ -1,7 +1,11 @@
 "use client";
 
 import { useActionState, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { updateWidgetTheme, type ActionState } from "@/lib/actions/calculators";
+import { cn } from "@/lib/cn";
 import type { Locale } from "../../../widget/src/strings";
 import { WidgetPreview } from "./WidgetPreview";
 
@@ -18,9 +22,6 @@ const CORNER_LABELS: Record<CornerStyle, string> = {
 const DEFAULT_BG = "#ffffff";
 const DEFAULT_TEXT = "#1e1b16";
 const DEFAULT_BORDER = "#e4dac5";
-
-const FIELD_CLASS =
-  "w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-brand-accent focus:outline-none focus:ring-2 focus:ring-brand-accent/20";
 
 interface Props {
   calculatorId: string;
@@ -55,153 +56,136 @@ export function WidgetSettingsForm({
   const [state, formAction, pending] = useActionState(action, initialState);
 
   return (
-    <div className="grid gap-8 md:grid-cols-2">
-      <form action={formAction} className="space-y-5">
-        <label className="block text-sm text-slate-600">
-          Kolor akcentu
-          <div className="mt-1 flex items-center gap-2">
+    <div className="grid max-w-3xl gap-8 md:grid-cols-2">
+      <form action={formAction} className="space-y-6">
+        <div className="space-y-2">
+          <Label htmlFor="accent-color">Kolor akcentu</Label>
+          <div className="flex items-center gap-2">
             <input
+              id="accent-color"
               type="color"
               name="accent_color"
               value={color}
               onChange={(e) => setColor(e.target.value)}
-              className="h-9 w-12 cursor-pointer rounded-lg border border-slate-300 bg-transparent p-1"
+              className="h-9 w-12 cursor-pointer rounded-md border border-input bg-transparent p-1"
             />
-            <span className="tabular text-xs text-slate-400">{color}</span>
+            <span className="font-mono text-xs text-muted-foreground">{color}</span>
           </div>
-        </label>
+        </div>
 
-        <label className="block text-sm text-slate-600">
-          Język widgetu
+        <div className="space-y-2">
+          <Label htmlFor="widget-locale">Język widgetu</Label>
           <select
+            id="widget-locale"
             name="locale"
             value={loc}
             onChange={(e) => setLoc(e.target.value as Locale)}
-            className={`mt-1 ${FIELD_CLASS}`}
+            className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
           >
             <option value="pl">Polski</option>
             <option value="en">English</option>
           </select>
-        </label>
+        </div>
 
-        <div>
-          <p className="mb-2 text-sm text-slate-600">Kształt narożników</p>
-          <div className="grid grid-cols-3 gap-2">
+        <div className="space-y-2">
+          <Label>Kształt narożników</Label>
+          <div className="flex gap-2">
             {(Object.keys(CORNER_LABELS) as CornerStyle[]).map((key) => (
-              <label
+              <Button
                 key={key}
-                className={`cursor-pointer rounded-lg border p-3 text-center text-xs transition-colors ${
-                  corner === key ? "border-brand-accent bg-brand-mint text-brand-mint-ink" : "border-slate-200 text-slate-500 hover:border-slate-300"
-                }`}
+                type="button"
+                variant={corner === key ? "brand" : "outline"}
+                size="sm"
+                onClick={() => setCorner(key)}
               >
-                <input
-                  type="radio"
-                  name="corner_style"
-                  value={key}
-                  checked={corner === key}
-                  onChange={() => setCorner(key)}
-                  className="sr-only"
-                />
                 {CORNER_LABELS[key]}
-              </label>
+              </Button>
             ))}
+            <input type="hidden" name="corner_style" value={corner} />
           </div>
         </div>
 
-        <div className="border-t border-dashed border-slate-200 pt-5">
-          <label className="flex items-center gap-2 text-sm text-slate-600">
+        <div className="space-y-3 border-t border-border pt-5">
+          <label className="flex items-center gap-2 text-sm text-foreground">
             <input
               type="checkbox"
               name="use_custom_palette"
               checked={customPalette}
               onChange={(e) => setCustomPalette(e.target.checked)}
-              className="accent-brand-accent"
+              className="accent-brand"
             />
             Własne kolory tła, tekstu i obramowania
           </label>
-          <p className="mt-1 text-xs text-slate-400">
+          <p className="text-xs text-muted-foreground">
             Wyłączone: widget sam dopasowuje się do jasnego/ciemnego motywu odwiedzającego.
           </p>
 
           {customPalette && (
-            <div className="mt-4 grid grid-cols-3 gap-3">
-              <label className="text-xs text-slate-500">
-                Tło
-                <div className="mt-1 flex items-center gap-1.5">
+            <div className="grid grid-cols-3 gap-3">
+              <div className="space-y-1">
+                <Label className="text-xs">Tło</Label>
+                <div className="flex items-center gap-1.5">
                   <input
                     type="color"
                     name="bg_color"
                     value={bg}
                     onChange={(e) => setBg(e.target.value)}
-                    className="h-8 w-10 cursor-pointer rounded-lg border border-slate-300 bg-transparent p-1"
+                    className="h-8 w-10 cursor-pointer rounded-md border border-input bg-transparent p-1"
                   />
-                  <span className="tabular">{bg}</span>
+                  <span className="font-mono text-xs">{bg}</span>
                 </div>
-              </label>
-              <label className="text-xs text-slate-500">
-                Tekst
-                <div className="mt-1 flex items-center gap-1.5">
+              </div>
+              <div className="space-y-1">
+                <Label className="text-xs">Tekst</Label>
+                <div className="flex items-center gap-1.5">
                   <input
                     type="color"
                     name="text_color"
                     value={text}
                     onChange={(e) => setText(e.target.value)}
-                    className="h-8 w-10 cursor-pointer rounded-lg border border-slate-300 bg-transparent p-1"
+                    className="h-8 w-10 cursor-pointer rounded-md border border-input bg-transparent p-1"
                   />
-                  <span className="tabular">{text}</span>
+                  <span className="font-mono text-xs">{text}</span>
                 </div>
-              </label>
-              <label className="text-xs text-slate-500">
-                Obramowanie
-                <div className="mt-1 flex items-center gap-1.5">
+              </div>
+              <div className="space-y-1">
+                <Label className="text-xs">Obramowanie</Label>
+                <div className="flex items-center gap-1.5">
                   <input
                     type="color"
                     name="border_color"
                     value={border}
                     onChange={(e) => setBorder(e.target.value)}
-                    className="h-8 w-10 cursor-pointer rounded-lg border border-slate-300 bg-transparent p-1"
+                    className="h-8 w-10 cursor-pointer rounded-md border border-input bg-transparent p-1"
                   />
-                  <span className="tabular">{border}</span>
+                  <span className="font-mono text-xs">{border}</span>
                 </div>
-              </label>
+              </div>
             </div>
           )}
         </div>
 
-        <div className="border-t border-dashed border-slate-200 pt-5">
-          <p className="mb-2 text-xs font-medium uppercase tracking-wide text-slate-400">
-            Bezpieczeństwo
-          </p>
-          <label className="block text-sm text-slate-600">
-            Dozwolona domena (opcjonalnie)
-            <input
-              name="allowed_domain"
-              defaultValue={allowedDomain ?? ""}
-              placeholder="mojafirma.pl"
-              className={`mt-1 ${FIELD_CLASS}`}
-            />
-          </label>
-          <p className="mt-1 text-xs text-slate-400">
+        <div className="space-y-2 border-t border-border pt-5">
+          <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">Bezpieczeństwo</p>
+          <div className="space-y-1.5">
+            <Label htmlFor="allowed-domain">Dozwolona domena (opcjonalnie)</Label>
+            <Input id="allowed-domain" name="allowed_domain" defaultValue={allowedDomain ?? ""} placeholder="mojafirma.pl" />
+          </div>
+          <p className="text-xs text-muted-foreground">
             Puste = widget działa wszędzie. Ustawione = widget ładuje się tylko na tej domenie
             (ochrona przed skopiowaniem kodu przez kogoś innego).
           </p>
         </div>
 
-        {state.error && <p className="text-sm text-red-600">{state.error}</p>}
-        <button
-          type="submit"
-          disabled={pending}
-          className="rounded-[10px] bg-brand-accent px-4 py-2 text-sm font-medium text-brand-accent-ink transition-colors hover:bg-brand-accent-hover disabled:opacity-60"
-        >
+        {state.error && <p className="text-sm text-destructive">{state.error}</p>}
+        <Button type="submit" variant="brand" disabled={pending}>
           {pending ? "Zapisywanie…" : "Zapisz wygląd"}
-        </button>
+        </Button>
       </form>
 
       <div>
-        <p className="mb-2 text-xs font-medium uppercase tracking-wide text-slate-400">
-          Podgląd na żywo
-        </p>
-        <div className="flex justify-center rounded-xl border border-slate-200 bg-white p-6">
+        <p className="mb-2 text-xs font-medium tracking-wide text-muted-foreground uppercase">Podgląd na żywo</p>
+        <div className={cn("flex justify-center rounded-xl border border-border bg-card p-6")}>
           <WidgetPreview
             accentColor={color}
             locale={loc}

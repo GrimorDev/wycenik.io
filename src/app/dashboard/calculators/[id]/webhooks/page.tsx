@@ -2,6 +2,15 @@ import { notFound } from "next/navigation";
 import { CalculatorEditorShell } from "@/components/calculator/CalculatorEditorShell";
 import { CalculatorPreviewPane } from "@/components/calculator/CalculatorPreviewPane";
 import { WebhookSettingsForm } from "@/components/calculator/WebhookSettingsForm";
+import { Badge } from "@/components/ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { toCalculatorConfig, type RawCalculator } from "@/lib/calculator/mapper";
 import { createClient } from "@/lib/supabase/server";
 
@@ -10,19 +19,23 @@ const CALCULATOR_SELECT =
 
 function StatusBadge({ statusCode, error }: { statusCode: number | null; error: string | null }) {
   if (error) {
-    return <span className="tabular rounded-md bg-red-50 px-2 py-0.5 text-xs text-red-600">błąd</span>;
+    return (
+      <Badge variant="destructive" className="font-mono">
+        błąd
+      </Badge>
+    );
   }
   if (statusCode && statusCode >= 200 && statusCode < 300) {
     return (
-      <span className="tabular rounded-md bg-brand-mint px-2 py-0.5 text-xs text-brand-mint-ink">
+      <Badge className="font-mono bg-brand text-brand-foreground hover:bg-brand/90">
         {statusCode} OK
-      </span>
+      </Badge>
     );
   }
   return (
-    <span className="tabular rounded-md bg-red-50 px-2 py-0.5 text-xs text-red-600">
+    <Badge variant="destructive" className="font-mono">
       {statusCode ?? "brak odpowiedzi"}
-    </span>
+    </Badge>
   );
 }
 
@@ -73,16 +86,16 @@ export default async function WebhookSettingsPage({
       isPublished={calculator.is_published}
       preview={<CalculatorPreviewPane config={previewConfig} />}
     >
-      <div className="space-y-6">
+      <div className="max-w-xl space-y-6">
         <div>
-          <h2 className="text-base font-semibold text-slate-900">Integracje</h2>
-          <p className="mt-1 text-sm text-slate-500">
+          <h2 className="text-base font-semibold text-foreground">Integracje</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
             Wysyłamy POST z danymi każdego nowego leada pod wskazany adres — podłącz Make, Zapiera
             albo własny endpoint.
           </p>
         </div>
 
-        <div className="panel p-6">
+        <div className="panel space-y-4 p-4">
           <WebhookSettingsForm
             calculatorId={calculator.id}
             webhookUrl={calculator.webhook_url}
@@ -91,37 +104,37 @@ export default async function WebhookSettingsPage({
         </div>
 
         <div>
-          <h3 className="mb-3 text-sm font-medium text-slate-600">Ostatnie dostarczenia</h3>
+          <h3 className="mb-3 text-sm font-medium text-foreground">Ostatnie dostarczenia</h3>
           {rows.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-500">
+            <div className="rounded-2xl border border-dashed border-border bg-card p-8 text-center text-sm text-muted-foreground">
               Brak jeszcze żadnych wysyłek.
             </div>
           ) : (
-            <div className="overflow-x-auto panel">
-              <table className="w-full text-left text-sm">
-                <thead className="border-b border-slate-200 text-slate-500">
-                  <tr>
-                    <th className="px-4 py-3 font-medium">Status</th>
-                    <th className="px-4 py-3 font-medium">Czas odpowiedzi</th>
-                    <th className="px-4 py-3 font-medium">Data</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
+            <div className="panel overflow-hidden">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-surface/60 hover:bg-surface/60">
+                    <TableHead>Status</TableHead>
+                    <TableHead>Czas odpowiedzi</TableHead>
+                    <TableHead>Data</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
                   {rows.map((log) => (
-                    <tr key={log.id}>
-                      <td className="px-4 py-3">
+                    <TableRow key={log.id}>
+                      <TableCell>
                         <StatusBadge statusCode={log.status_code} error={log.error} />
-                      </td>
-                      <td className="tabular px-4 py-3 text-slate-600">
+                      </TableCell>
+                      <TableCell className="font-mono text-muted-foreground">
                         {log.response_time_ms != null ? `${log.response_time_ms} ms` : "—"}
-                      </td>
-                      <td className="tabular px-4 py-3 text-slate-400">
+                      </TableCell>
+                      <TableCell className="font-mono text-muted-foreground">
                         {new Date(log.created_at).toLocaleString("pl-PL")}
-                      </td>
-                    </tr>
+                      </TableCell>
+                    </TableRow>
                   ))}
-                </tbody>
-              </table>
+                </TableBody>
+              </Table>
             </div>
           )}
         </div>

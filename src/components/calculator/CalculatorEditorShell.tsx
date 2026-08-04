@@ -30,7 +30,7 @@ export function CalculatorEditorShell({
         isPublished={isPublished}
         questionCount={questionCount}
       />
-      <div className="border-b border-slate-200 bg-white px-6 py-3 md:px-10">
+      <div className="border-b border-border bg-background px-6 py-3 md:px-10">
         <CalculatorTabs calculatorId={calculatorId} />
       </div>
 

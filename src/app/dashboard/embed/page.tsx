@@ -35,15 +35,15 @@ export default async function EmbedPage({
       />
       <main className="mx-auto w-full max-w-5xl p-6 md:p-10">
         {!active ? (
-          <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-500">
+          <div className="rounded-2xl border border-dashed border-border bg-card p-8 text-center text-sm text-muted-foreground">
             Najpierw stwórz kalkulator, aby uzyskać kod do osadzenia.
           </div>
         ) : !active.is_published ? (
-          <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-500">
+          <div className="rounded-2xl border border-dashed border-border bg-card p-8 text-center text-sm text-muted-foreground">
             Opublikuj kalkulator „{active.name}”, aby otrzymać kod do wklejenia na stronę.
           </div>
         ) : (
-          <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
+          <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr]">
             <EmbedCodeBlock
               title="Skrypt JS"
               code={`<script src="${origin}/widget.js" data-calculator="${active.slug}"></script>`}
