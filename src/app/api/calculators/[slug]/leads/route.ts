@@ -11,7 +11,7 @@ import { createPublicClient } from "@/lib/supabase/public";
 import { dispatchLeadWebhook } from "@/lib/webhooks/dispatch";
 
 const CALCULATOR_SELECT =
-  "id,name,base_price,currency,estimate_spread_percent,accent_color,locale,corner_style,bg_color,text_color,border_color,allowed_domain,webhook_url,webhook_secret,user_id,questions(id,label,type,config,position,required,options(id,label,price_delta,price_multiplier,position))";
+  "id,name,base_price,currency,estimate_spread_percent,accent_color,locale,corner_style,bg_color,text_color,border_color,allowed_domain,webhook_url,webhook_secret,user_id,questions(id,label,hint,type,config,position,required,options(id,label,price_delta,price_multiplier,position))";
 
 interface LeadRequestBody {
   name?: string;

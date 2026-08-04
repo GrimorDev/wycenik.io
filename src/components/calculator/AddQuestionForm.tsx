@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useRef, useState } from "react";
+import { InfoTooltip } from "@/components/InfoTooltip";
 import { addQuestion, type ActionState } from "@/lib/actions/calculators";
 
 const initialState: ActionState = { error: null };
@@ -43,6 +44,11 @@ export function AddQuestionForm({ calculatorId }: { calculatorId: string }) {
       <label className="block text-sm text-slate-600">
         Treść pytania
         <input name="label" required className={`mt-1 ${FIELD_CLASS}`} />
+      </label>
+      <label className="block text-sm text-slate-600">
+        Podpowiedź dla klienta
+        <InfoTooltip text="Krótki opis wyświetlany pod pytaniem w widgecie, np. „Podaj powierzchnię użytkową”. Opcjonalne." />
+        <input name="hint" placeholder="np. Podaj powierzchnię użytkową" className={`mt-1 ${FIELD_CLASS}`} />
       </label>
       <div className="flex items-end gap-4">
         <label className="block text-sm text-slate-600">

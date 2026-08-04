@@ -16,6 +16,7 @@ export interface RawOption {
 export interface RawQuestion {
   id: string;
   label: string;
+  hint?: string | null;
   type: "number_slider" | "single_choice" | "checkbox";
   config: Record<string, unknown>;
   position: number;
@@ -52,6 +53,7 @@ function mapQuestion(question: RawQuestion): CalculatorQuestion {
   const base = {
     id: question.id,
     label: question.label,
+    hint: question.hint ?? undefined,
     required: question.required,
     position: question.position,
   };

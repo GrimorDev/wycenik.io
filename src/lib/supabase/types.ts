@@ -97,6 +97,7 @@ export interface Database {
           id: string;
           calculator_id: string;
           label: string;
+          hint: string | null;
           type: "number_slider" | "single_choice" | "checkbox";
           config: Record<string, unknown>;
           position: number;
@@ -107,6 +108,7 @@ export interface Database {
           id?: string;
           calculator_id: string;
           label: string;
+          hint?: string | null;
           type: "number_slider" | "single_choice" | "checkbox";
           config?: Record<string, unknown>;
           position?: number;
@@ -117,6 +119,7 @@ export interface Database {
           id?: string;
           calculator_id?: string;
           label?: string;
+          hint?: string | null;
           type?: "number_slider" | "single_choice" | "checkbox";
           config?: Record<string, unknown>;
           position?: number;

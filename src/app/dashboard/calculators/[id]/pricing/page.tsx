@@ -1,8 +1,12 @@
 import { notFound } from "next/navigation";
-import { CalculatorHeader } from "@/components/calculator/CalculatorHeader";
-import { CalculatorTabs } from "@/components/calculator/CalculatorTabs";
+import { CalculatorEditorShell } from "@/components/calculator/CalculatorEditorShell";
+import { CalculatorPreviewPane } from "@/components/calculator/CalculatorPreviewPane";
 import { DetailsForm } from "@/components/calculator/DetailsForm";
+import { toCalculatorConfig, type RawCalculator } from "@/lib/calculator/mapper";
 import { createClient } from "@/lib/supabase/server";
+
+const CALCULATOR_SELECT =
+  "id,name,slug,description,base_price,currency,estimate_spread_percent,accent_color,locale,corner_style,bg_color,text_color,border_color,is_published,user_id,questions(id,label,hint,type,config,position,required,options(id,label,price_delta,price_multiplier,position))";
 
 function topDomainsFrom(rows: { source_domain: string | null }[]): [string, number][] {
   const counts = new Map<string, number>();
@@ -25,15 +29,22 @@ export default async function CalculatorPricingPage({
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { data: calculator, error } = await supabase
-    .from("calculators")
-    .select("id,name,slug,description,base_price,currency,estimate_spread_percent,is_published,user_id")
-    .eq("id", id)
-    .single();
+  const { data, error } = await supabase.from("calculators").select(CALCULATOR_SELECT).eq("id", id).single();
+
+  const calculator = data as unknown as
+    | (RawCalculator & {
+        slug: string;
+        description: string | null;
+        is_published: boolean;
+        user_id: string;
+      })
+    | null;
 
   if (error || !calculator || calculator.user_id !== user?.id) {
     notFound();
   }
+
+  const previewConfig = toCalculatorConfig(calculator);
 
   const [{ count: viewCount }, { count: leadCount }, { data: viewRows }] = await Promise.all([
     supabase.from("calculator_views").select("id", { count: "exact", head: true }).eq("calculator_id", id),
@@ -52,65 +63,59 @@ export default async function CalculatorPricingPage({
   const topDomains = topDomainsFrom(viewRows ?? []);
 
   return (
-    <>
-      <CalculatorHeader
-        calculatorId={calculator.id}
-        name={calculator.name}
-        slug={calculator.slug}
-        isPublished={calculator.is_published}
-      />
-      <main className="mx-auto w-full max-w-3xl p-6 md:p-10">
-        <div className="mb-6">
-          <CalculatorTabs calculatorId={calculator.id} />
-        </div>
-
-        <div className="space-y-8">
-          <section className="space-y-3">
-            <h2 className="text-base font-semibold text-slate-900">Statystyki</h2>
-            <div className="grid grid-cols-3 gap-3">
-              <div className="panel p-4 text-center">
-                <p className="font-dashboard-display text-2xl font-semibold text-slate-900">{views}</p>
-                <p className="mt-1 text-xs text-slate-400">Wyświetlenia</p>
-              </div>
-              <div className="panel p-4 text-center">
-                <p className="font-dashboard-display text-2xl font-semibold text-slate-900">{leads}</p>
-                <p className="mt-1 text-xs text-slate-400">Leady</p>
-              </div>
-              <div className="panel p-4 text-center">
-                <p className="font-dashboard-display text-2xl font-semibold text-slate-900">{conversion}%</p>
-                <p className="mt-1 text-xs text-slate-400">Konwersja</p>
-              </div>
+    <CalculatorEditorShell
+      calculatorId={calculator.id}
+      name={calculator.name}
+      slug={calculator.slug}
+      isPublished={calculator.is_published}
+      preview={<CalculatorPreviewPane config={previewConfig} />}
+    >
+      <div className="space-y-8">
+        <section className="space-y-3">
+          <h2 className="text-base font-semibold text-slate-900">Statystyki</h2>
+          <div className="grid grid-cols-3 gap-3">
+            <div className="panel p-4 text-center">
+              <p className="font-dashboard-display text-2xl font-semibold text-slate-900">{views}</p>
+              <p className="mt-1 text-xs text-slate-400">Wyświetlenia</p>
             </div>
-            {topDomains.length > 0 && (
-              <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-4">
-                <p className="mb-2 text-xs font-medium uppercase tracking-wide text-slate-400">Aktywny na domenach</p>
-                <ul className="space-y-1">
-                  {topDomains.map(([domain, count]) => (
-                    <li key={domain} className="flex items-center justify-between text-sm">
-                      <span className="tabular text-slate-600">{domain}</span>
-                      <span className="tabular text-slate-400">{count}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </section>
-
-          <section className="space-y-3">
-            <h2 className="text-base font-semibold text-slate-900">Ustawienia wyceny</h2>
-            <div className="panel p-6">
-              <DetailsForm
-                calculatorId={calculator.id}
-                name={calculator.name}
-                description={calculator.description}
-                basePrice={calculator.base_price}
-                currency={calculator.currency}
-                estimateSpreadPercent={calculator.estimate_spread_percent}
-              />
+            <div className="panel p-4 text-center">
+              <p className="font-dashboard-display text-2xl font-semibold text-slate-900">{leads}</p>
+              <p className="mt-1 text-xs text-slate-400">Leady</p>
             </div>
-          </section>
-        </div>
-      </main>
-    </>
+            <div className="panel p-4 text-center">
+              <p className="font-dashboard-display text-2xl font-semibold text-slate-900">{conversion}%</p>
+              <p className="mt-1 text-xs text-slate-400">Konwersja</p>
+            </div>
+          </div>
+          {topDomains.length > 0 && (
+            <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-4">
+              <p className="mb-2 text-xs font-medium uppercase tracking-wide text-slate-400">Aktywny na domenach</p>
+              <ul className="space-y-1">
+                {topDomains.map(([domain, count]) => (
+                  <li key={domain} className="flex items-center justify-between text-sm">
+                    <span className="tabular text-slate-600">{domain}</span>
+                    <span className="tabular text-slate-400">{count}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </section>
+
+        <section className="space-y-3">
+          <h2 className="text-base font-semibold text-slate-900">Ustawienia wyceny</h2>
+          <div className="panel p-6">
+            <DetailsForm
+              calculatorId={calculator.id}
+              name={calculator.name}
+              description={calculator.description}
+              basePrice={calculator.base_price}
+              currency={calculator.currency}
+              estimateSpreadPercent={calculator.estimate_spread_percent}
+            />
+          </div>
+        </section>
+      </div>
+    </CalculatorEditorShell>
   );
 }

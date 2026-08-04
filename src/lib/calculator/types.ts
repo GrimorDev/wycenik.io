@@ -20,6 +20,7 @@ export interface NumberSliderQuestion {
   id: string;
   type: "number_slider";
   label: string;
+  hint?: string;
   required: boolean;
   position: number;
   config: SliderConfig;
@@ -30,6 +31,7 @@ export interface ChoiceQuestion {
   id: string;
   type: "single_choice" | "checkbox";
   label: string;
+  hint?: string;
   required: boolean;
   position: number;
   config?: Record<string, never>;

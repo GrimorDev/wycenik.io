@@ -220,6 +220,7 @@ function Calculator({ apiBase, slug, config }: { apiBase: string; slug: string; 
       ) : (
         <div class="wk-step">
           <h3>{question!.label}</h3>
+          {question!.hint && <p class="wk-hint">{question!.hint}</p>}
           <QuestionInput
             question={question!}
             answer={answers[question!.id]}

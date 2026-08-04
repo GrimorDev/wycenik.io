@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useRef, useState } from "react";
+import { InfoTooltip } from "@/components/InfoTooltip";
 import { updateQuestion, type ActionState } from "@/lib/actions/calculators";
 import type { RawQuestion } from "@/lib/calculator/mapper";
 
@@ -48,6 +49,7 @@ export function EditQuestionForm({
             </>
           )}
         </p>
+        {question.hint && <p className="mt-0.5 truncate text-xs text-slate-400 italic">{question.hint}</p>}
       </button>
     );
   }
@@ -62,6 +64,16 @@ export function EditQuestionForm({
           Wymagane
         </label>
       </div>
+      <label className="block text-sm text-slate-600">
+        Podpowiedź dla klienta
+        <InfoTooltip text="Krótki opis wyświetlany pod pytaniem w widgecie, np. „Podaj powierzchnię użytkową”. Opcjonalne." />
+        <input
+          name="hint"
+          placeholder="np. Podaj powierzchnię użytkową"
+          defaultValue={question.hint ?? ""}
+          className={`mt-1 ${FIELD_CLASS}`}
+        />
+      </label>
 
       {question.type === "number_slider" && (
         <div className="grid grid-cols-4 gap-3">

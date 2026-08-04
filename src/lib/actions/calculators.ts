@@ -262,6 +262,7 @@ export async function addQuestion(
 ): Promise<ActionState> {
   await requireUserId();
   const label = String(formData.get("label") ?? "").trim();
+  const hint = String(formData.get("hint") ?? "").trim();
   const type = String(formData.get("type") ?? "single_choice") as
     | "number_slider"
     | "single_choice"
@@ -291,6 +292,7 @@ export async function addQuestion(
   const { error } = await supabase.from("questions").insert({
     calculator_id: calculatorId,
     label,
+    hint: hint || null,
     type,
     required,
     position: count ?? 0,
@@ -311,13 +313,20 @@ export async function updateQuestion(
 ): Promise<ActionState> {
   await requireUserId();
   const label = String(formData.get("label") ?? "").trim();
+  const hint = String(formData.get("hint") ?? "").trim();
   const required = formData.get("required") === "on";
   const type = String(formData.get("type") ?? "");
 
   if (!label) return { error: "Treść pytania jest wymagana." };
 
-  const update: { label: string; required: boolean; config?: Record<string, unknown> } = {
+  const update: {
+    label: string;
+    hint: string | null;
+    required: boolean;
+    config?: Record<string, unknown>;
+  } = {
     label,
+    hint: hint || null,
     required,
   };
 

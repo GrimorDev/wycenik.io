@@ -236,6 +236,7 @@ export function AdminCalculatorPreview({ config }: { config: CalculatorConfig })
 
       <div className="wk-step">
         <h3>{question!.label}</h3>
+        {question!.hint && <p className="wk-hint">{question!.hint}</p>}
         <PreviewQuestionInput
           question={question!}
           answer={answers[question!.id]}
