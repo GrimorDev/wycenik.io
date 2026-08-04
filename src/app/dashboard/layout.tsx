@@ -20,7 +20,7 @@ export default async function DashboardLayout({
   const usage = await getPlanUsage(supabase, user.id);
 
   return (
-    <div className="font-dashboard flex min-h-screen flex-1 flex-col bg-slate-50 md:flex-row">
+    <div className="font-dashboard flex min-h-screen flex-1 flex-col bg-background md:flex-row">
       <DashboardSidebar email={user.email ?? ""} usage={usage} />
       <div className="flex min-w-0 flex-1 flex-col">{children}</div>
     </div>

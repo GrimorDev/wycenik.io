@@ -1,9 +1,9 @@
 import Link from "next/link";
+import { Eye, MousePointerClick, Users } from "lucide-react";
 import { CalculatorsTable } from "@/components/dashboard/CalculatorsTable";
 import { NewCalculatorModal } from "@/components/dashboard/NewCalculatorModal";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { StatCard } from "@/components/dashboard/StatCard";
-import { CursorClickIcon, EyeIcon, UsersIcon } from "@/components/icons";
 import { OnboardingChecklist } from "@/components/OnboardingChecklist";
 import { getCalculatorsWithStats } from "@/lib/dashboard-data";
 import { getPlanUsage } from "@/lib/plans";
@@ -130,19 +130,19 @@ export default async function DashboardPage() {
           <StatCard
             label="Odebrane leady"
             value={String(leadsThisPeriod)}
-            icon={UsersIcon}
+            icon={Users}
             trend={trendFor(leadsThisPeriod, leadsPreviousPeriod)}
           />
           <StatCard
             label="Odsłony widgetu"
             value={String(viewsThisPeriod)}
-            icon={EyeIcon}
+            icon={Eye}
             trend={trendFor(viewsThisPeriod, viewsPreviousPeriod)}
           />
           <StatCard
             label="Stopa konwersji"
             value={`${conversionThisPeriod.toFixed(1)}%`}
-            icon={CursorClickIcon}
+            icon={MousePointerClick}
             trend={trendFor(conversionThisPeriod, conversionPreviousPeriod, "points")}
           />
         </div>

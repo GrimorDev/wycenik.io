@@ -1,4 +1,4 @@
-import { TrendUpIcon } from "@/components/icons";
+import { TrendingUp } from "lucide-react";
 
 interface Trend {
   direction: "up" | "down" | "flat";
@@ -16,17 +16,17 @@ export function StatCard({ label, value, icon: Icon, trend }: StatCardProps) {
   return (
     <div className="panel p-5">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-slate-500">{label}</p>
-        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-mint text-brand-mint-ink">
-          <Icon className="h-4 w-4" />
+        <span className="text-sm text-muted-foreground">{label}</span>
+        <span className="flex size-8 items-center justify-center rounded-lg bg-brand-soft text-accent-foreground">
+          <Icon className="size-4" />
         </span>
       </div>
-      <p className="font-dashboard-display mt-3 text-3xl font-semibold text-slate-900">{value}</p>
+      <p className="font-dashboard-display mt-3 text-3xl font-semibold text-foreground">{value}</p>
       {trend && (
-        <p className="mt-1.5 flex items-center gap-1 text-xs text-slate-500">
+        <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
           {trend.direction !== "flat" && (
-            <TrendUpIcon
-              className={`h-3 w-3 ${trend.direction === "down" ? "rotate-180 text-red-500" : "text-brand-accent"}`}
+            <TrendingUp
+              className={`size-3 ${trend.direction === "down" ? "rotate-180 text-destructive" : "text-brand"}`}
             />
           )}
           {trend.text}

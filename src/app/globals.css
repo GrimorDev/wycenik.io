@@ -1,6 +1,7 @@
 @layer theme, base, components, utilities;
 
 @import "tailwindcss";
+@import "tw-animate-css";
 
 :root {
   --paper: #faf6ec;
@@ -30,6 +31,50 @@
   }
 }
 
+/* Dashboard design system — ported verbatim (token names + oklch values)
+   from the PriceMaker Pro reference's src/styles.css so dashboard
+   components can use the exact same utility classes (bg-primary,
+   text-muted-foreground, bg-sidebar, etc.) as the source. Scoped by
+   naming only: none of these token names are used by the marketing
+   theme above, so both systems coexist without collision. */
+:root {
+  --dash-radius: 0.75rem;
+  --background: oklch(0.982 0.004 240);
+  --foreground: oklch(0.22 0.028 253);
+  --surface: oklch(0.965 0.006 245);
+  --surface-foreground: oklch(0.22 0.028 253);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.22 0.028 253);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.22 0.028 253);
+  --primary: oklch(0.26 0.035 253);
+  --primary-foreground: oklch(0.985 0.004 240);
+  --secondary: oklch(0.955 0.008 245);
+  --secondary-foreground: oklch(0.3 0.03 253);
+  --muted: oklch(0.955 0.008 245);
+  --muted-foreground: oklch(0.53 0.024 253);
+  --accent: oklch(0.94 0.03 175);
+  --accent-foreground: oklch(0.32 0.06 175);
+  --brand: oklch(0.62 0.13 172);
+  --brand-foreground: oklch(0.99 0.01 172);
+  --brand-soft: oklch(0.955 0.03 172);
+  --destructive: oklch(0.58 0.2 22);
+  --destructive-foreground: oklch(0.985 0.004 240);
+  --dash-border: oklch(0.905 0.01 247);
+  --dash-input: oklch(0.9 0.01 247);
+  --dash-ring: oklch(0.62 0.13 172);
+  --sidebar: oklch(0.24 0.032 253);
+  --sidebar-foreground: oklch(0.9 0.012 247);
+  --sidebar-primary: oklch(0.62 0.13 172);
+  --sidebar-primary-foreground: oklch(0.99 0.01 172);
+  --sidebar-accent: oklch(0.3 0.033 253);
+  --sidebar-accent-foreground: oklch(0.97 0.006 245);
+  --sidebar-border: oklch(0.33 0.03 253);
+  --sidebar-ring: oklch(0.62 0.13 172);
+  --shadow-card: 0 1px 2px oklch(0.2 0.03 250 / 0.05), 0 8px 24px -12px oklch(0.2 0.03 250 / 0.16);
+  --shadow-float: 0 24px 60px -24px oklch(0.2 0.03 250 / 0.32);
+}
+
 @theme inline {
   --color-paper: var(--paper);
   --color-paper-raised: var(--paper-raised);
@@ -57,6 +102,41 @@
   --color-brand-mint-ink: #013d31;
   --font-dashboard: var(--font-dm-sans);
   --font-dashboard-display: var(--font-dashboard-display);
+
+  /* Exact reference token → Tailwind utility mapping (bg-primary,
+     text-muted-foreground, bg-sidebar-accent, shadow-[var(--shadow-card)], …) */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-foreground: var(--surface-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-brand-soft: var(--brand-soft);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--dash-border);
+  --color-input: var(--dash-input);
+  --color-ring: var(--dash-ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
 }
 
 body {
@@ -105,13 +185,13 @@ body > div {
    declared at the top of this file. */
 @layer components {
 
-/* Dashboard redesign card treatment — matches the reference's .panel exactly
-   (box-shadow sampled from its computed --shadow-card token). */
+/* Dashboard redesign card treatment — ported verbatim from the reference's
+   @utility panel (same --card/--border/--shadow-card tokens). */
 .panel {
-  background-color: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 1rem;
-  box-shadow: 0 1px 2px rgba(15, 20, 30, 0.05), 0 8px 24px -12px rgba(15, 20, 30, 0.16);
+  background-color: var(--card);
+  border: 1px solid var(--dash-border);
+  border-radius: calc(var(--dash-radius) + 4px);
+  box-shadow: var(--shadow-card);
 }
 
 /* Reference uses a separate display typeface (Space Grotesk) for headings

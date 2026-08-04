@@ -2,6 +2,16 @@
 
 import { useState } from "react";
 import { LeadDetailSheet } from "@/components/dashboard/LeadDetailSheet";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import type { CalculatorConfig } from "@/lib/calculator/types";
 
 export interface LeadRow {
@@ -31,7 +41,7 @@ export function LeadsTable({
 
   if (leads.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-500">
+      <div className="rounded-2xl border border-dashed border-border bg-card p-8 text-center text-sm text-muted-foreground">
         {hasQuery ? "Brak wyników dla tego wyszukiwania." : "Brak leadów jeszcze."}
       </div>
     );
@@ -39,68 +49,60 @@ export function LeadsTable({
 
   return (
     <>
-      <div className="panel overflow-x-auto">
-        <table className="w-full text-left text-sm">
-          <thead className="border-b border-slate-200 bg-slate-50/60 text-slate-500">
-            <tr>
-              <th className="px-5 py-3 font-medium">Kontakt</th>
-              <th className="hidden px-5 py-3 font-medium md:table-cell">Telefon</th>
-              <th className="hidden px-5 py-3 font-medium lg:table-cell">Kalkulator</th>
-              <th className="px-5 py-3 font-medium">Kwota</th>
-              <th className="hidden px-5 py-3 font-medium sm:table-cell">Data</th>
-              <th className="px-5 py-3 text-right font-medium">Szczegóły</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
+      <div className="panel overflow-hidden">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-surface/60 hover:bg-surface/60">
+              <TableHead>Kontakt</TableHead>
+              <TableHead className="hidden md:table-cell">Telefon</TableHead>
+              <TableHead className="hidden lg:table-cell">Kalkulator</TableHead>
+              <TableHead>Kwota</TableHead>
+              <TableHead className="hidden sm:table-cell">Data</TableHead>
+              <TableHead className="text-right">Szczegóły</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {leads.map((lead) => (
-              <tr
-                key={lead.id}
-                onClick={() => setActiveId(lead.id)}
-                className="cursor-pointer hover:bg-slate-50/60"
-              >
-                <td className="px-5 py-4">
-                  <p className="font-medium text-slate-900">{lead.name}</p>
-                  <p className="text-xs text-slate-400">{lead.email}</p>
-                </td>
-                <td className="tabular hidden px-5 py-4 text-slate-600 md:table-cell">
-                  {lead.phone ?? "—"}
-                </td>
-                <td className="hidden px-5 py-4 lg:table-cell">
-                  <span className="rounded-md bg-slate-100 px-2 py-0.5 text-xs text-slate-600">
+              <TableRow key={lead.id} className="cursor-pointer" onClick={() => setActiveId(lead.id)}>
+                <TableCell>
+                  <p className="font-medium text-foreground">{lead.name}</p>
+                  <p className="text-xs text-muted-foreground">{lead.email}</p>
+                </TableCell>
+                <TableCell className="hidden font-mono text-sm md:table-cell">{lead.phone ?? "—"}</TableCell>
+                <TableCell className="hidden lg:table-cell">
+                  <Badge variant="secondary" className="font-normal">
                     {lead.calculatorName}
-                  </span>
-                </td>
-                <td className="tabular px-5 py-4 font-medium text-brand-accent">
+                  </Badge>
+                </TableCell>
+                <TableCell className="font-mono font-medium text-brand">
                   {lead.estimated_min}–{lead.estimated_max} zł
-                </td>
-                <td className="tabular hidden px-5 py-4 text-slate-400 sm:table-cell">
+                </TableCell>
+                <TableCell className="hidden text-sm text-muted-foreground sm:table-cell">
                   {new Date(lead.created_at).toLocaleString("pl-PL")}
-                </td>
-                <td className="px-5 py-4 text-right">
-                  <button
-                    type="button"
+                </TableCell>
+                <TableCell className="text-right">
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     onClick={(e) => {
                       e.stopPropagation();
                       setActiveId(lead.id);
                     }}
-                    className="text-sm font-medium text-slate-500 hover:text-slate-800"
                   >
                     Otwórz
-                  </button>
-                </td>
-              </tr>
+                  </Button>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
 
-      {active && (
-        <LeadDetailSheet
-          lead={active}
-          config={configsById[active.calculatorId]}
-          onClose={() => setActiveId(null)}
-        />
-      )}
+      <LeadDetailSheet
+        lead={active}
+        config={active ? configsById[active.calculatorId] : undefined}
+        onClose={() => setActiveId(null)}
+      />
     </>
   );
 }

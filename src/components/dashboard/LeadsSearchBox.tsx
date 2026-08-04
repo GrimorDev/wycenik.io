@@ -1,7 +1,8 @@
 "use client";
 
+import { Search } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { SearchIcon } from "@/components/icons";
+import { Input } from "@/components/ui/input";
 
 export function LeadsSearchBox() {
   const router = useRouter();
@@ -9,8 +10,8 @@ export function LeadsSearchBox() {
 
   return (
     <div className="relative w-full max-w-xs">
-      <SearchIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-      <input
+      <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+      <Input
         type="search"
         defaultValue={searchParams.get("q") ?? ""}
         onChange={(e) => {
@@ -20,7 +21,7 @@ export function LeadsSearchBox() {
           router.replace(`/dashboard/leads?${params.toString()}`);
         }}
         placeholder="Szukaj po nazwisku, e-mailu…"
-        className="w-full rounded-lg border border-slate-300 bg-white py-2 pl-9 pr-3 text-sm text-slate-900 focus:border-brand-accent focus:outline-none focus:ring-2 focus:ring-brand-accent/20"
+        className="w-64 pl-9"
       />
     </div>
   );

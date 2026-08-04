@@ -1,13 +1,25 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { CheckIcon, PlusIcon, XIcon } from "@/components/icons";
+import { ArrowRight, Check, Plus } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   createCalculator,
   createCalculatorFromTemplate,
   type ActionState,
 } from "@/lib/actions/calculators";
 import { CALCULATOR_TEMPLATES, type CalculatorTemplate } from "@/lib/calculator/templates";
+import { cn } from "@/lib/cn";
 
 const initialState: ActionState = { error: null };
 
@@ -45,91 +57,72 @@ export function NewCalculatorModal({
   });
 
   return (
-    <>
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        disabled={disabled}
-        title={disabled ? disabledReason : undefined}
-        className="flex items-center gap-1.5 rounded-[10px] bg-brand-accent px-4 py-2 text-sm font-medium text-brand-accent-ink transition-colors hover:bg-brand-accent-hover disabled:cursor-not-allowed disabled:opacity-50"
-      >
-        <PlusIcon className="h-4 w-4" />
-        Nowy kalkulator
-      </button>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <Button variant="brand" disabled={disabled} title={disabled ? disabledReason : undefined} onClick={() => setOpen(true)}>
+        <Plus className="size-4" /> Nowy kalkulator
+      </Button>
 
-      {open && (
-        <div
-          className="animate-overlay-in fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) setOpen(false);
-          }}
-        >
-          <div className="animate-dialog-in w-full max-w-2xl rounded-2xl bg-white p-6 shadow-2xl">
-            <div className="mb-5 flex items-start justify-between">
-              <div>
-                <h2 className="text-lg font-semibold text-slate-900">Nowy kalkulator</h2>
-                <p className="mt-0.5 text-sm text-slate-500">
-                  Zacznij od gotowego szablonu branżowego albo zbuduj wycenę od zera.
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                className="rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
-              >
-                <XIcon className="h-4 w-4" />
-              </button>
-            </div>
+      <DialogContent className="max-w-3xl">
+        <DialogHeader>
+          <DialogTitle>Nowy kalkulator</DialogTitle>
+          <DialogDescription>
+            Zacznij od gotowego szablonu branżowego albo zbuduj wycenę od zera.
+          </DialogDescription>
+        </DialogHeader>
 
-            <div className="grid gap-5 sm:grid-cols-2">
-              <div className="grid grid-cols-2 gap-3">
-                {CALCULATOR_TEMPLATES.map((template) => {
-                  const meta = TEMPLATE_META[template.key];
-                  const active = selection.kind === "template" && selection.key === template.key;
-                  return (
-                    <button
-                      key={template.key}
-                      type="button"
-                      onClick={() => setSelection({ kind: "template", key: template.key })}
-                      className={`relative rounded-xl border p-4 text-left transition-all ${
-                        active ? "panel border-brand-accent bg-brand-mint/60" : "border-slate-200 hover:border-slate-300"
-                      }`}
-                    >
-                      <div className="flex items-start justify-between">
-                        <span className="text-xl">{meta.emoji}</span>
-                        {active && <CheckIcon className="h-4 w-4 text-brand-accent" />}
-                      </div>
-                      <p className="mt-2 text-sm font-semibold text-slate-900">{shortTitle(template.title)}</p>
-                      <p className="mt-0.5 text-xs text-slate-500">{meta.category}</p>
-                    </button>
-                  );
-                })}
+        <div className="grid gap-4 md:grid-cols-[1fr_260px]">
+          <div className="grid gap-2 sm:grid-cols-2">
+            {CALCULATOR_TEMPLATES.map((template) => {
+              const meta = TEMPLATE_META[template.key];
+              const active = selection.kind === "template" && selection.key === template.key;
+              return (
                 <button
+                  key={template.key}
                   type="button"
-                  onClick={() => setSelection({ kind: "blank" })}
-                  className={`relative rounded-xl border p-4 text-left transition-all ${
-                    selection.kind === "blank" ? "panel border-brand-accent bg-brand-mint/60" : "border-slate-200 hover:border-slate-300"
-                  }`}
+                  onClick={() => setSelection({ kind: "template", key: template.key })}
+                  className={cn(
+                    "rounded-xl border p-4 text-left transition-all",
+                    active
+                      ? "border-brand bg-brand-soft/60 shadow-[var(--shadow-card)]"
+                      : "border-border hover:border-muted-foreground/40",
+                  )}
                 >
                   <div className="flex items-start justify-between">
-                    <span className="text-xl">✨</span>
-                    {selection.kind === "blank" && <CheckIcon className="h-4 w-4 text-brand-accent" />}
+                    <span className="text-xl">{meta.emoji}</span>
+                    {active && <Check className="size-4 text-brand" />}
                   </div>
-                  <p className="mt-2 text-sm font-semibold text-slate-900">Pusty kalkulator</p>
-                  <p className="mt-0.5 text-xs text-slate-500">Własny scenariusz</p>
+                  <p className="mt-2 text-sm font-semibold text-foreground">{shortTitle(template.title)}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">{meta.category}</p>
                 </button>
-              </div>
-
-              {selection.kind === "template" ? (
-                <TemplatePanel key={selection.key} templateKey={selection.key} />
-              ) : (
-                <BlankPanel />
+              );
+            })}
+            <button
+              type="button"
+              onClick={() => setSelection({ kind: "blank" })}
+              className={cn(
+                "rounded-xl border p-4 text-left transition-all",
+                selection.kind === "blank"
+                  ? "border-brand bg-brand-soft/60 shadow-[var(--shadow-card)]"
+                  : "border-border hover:border-muted-foreground/40",
               )}
-            </div>
+            >
+              <div className="flex items-start justify-between">
+                <span className="text-xl">✨</span>
+                {selection.kind === "blank" && <Check className="size-4 text-brand" />}
+              </div>
+              <p className="mt-2 text-sm font-semibold text-foreground">Pusty kalkulator</p>
+              <p className="mt-1 text-xs text-muted-foreground">Własny scenariusz</p>
+            </button>
           </div>
+
+          {selection.kind === "template" ? (
+            <TemplatePanel key={selection.key} templateKey={selection.key} />
+          ) : (
+            <BlankPanel />
+          )}
         </div>
-      )}
-    </>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -141,33 +134,24 @@ function TemplatePanel({ templateKey }: { templateKey: string }) {
   if (!template) return null;
 
   return (
-    <form action={formAction} className="flex h-full flex-col rounded-xl border border-slate-200 bg-slate-50 p-4">
-      <p className="text-sm font-semibold text-slate-900">{template.title}</p>
-      <p className="mt-1 text-xs text-slate-500">{template.description}</p>
+    <form action={formAction} className="rounded-xl border border-border bg-surface p-4">
+      <p className="text-sm font-semibold text-foreground">{template.title}</p>
+      <p className="mt-1 text-xs text-muted-foreground">{template.description}</p>
       <div className="mt-3 flex flex-wrap gap-1.5">
         {templatePills(template).map((pill) => (
-          <span key={pill} className="rounded-md border border-slate-200 bg-white px-2 py-0.5 text-[11px] text-slate-600">
+          <Badge key={pill} variant="secondary" className="font-normal">
             {pill}
-          </span>
+          </Badge>
         ))}
       </div>
-      <label className="mt-4 block text-xs font-medium text-slate-600">
-        Nazwa kalkulatora
-        <input
-          name="name"
-          required
-          defaultValue={`${template.title} — mój widget`}
-          className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-brand-accent focus:outline-none focus:ring-2 focus:ring-brand-accent/20"
-        />
-      </label>
-      {state.error && <p className="mt-2 text-xs text-red-600">{state.error}</p>}
-      <button
-        type="submit"
-        disabled={pending}
-        className="mt-4 flex items-center justify-center gap-1.5 rounded-[10px] bg-brand-accent px-4 py-2 text-sm font-medium text-brand-accent-ink transition-colors hover:bg-brand-accent-hover disabled:opacity-60"
-      >
-        {pending ? "Tworzenie…" : "Utwórz kalkulator →"}
-      </button>
+      <div className="mt-4 space-y-2">
+        <Label htmlFor="calc-name">Nazwa kalkulatora</Label>
+        <Input id="calc-name" name="name" required defaultValue={`${template.title} — mój widget`} />
+      </div>
+      {state.error && <p className="mt-2 text-xs text-destructive">{state.error}</p>}
+      <Button type="submit" variant="brand" disabled={pending} className="mt-4 w-full">
+        {pending ? "Tworzenie…" : "Utwórz kalkulator"} <ArrowRight className="size-4" />
+      </Button>
     </form>
   );
 }
@@ -176,35 +160,21 @@ function BlankPanel() {
   const [state, formAction, pending] = useActionState(createCalculator, initialState);
 
   return (
-    <form action={formAction} className="flex h-full flex-col rounded-xl border border-slate-200 bg-slate-50 p-4">
-      <p className="text-sm font-semibold text-slate-900">Pusty kalkulator</p>
-      <p className="mt-1 text-xs text-slate-500">Zaczynasz od zera i sam dodajesz wszystkie pytania.</p>
-      <label className="mt-4 block text-xs font-medium text-slate-600">
-        Nazwa kalkulatora
-        <input
-          name="name"
-          required
-          className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-brand-accent focus:outline-none focus:ring-2 focus:ring-brand-accent/20"
-        />
-      </label>
-      <label className="mt-3 block text-xs font-medium text-slate-600">
-        Cena bazowa (PLN)
-        <input
-          name="base_price"
-          type="number"
-          step="0.01"
-          defaultValue={0}
-          className="tabular mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-brand-accent focus:outline-none focus:ring-2 focus:ring-brand-accent/20"
-        />
-      </label>
-      {state.error && <p className="mt-2 text-xs text-red-600">{state.error}</p>}
-      <button
-        type="submit"
-        disabled={pending}
-        className="mt-4 flex items-center justify-center gap-1.5 rounded-[10px] bg-brand-accent px-4 py-2 text-sm font-medium text-brand-accent-ink transition-colors hover:bg-brand-accent-hover disabled:opacity-60"
-      >
-        {pending ? "Tworzenie…" : "Utwórz kalkulator →"}
-      </button>
+    <form action={formAction} className="rounded-xl border border-border bg-surface p-4">
+      <p className="text-sm font-semibold text-foreground">Pusty kalkulator</p>
+      <p className="mt-1 text-xs text-muted-foreground">Zaczynasz od zera i sam dodajesz wszystkie pytania.</p>
+      <div className="mt-4 space-y-2">
+        <Label htmlFor="calc-name-blank">Nazwa kalkulatora</Label>
+        <Input id="calc-name-blank" name="name" required />
+      </div>
+      <div className="mt-3 space-y-2">
+        <Label htmlFor="calc-base-price">Cena bazowa (PLN)</Label>
+        <Input id="calc-base-price" name="base_price" type="number" step="0.01" defaultValue={0} className="font-mono" />
+      </div>
+      {state.error && <p className="mt-2 text-xs text-destructive">{state.error}</p>}
+      <Button type="submit" variant="brand" disabled={pending} className="mt-4 w-full">
+        {pending ? "Tworzenie…" : "Utwórz kalkulator"} <ArrowRight className="size-4" />
+      </Button>
     </form>
   );
 }
