@@ -47,8 +47,7 @@ export function CalculatorsTable({ calculators }: { calculators: CalculatorSumma
                   {calc.name}
                 </Link>
                 <p className="text-xs text-muted-foreground">
-                  {calc.questionCount} {calc.questionCount === 1 ? "pytanie" : "pytań"} ·{" "}
-                  <span className="font-mono">/{calc.slug}</span>
+                  {calc.industry} · {calc.questionCount} {calc.questionCount === 1 ? "pytanie" : "pytań"}
                 </p>
               </TableCell>
               <TableCell className="hidden font-mono text-sm md:table-cell">{calc.views}</TableCell>

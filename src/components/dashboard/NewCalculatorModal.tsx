@@ -23,10 +23,10 @@ import { cn } from "@/lib/cn";
 
 const initialState: ActionState = { error: null };
 
-const TEMPLATE_META: Record<string, { emoji: string; category: string }> = {
-  sprzatanie: { emoji: "🧹", category: "Usługi porządkowe" },
-  wykonczenia: { emoji: "🔧", category: "Budownictwo" },
-  "strony-www": { emoji: "💻", category: "Agencja interaktywna" },
+const TEMPLATE_EMOJI: Record<string, string> = {
+  sprzatanie: "🧹",
+  wykonczenia: "🔧",
+  "strony-www": "💻",
 };
 
 type Selection = { kind: "template"; key: string } | { kind: "blank" };
@@ -73,7 +73,6 @@ export function NewCalculatorModal({
         <div className="grid gap-4 md:grid-cols-[1fr_260px]">
           <div className="grid gap-2 sm:grid-cols-2">
             {CALCULATOR_TEMPLATES.map((template) => {
-              const meta = TEMPLATE_META[template.key];
               const active = selection.kind === "template" && selection.key === template.key;
               return (
                 <button
@@ -88,11 +87,11 @@ export function NewCalculatorModal({
                   )}
                 >
                   <div className="flex items-start justify-between">
-                    <span className="text-xl">{meta.emoji}</span>
+                    <span className="text-xl">{TEMPLATE_EMOJI[template.key]}</span>
                     {active && <Check className="size-4 text-brand" />}
                   </div>
                   <p className="mt-2 text-sm font-semibold text-foreground">{shortTitle(template.title)}</p>
-                  <p className="mt-1 text-xs text-muted-foreground">{meta.category}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">{template.industry}</p>
                 </button>
               );
             })}

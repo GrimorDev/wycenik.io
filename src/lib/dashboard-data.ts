@@ -5,6 +5,7 @@ export interface CalculatorSummary {
   id: string;
   name: string;
   slug: string;
+  industry: string;
   isPublished: boolean;
   questionCount: number;
   views: number;
@@ -18,7 +19,7 @@ export async function getCalculatorsWithStats(
 ): Promise<CalculatorSummary[]> {
   const { data: calculators } = await supabase
     .from("calculators")
-    .select("id,name,slug,is_published,created_at")
+    .select("id,name,slug,industry,is_published,created_at")
     .eq("user_id", userId)
     .order("created_at", { ascending: false });
 
@@ -47,6 +48,7 @@ export async function getCalculatorsWithStats(
       id: r.id,
       name: r.name,
       slug: r.slug,
+      industry: r.industry,
       isPublished: r.is_published,
       questionCount: questionCounts.get(r.id) ?? 0,
       views,

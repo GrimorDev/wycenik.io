@@ -32,7 +32,7 @@ type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
 // an error the user has no field to fix.
 async function insertCalculatorWithUniqueSlug(
   supabase: SupabaseServerClient,
-  base: { user_id: string; name: string; base_price: number; currency?: string },
+  base: { user_id: string; name: string; base_price: number; currency?: string; industry?: string },
 ): Promise<{ id: string } | { error: string }> {
   const baseSlug = slugify(base.name);
 
@@ -102,6 +102,7 @@ export async function createCalculatorFromTemplate(
   const result = await insertCalculatorWithUniqueSlug(supabase, {
     user_id: userId,
     name,
+    industry: template.industry,
     base_price: template.basePrice,
     currency: template.currency,
   });

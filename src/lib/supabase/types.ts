@@ -30,6 +30,7 @@ export interface Database {
           name: string;
           slug: string;
           description: string | null;
+          industry: string;
           base_price: number;
           currency: string;
           estimate_spread_percent: number;
@@ -52,6 +53,7 @@ export interface Database {
           name: string;
           slug: string;
           description?: string | null;
+          industry?: string;
           base_price?: number;
           currency?: string;
           estimate_spread_percent?: number;
@@ -74,6 +76,7 @@ export interface Database {
           name?: string;
           slug?: string;
           description?: string | null;
+          industry?: string;
           base_price?: number;
           currency?: string;
           estimate_spread_percent?: number;

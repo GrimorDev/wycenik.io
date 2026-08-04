@@ -18,6 +18,7 @@ export interface TemplateQuestion {
 export interface CalculatorTemplate {
   key: string;
   title: string;
+  industry: string;
   description: string;
   basePrice: number;
   currency: string;
@@ -28,6 +29,7 @@ export const CALCULATOR_TEMPLATES: CalculatorTemplate[] = [
   {
     key: "sprzatanie",
     title: "Sprzątanie",
+    industry: "Usługi porządkowe",
     description: "Metraż, częstotliwość i dodatki jak mycie okien czy pranie dywanów.",
     basePrice: 80,
     currency: "PLN",
@@ -63,6 +65,7 @@ export const CALCULATOR_TEMPLATES: CalculatorTemplate[] = [
   {
     key: "wykonczenia",
     title: "Wykończenia wnętrz i remonty",
+    industry: "Budownictwo",
     description: "Metraż, stan mieszkania i zakres prac (łazienka, kuchnia, podłogi).",
     basePrice: 500,
     currency: "PLN",
@@ -98,6 +101,7 @@ export const CALCULATOR_TEMPLATES: CalculatorTemplate[] = [
   {
     key: "strony-www",
     title: "Strony WWW i marketing",
+    industry: "Agencja interaktywna",
     description: "Typ strony, liczba podstron i usługi dodatkowe jak SEO czy copywriting.",
     basePrice: 1500,
     currency: "PLN",
