@@ -286,4 +286,47 @@ body > div {
   bottom: -6px;
 }
 
+/* Dialog/sheet enter animations — matches Radix Dialog/Sheet open transitions
+   from the reference (tw-animate-css fade + slide/zoom on data-state=open). */
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes sheet-in-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-overlay-in {
+  animation: overlay-in 0.2s ease-out;
+}
+
+.animate-dialog-in {
+  animation: dialog-in 0.2s ease-out;
+}
+
+.animate-sheet-in-right {
+  animation: sheet-in-right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 }

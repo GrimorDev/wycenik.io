@@ -69,7 +69,7 @@ export function QuestionCard({
           <EditQuestionForm calculatorId={calculatorId} question={question} />
         </div>
 
-        <span className="tabular hidden shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600 sm:inline-block">
+        <span className="tabular hidden shrink-0 rounded-md bg-slate-100 px-2 py-0.5 text-xs text-slate-600 sm:inline-block">
           {summaryPill(question, currency)}
         </span>
 

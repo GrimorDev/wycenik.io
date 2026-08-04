@@ -20,7 +20,7 @@ export function CalculatorHeader({ calculatorId, name, slug, isPublished, questi
       </div>
       <div className="flex items-center gap-2">
         <span
-          className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+          className={`rounded-md px-2.5 py-0.5 text-xs font-semibold ${
             isPublished ? "bg-brand-primary text-brand-primary-ink" : "bg-slate-100 text-slate-500"
           }`}
         >

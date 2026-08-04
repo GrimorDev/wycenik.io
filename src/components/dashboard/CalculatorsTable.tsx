@@ -39,7 +39,7 @@ export function CalculatorsTable({ calculators }: { calculators: CalculatorSumma
               <td className="tabular hidden px-5 py-4 text-slate-700 md:table-cell">{calc.views}</td>
               <td className="tabular hidden px-5 py-4 text-slate-700 md:table-cell">{calc.leads}</td>
               <td className="hidden px-5 py-4 lg:table-cell">
-                <span className="tabular rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">
+                <span className="tabular rounded-md bg-slate-100 px-2 py-0.5 text-xs text-slate-600">
                   {calc.conversion.toFixed(1)}%
                 </span>
               </td>

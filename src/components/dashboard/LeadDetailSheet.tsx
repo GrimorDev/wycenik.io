@@ -35,9 +35,9 @@ export function LeadDetailSheet({
   )}`;
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-slate-950/40" onClick={onClose}>
+    <div className="animate-overlay-in fixed inset-0 z-50 flex justify-end bg-slate-950/40" onClick={onClose}>
       <div
-        className="h-full w-full max-w-md overflow-y-auto bg-white p-6 shadow-2xl"
+        className="animate-sheet-in-right h-full w-full max-w-md overflow-y-auto bg-white p-6 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-6 flex items-start justify-between">

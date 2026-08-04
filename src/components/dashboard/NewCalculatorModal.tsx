@@ -59,12 +59,12 @@ export function NewCalculatorModal({
 
       {open && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4"
+          className="animate-overlay-in fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4"
           onClick={(e) => {
             if (e.target === e.currentTarget) setOpen(false);
           }}
         >
-          <div className="w-full max-w-2xl rounded-2xl bg-white p-6 shadow-2xl">
+          <div className="animate-dialog-in w-full max-w-2xl rounded-2xl bg-white p-6 shadow-2xl">
             <div className="mb-5 flex items-start justify-between">
               <div>
                 <h2 className="text-lg font-semibold text-slate-900">Nowy kalkulator</h2>
@@ -146,7 +146,7 @@ function TemplatePanel({ templateKey }: { templateKey: string }) {
       <p className="mt-1 text-xs text-slate-500">{template.description}</p>
       <div className="mt-3 flex flex-wrap gap-1.5">
         {templatePills(template).map((pill) => (
-          <span key={pill} className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] text-slate-600">
+          <span key={pill} className="rounded-md border border-slate-200 bg-white px-2 py-0.5 text-[11px] text-slate-600">
             {pill}
           </span>
         ))}

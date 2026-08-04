@@ -10,17 +10,17 @@ const CALCULATOR_SELECT =
 
 function StatusBadge({ statusCode, error }: { statusCode: number | null; error: string | null }) {
   if (error) {
-    return <span className="tabular rounded-full bg-red-50 px-2 py-0.5 text-xs text-red-600">błąd</span>;
+    return <span className="tabular rounded-md bg-red-50 px-2 py-0.5 text-xs text-red-600">błąd</span>;
   }
   if (statusCode && statusCode >= 200 && statusCode < 300) {
     return (
-      <span className="tabular rounded-full bg-brand-mint px-2 py-0.5 text-xs text-brand-mint-ink">
+      <span className="tabular rounded-md bg-brand-mint px-2 py-0.5 text-xs text-brand-mint-ink">
         {statusCode} OK
       </span>
     );
   }
   return (
-    <span className="tabular rounded-full bg-red-50 px-2 py-0.5 text-xs text-red-600">
+    <span className="tabular rounded-md bg-red-50 px-2 py-0.5 text-xs text-red-600">
       {statusCode ?? "brak odpowiedzi"}
     </span>
   );

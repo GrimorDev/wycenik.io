@@ -66,7 +66,7 @@ export function LeadsTable({
                   {lead.phone ?? "—"}
                 </td>
                 <td className="hidden px-5 py-4 lg:table-cell">
-                  <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">
+                  <span className="rounded-md bg-slate-100 px-2 py-0.5 text-xs text-slate-600">
                     {lead.calculatorName}
                   </span>
                 </td>
