@@ -21,7 +21,7 @@ export function StatCard({ label, value, icon: Icon, trend }: StatCardProps) {
           <Icon className="h-4 w-4" />
         </span>
       </div>
-      <p className="tabular mt-3 text-3xl font-semibold text-slate-900">{value}</p>
+      <p className="font-dashboard-display mt-3 text-3xl font-semibold text-slate-900">{value}</p>
       {trend && (
         <p className="mt-1.5 flex items-center gap-1 text-xs text-slate-500">
           {trend.direction !== "flat" && (

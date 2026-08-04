@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { PlusIcon, XIcon } from "@/components/icons";
+import { CheckIcon, PlusIcon, XIcon } from "@/components/icons";
 import {
   createCalculator,
   createCalculatorFromTemplate,
@@ -11,10 +11,10 @@ import { CALCULATOR_TEMPLATES, type CalculatorTemplate } from "@/lib/calculator/
 
 const initialState: ActionState = { error: null };
 
-const TEMPLATE_META: Record<string, { emoji: string; category: string; color: string }> = {
-  sprzatanie: { emoji: "🧹", category: "Usługi porządkowe", color: "bg-orange-50" },
-  wykonczenia: { emoji: "🔧", category: "Budownictwo", color: "bg-blue-50" },
-  "strony-www": { emoji: "💻", category: "Agencja interaktywna", color: "bg-indigo-50" },
+const TEMPLATE_META: Record<string, { emoji: string; category: string }> = {
+  sprzatanie: { emoji: "🧹", category: "Usługi porządkowe" },
+  wykonczenia: { emoji: "🔧", category: "Budownictwo" },
+  "strony-www": { emoji: "💻", category: "Agencja interaktywna" },
 };
 
 type Selection = { kind: "template"; key: string } | { kind: "blank" };
@@ -91,40 +91,32 @@ export function NewCalculatorModal({
                       key={template.key}
                       type="button"
                       onClick={() => setSelection({ kind: "template", key: template.key })}
-                      className={`relative rounded-xl border p-3 text-left transition-colors ${
-                        active ? "border-brand-accent bg-brand-mint/50" : "border-slate-200 hover:border-slate-300"
+                      className={`relative rounded-xl border p-4 text-left transition-all ${
+                        active ? "panel border-brand-accent bg-brand-mint/60" : "border-slate-200 hover:border-slate-300"
                       }`}
                     >
-                      {active && (
-                        <span className="absolute right-2 top-2 flex h-4 w-4 items-center justify-center rounded-full bg-brand-accent text-[10px] text-brand-accent-ink">
-                          ✓
-                        </span>
-                      )}
-                      <span className={`flex h-8 w-8 items-center justify-center rounded-lg text-base ${meta.color}`}>
-                        {meta.emoji}
-                      </span>
-                      <p className="mt-2 text-sm font-medium text-slate-900">{shortTitle(template.title)}</p>
-                      <p className="text-xs text-slate-500">{meta.category}</p>
+                      <div className="flex items-start justify-between">
+                        <span className="text-xl">{meta.emoji}</span>
+                        {active && <CheckIcon className="h-4 w-4 text-brand-accent" />}
+                      </div>
+                      <p className="mt-2 text-sm font-semibold text-slate-900">{shortTitle(template.title)}</p>
+                      <p className="mt-0.5 text-xs text-slate-500">{meta.category}</p>
                     </button>
                   );
                 })}
                 <button
                   type="button"
                   onClick={() => setSelection({ kind: "blank" })}
-                  className={`relative rounded-xl border p-3 text-left transition-colors ${
-                    selection.kind === "blank" ? "border-brand-accent bg-brand-mint/50" : "border-slate-200 hover:border-slate-300"
+                  className={`relative rounded-xl border p-4 text-left transition-all ${
+                    selection.kind === "blank" ? "panel border-brand-accent bg-brand-mint/60" : "border-slate-200 hover:border-slate-300"
                   }`}
                 >
-                  {selection.kind === "blank" && (
-                    <span className="absolute right-2 top-2 flex h-4 w-4 items-center justify-center rounded-full bg-brand-accent text-[10px] text-brand-accent-ink">
-                      ✓
-                    </span>
-                  )}
-                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-base">
-                    ✨
-                  </span>
-                  <p className="mt-2 text-sm font-medium text-slate-900">Pusty kalkulator</p>
-                  <p className="text-xs text-slate-500">Własny scenariusz</p>
+                  <div className="flex items-start justify-between">
+                    <span className="text-xl">✨</span>
+                    {selection.kind === "blank" && <CheckIcon className="h-4 w-4 text-brand-accent" />}
+                  </div>
+                  <p className="mt-2 text-sm font-semibold text-slate-900">Pusty kalkulator</p>
+                  <p className="mt-0.5 text-xs text-slate-500">Własny scenariusz</p>
                 </button>
               </div>
 

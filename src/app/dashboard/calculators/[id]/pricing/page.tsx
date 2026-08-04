@@ -69,15 +69,15 @@ export default async function CalculatorPricingPage({
             <h2 className="text-base font-semibold text-slate-900">Statystyki</h2>
             <div className="grid grid-cols-3 gap-3">
               <div className="panel p-4 text-center">
-                <p className="tabular text-2xl font-semibold text-slate-900">{views}</p>
+                <p className="font-dashboard-display text-2xl font-semibold text-slate-900">{views}</p>
                 <p className="mt-1 text-xs text-slate-400">Wyświetlenia</p>
               </div>
               <div className="panel p-4 text-center">
-                <p className="tabular text-2xl font-semibold text-slate-900">{leads}</p>
+                <p className="font-dashboard-display text-2xl font-semibold text-slate-900">{leads}</p>
                 <p className="mt-1 text-xs text-slate-400">Leady</p>
               </div>
               <div className="panel p-4 text-center">
-                <p className="tabular text-2xl font-semibold text-slate-900">{conversion}%</p>
+                <p className="font-dashboard-display text-2xl font-semibold text-slate-900">{conversion}%</p>
                 <p className="mt-1 text-xs text-slate-400">Konwersja</p>
               </div>
             </div>

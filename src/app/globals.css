@@ -56,6 +56,7 @@
   --color-brand-mint: #ddf7ee;
   --color-brand-mint-ink: #013d31;
   --font-dashboard: var(--font-dm-sans);
+  --font-dashboard-display: var(--font-dashboard-display);
 }
 
 body {
@@ -111,6 +112,17 @@ body > div {
   border: 1px solid #e2e8f0;
   border-radius: 1rem;
   box-shadow: 0 1px 2px rgba(15, 20, 30, 0.05), 0 8px 24px -12px rgba(15, 20, 30, 0.16);
+}
+
+/* Reference uses a separate display typeface (Space Grotesk) for headings
+   and big numeric values, scoped to the dashboard so marketing pages keep
+   their own Bricolage Grotesque heading style untouched. */
+.font-dashboard h1,
+.font-dashboard h2,
+.font-dashboard h3,
+.font-dashboard h4 {
+  font-family: var(--font-dashboard-display);
+  letter-spacing: -0.02em;
 }
 
 .ticket {

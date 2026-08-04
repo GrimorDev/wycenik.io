@@ -1,10 +1,16 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, DM_Sans, IBM_Plex_Mono, Work_Sans } from "next/font/google";
+import { Bricolage_Grotesque, DM_Sans, IBM_Plex_Mono, Space_Grotesk, Work_Sans } from "next/font/google";
 import "./globals.css";
 import "@/styles/widget-preview.css";
 
 const bricolage = Bricolage_Grotesque({
   variable: "--font-display",
+  subsets: ["latin", "latin-ext"],
+});
+
+// Used only by the redesigned /dashboard section, alongside DM Sans.
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-dashboard-display",
   subsets: ["latin", "latin-ext"],
 });
 
@@ -39,7 +45,7 @@ export default function RootLayout({
   return (
     <html
       lang="pl"
-      className={`${bricolage.variable} ${workSans.variable} ${plexMono.variable} ${dmSans.variable} h-full antialiased`}
+      className={`${bricolage.variable} ${workSans.variable} ${plexMono.variable} ${dmSans.variable} ${spaceGrotesk.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-paper text-ink font-sans">{children}</body>
     </html>

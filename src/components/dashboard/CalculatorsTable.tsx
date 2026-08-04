@@ -19,11 +19,11 @@ export function CalculatorsTable({ calculators }: { calculators: CalculatorSumma
         <thead className="border-b border-slate-200 bg-slate-50/60 text-slate-500">
           <tr>
             <th className="px-5 py-3 font-medium">Kalkulator</th>
-            <th className="px-5 py-3 font-medium">Odsłony</th>
-            <th className="px-5 py-3 font-medium">Leady</th>
-            <th className="px-5 py-3 font-medium">Konwersja</th>
+            <th className="hidden px-5 py-3 font-medium md:table-cell">Odsłony</th>
+            <th className="hidden px-5 py-3 font-medium md:table-cell">Leady</th>
+            <th className="hidden px-5 py-3 font-medium lg:table-cell">Konwersja</th>
             <th className="px-5 py-3 font-medium">Status</th>
-            <th className="px-5 py-3 font-medium">Akcje</th>
+            <th className="px-5 py-3 text-right font-medium">Akcje</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-100">
@@ -36,9 +36,9 @@ export function CalculatorsTable({ calculators }: { calculators: CalculatorSumma
                   <span className="tabular">/{calc.slug}</span>
                 </p>
               </td>
-              <td className="tabular px-5 py-4 text-slate-700">{calc.views}</td>
-              <td className="tabular px-5 py-4 text-slate-700">{calc.leads}</td>
-              <td className="px-5 py-4">
+              <td className="tabular hidden px-5 py-4 text-slate-700 md:table-cell">{calc.views}</td>
+              <td className="tabular hidden px-5 py-4 text-slate-700 md:table-cell">{calc.leads}</td>
+              <td className="hidden px-5 py-4 lg:table-cell">
                 <span className="tabular rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">
                   {calc.conversion.toFixed(1)}%
                 </span>
@@ -46,11 +46,11 @@ export function CalculatorsTable({ calculators }: { calculators: CalculatorSumma
               <td className="px-5 py-4">
                 <div className="flex items-center gap-2">
                   <PublishToggle calculatorId={calc.id} isPublished={calc.isPublished} />
-                  <span className="text-xs text-slate-500">{calc.isPublished ? "Aktywny" : "Szkic"}</span>
+                  <span className="text-xs text-slate-500">{calc.isPublished ? "Aktywny" : "Wstrzymany"}</span>
                 </div>
               </td>
               <td className="px-5 py-4">
-                <div className="flex items-center gap-4">
+                <div className="flex items-center justify-end gap-4">
                   <Link
                     href={`/dashboard/embed?calculator=${calc.id}`}
                     className="flex items-center gap-1 text-sm text-slate-500 hover:text-slate-800"
