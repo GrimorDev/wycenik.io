@@ -175,8 +175,19 @@ body > div {
   color: var(--paper-raised);
 }
 
-* {
-  border-color: var(--line);
+@layer base {
+  * {
+    border-color: var(--line);
+  }
+
+  /* Dashboard components (Radix Dialog/Select/DropdownMenu/etc.) use a bare
+     `border` class relying on this cascade default for their color, same as
+     the reference's own `@layer base { * { border-color: var(--color-border) } }`.
+     Without this override they'd inherit the marketing theme's --line color. */
+  .font-dashboard,
+  .font-dashboard * {
+    border-color: var(--dash-border);
+  }
 }
 
 /* Ticket / receipt card: the recurring container motif across the app.
@@ -192,6 +203,11 @@ body > div {
   border: 1px solid var(--dash-border);
   border-radius: calc(var(--dash-radius) + 4px);
   box-shadow: var(--shadow-card);
+}
+
+.grid-dots {
+  background-image: radial-gradient(var(--dash-border) 1px, transparent 1px);
+  background-size: 18px 18px;
 }
 
 /* Reference uses a separate display typeface (Space Grotesk) for headings
