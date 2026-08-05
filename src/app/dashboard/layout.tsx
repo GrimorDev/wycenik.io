@@ -23,7 +23,7 @@ export default async function DashboardLayout({
 
   return (
     <TooltipProvider delayDuration={200}>
-      <div className="font-dashboard flex min-h-screen flex-1 flex-col bg-background md:flex-row">
+      <div className="font-dashboard flex min-h-screen flex-1 flex-col bg-background text-foreground [color-scheme:light] md:flex-row">
         <DashboardSidebar email={user.email ?? ""} usage={usage} />
         <div className="flex min-w-0 flex-1 flex-col">{children}</div>
       </div>
