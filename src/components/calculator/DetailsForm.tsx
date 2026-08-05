@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { InfoTooltip } from "@/components/InfoTooltip";
+import { FieldHint } from "@/components/calculator/FieldHint";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -51,7 +51,7 @@ export function DetailsForm({
         <div className="space-y-1.5">
           <Label className="flex items-center gap-1.5" htmlFor="calc-base-price">
             Cena bazowa
-            <InfoTooltip text="Minimalna kwota, od której zaczynasz wycenę — np. koszt dojazdu lub minimalna wartość zlecenia." />
+            <FieldHint>Minimalna kwota, od której zaczynasz wycenę — np. koszt dojazdu lub minimalna wartość zlecenia.</FieldHint>
           </Label>
           <Input id="calc-base-price" name="base_price" type="number" step="0.01" defaultValue={basePrice} className="font-mono" />
         </div>
@@ -64,7 +64,7 @@ export function DetailsForm({
       <div className="space-y-2">
         <Label className="flex items-center gap-1.5">
           Widełki wyceny: ±{spread}%
-          <InfoTooltip text="Zalecane 10–15%. Klienci chętniej zostawiają kontakt, widząc przedział cenowy (np. 1500–1800 zł), niż jedną sztywną kwotę." />
+          <FieldHint>Zalecane 10–15%. Klienci chętniej zostawiają kontakt, widząc przedział cenowy (np. 1500–1800 zł), niż jedną sztywną kwotę.</FieldHint>
         </Label>
         <Slider value={[spread]} min={0} max={40} step={1} onValueChange={([v]) => setSpread(v ?? 0)} />
         <input type="hidden" name="estimate_spread_percent" value={spread} />

@@ -2,6 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { ArrowRight, Check, Plus } from "lucide-react";
+import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -133,7 +134,11 @@ function TemplatePanel({ templateKey }: { templateKey: string }) {
   if (!template) return null;
 
   return (
-    <form action={formAction} className="rounded-xl border border-border bg-surface p-4">
+    <form
+      action={formAction}
+      onSubmit={() => toast.success("Kalkulator utworzony", { description: "Możesz od razu dopasować pytania i wygląd." })}
+      className="rounded-xl border border-border bg-surface p-4"
+    >
       <p className="text-sm font-semibold text-foreground">{template.title}</p>
       <p className="mt-1 text-xs text-muted-foreground">{template.description}</p>
       <div className="mt-3 flex flex-wrap gap-1.5">
@@ -159,7 +164,11 @@ function BlankPanel() {
   const [state, formAction, pending] = useActionState(createCalculator, initialState);
 
   return (
-    <form action={formAction} className="rounded-xl border border-border bg-surface p-4">
+    <form
+      action={formAction}
+      onSubmit={() => toast.success("Kalkulator utworzony", { description: "Możesz od razu dopasować pytania i wygląd." })}
+      className="rounded-xl border border-border bg-surface p-4"
+    >
       <p className="text-sm font-semibold text-foreground">Pusty kalkulator</p>
       <p className="mt-1 text-xs text-muted-foreground">Zaczynasz od zera i sam dodajesz wszystkie pytania.</p>
       <div className="mt-4 space-y-2">

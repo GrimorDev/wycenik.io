@@ -1,6 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
+import { toast } from "sonner";
 import { Switch } from "@/components/ui/switch";
 import { togglePublish } from "@/lib/actions/calculators";
 
@@ -11,6 +12,7 @@ export function PublishToggle({ calculatorId, isPublished }: { calculatorId: str
     startTransition(() => {
       togglePublish(calculatorId, checked);
     });
+    toast(checked ? "Kalkulator włączony" : "Kalkulator wyłączony");
   }
 
   return (

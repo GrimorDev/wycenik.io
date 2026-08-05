@@ -1,6 +1,7 @@
 "use client";
 
 import { MoreHorizontal, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -24,6 +25,7 @@ export function RowMenu({ calculatorId, calculatorName }: { calculatorId: string
           onSelect={(e) => {
             e.preventDefault();
             if (confirm(`Usunąć kalkulator „${calculatorName}”? Tej operacji nie można cofnąć.`)) {
+              toast("Kalkulator usunięty");
               deleteCalculator(calculatorId);
             }
           }}

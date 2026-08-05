@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -28,6 +29,7 @@ export function WebhookSettingsForm({ calculatorId, webhookUrl, webhookSecret }:
     if (!webhookSecret) return;
     await navigator.clipboard.writeText(webhookSecret);
     setCopied(true);
+    toast.success("Skopiowano sekret webhooka");
     setTimeout(() => setCopied(false), 1500);
   }
 

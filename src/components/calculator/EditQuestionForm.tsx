@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useRef, useState } from "react";
-import { InfoTooltip } from "@/components/InfoTooltip";
+import { FieldHint } from "@/components/calculator/FieldHint";
 import { updateQuestion, type ActionState } from "@/lib/actions/calculators";
 import type { RawQuestion } from "@/lib/calculator/mapper";
 
@@ -66,7 +66,7 @@ export function EditQuestionForm({
       </div>
       <label className="block text-sm text-slate-600">
         Podpowiedź dla klienta
-        <InfoTooltip text="Krótki opis wyświetlany pod pytaniem w widgecie, np. „Podaj powierzchnię użytkową”. Opcjonalne." />
+        <FieldHint>Krótki opis wyświetlany pod pytaniem w widgecie, np. „Podaj powierzchnię użytkową”. Opcjonalne.</FieldHint>
         <input
           name="hint"
           placeholder="np. Podaj powierzchnię użytkową"

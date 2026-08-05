@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Check, Copy } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
 export function EmbedCodeBlock({ title, code }: { title: string; code: string }) {
@@ -10,6 +11,7 @@ export function EmbedCodeBlock({ title, code }: { title: string; code: string })
   async function handleCopy() {
     await navigator.clipboard.writeText(code);
     setCopied(true);
+    toast.success("Skopiowano kod osadzenia");
     setTimeout(() => setCopied(false), 1500);
   }
 
